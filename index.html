@@ -847,6 +847,8 @@
   .overlay #overlay-msg { margin-bottom: 72px !important; }
   .overlay .keys { margin-top: 48px !important; }
   .overlay:not(.paused):not(.battle) { padding-top: 50px; }
+  /* 시작·게임오버 화면에선 PLAY·MUSIC 버튼도 뒤로 (딤 처리) */
+  body.ov:has(.overlay:not(.paused)) .info .sock { z-index: 1 !important; pointer-events: none; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -2054,11 +2056,13 @@
     $overlayMsg.innerHTML = msg;
     $overlayBtn.textContent = btnText;
     $overlay.style.display = 'flex';
+    document.body.classList.add('ov');
   }
 
   function hideOverlay() {
     $overlay.classList.remove('paused');
     $overlay.style.display = 'none';
+    document.body.classList.remove('ov');
   }
 
   function startGame() {
