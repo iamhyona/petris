@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PETRIS">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0b0b0f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>PETRIS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -1330,10 +1338,18 @@
       audioCtx.decodeAudioData(arr.buffer).then(buf => { voxBuf[k] = buf; }).catch(() => {});
     });
   }
-  function say(text, pitch = 1.1, rate = 1) {
+  // 목소리: 기기에 들어있는 여자 영어 음성 사용
+  function femaleVoice() {
+    try {
+      const v = speechSynthesis.getVoices().filter(x => /^en/i.test(x.lang));
+      return v.find(x => /samantha|female|zira|aria|jenny|karen|victoria|google us english/i.test(x.name)) || v[0] || null;
+    } catch (e) { return null; }
+  }
+  try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {}
+  function say(text, pitch = 1.2, rate = 1) {
     const key = text.toLowerCase().replace(/[^a-z]/g, '').replace(/o+$/, m => m.length > 2 ? '' : m);
     const k = key.startsWith('boo') || key === 'b' ? 'boo' : key;
-    if (audioCtx && voxBuf[k]) {
+    if (!window.speechSynthesis && audioCtx && voxBuf[k]) {
       const src = audioCtx.createBufferSource();
       const g = audioCtx.createGain();
       src.buffer = voxBuf[k];
@@ -1345,7 +1361,8 @@
     try {
       if (!window.speechSynthesis) return;
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.pitch = pitch; u.rate = rate; u.volume = 1;
+      u.lang = 'en-US'; u.pitch = Math.max(pitch, 1.2); u.rate = rate; u.volume = 1;
+      const fv = femaleVoice(); if (fv) u.voice = fv;
       speechSynthesis.cancel();
       speechSynthesis.speak(u);
     } catch (e) {}
