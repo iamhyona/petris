@@ -777,6 +777,9 @@
   .info .sock #sel-btn::after { content: 'MUSIC'; }
   .info .sock #restart-btn::after { content: 'RESTART'; font-size: 10px; }
   .info .sock #speed-btn::after { content: 'SPEED' attr(data-n); font-size: 10px; }
+  .info .sock #shadow-btn::after { content: 'SHADOW'; font-size: 10px; }
+  .info .sock #shadow-btn:not(.on) { color: #4a6650 !important; border-color: #22382a !important; }
+  .info .sock #shadow-btn.on { border-color: #5b8a60 !important; text-shadow: 0 0 8px rgba(150,240,120,0.6); }
   .info .sock #speed-btn[data-n]:not([data-n='']) { color: #f2b000 !important; border-color: #8a6a10 !important; }
   body.battle .info .sock:has(#speed-btn) { display: none; }
   body.battle .info .sock:has(#restart-btn) { display: none; }
@@ -785,12 +788,12 @@
   .info .sock:has(#speed-btn) { margin-top: 0 !important; }
   body.battle .info .sock:has(#start-btn) { margin-top: auto !important; }
   /* 화면이 낮은 폰: 로고·버튼을 줄여서 PAUSE·MUSIC이 잘리지 않게 */
-  @media (max-height: 760px) {
+  @media (max-height: 820px) {
     .info .vlogo { gap: 3px; }
     .info .vlogo b { width: 19px !important; height: 19px !important; font-size: 11px !important; border-radius: 4px !important; }
     .info .sock .sysb { height: 34px !important; }
   }
-  @media (max-height: 600px) { .info .vlogo { display: none !important; } }
+  @media (max-height: 700px) { .info .vlogo { display: none !important; } .info .sock:has(#speed-btn) { margin-top: auto !important; } }
   .info .sock #sel-btn.off::after { content: 'MUSIC'; }
   .info .sock #sel-btn:not(.off) { border-color: #5b8a60 !important; text-shadow: 0 0 8px rgba(150,240,120,0.6); }
   .info .sock #sel-btn.off { color: #4a6650 !important; border-color: #22382a !important; }
@@ -939,7 +942,7 @@
   .vs .vs-x::before { content: none !important; }
   .rank-note { min-height: 16px; margin-top: 6px; font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; font-size: 12px; font-weight: 400; color: #f2b000; letter-spacing: 0; }
   /* 시작·게임오버 화면에선 PLAY·MUSIC 버튼도 뒤로 (딤 처리) */
-  body.ov:has(.overlay:not(.paused)) .info .sock { z-index: 1 !important; pointer-events: none; }
+  body.ov .info .sock { z-index: 1 !important; pointer-events: none; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -1039,6 +1042,7 @@
 
   <div class="sys">
     <span class="sock"><button class="pb sysb" id="speed-btn" aria-label="속도 올리기"></button></span>
+    <span class="sock"><button class="pb sysb" id="shadow-btn" aria-label="그림자 켜기/끄기"></button></span>
     <span class="sock"><button class="pb sysb" id="restart-btn" aria-label="처음부터 다시"></button></span>
     <span class="sock"><button class="pb sysb" id="start-btn" aria-label="잠시 멈춤"><svg class="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></button></span>
     <span class="sock"><button class="pb sysb" id="sel-btn" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button></span>
@@ -1152,6 +1156,16 @@
   const $restartBtn = document.getElementById('restart-btn');
   const $speedBtn = document.getElementById('speed-btn');
   let speedBoost = 0;
+  const $shadowBtn = document.getElementById('shadow-btn');
+  let shadowOn = (() => { try { return localStorage.getItem('petris-shadow') === '1'; } catch (e) { return false; } })();
+  function shadowLabel() { $shadowBtn.classList.toggle('on', shadowOn); }
+  shadowLabel();
+  $shadowBtn.addEventListener('click', () => {
+    shadowOn = !shadowOn;
+    try { localStorage.setItem('petris-shadow', shadowOn ? '1' : '0'); } catch (e) {}
+    shadowLabel();
+    if (typeof draw === 'function') draw();
+  });
   function speedLabel() { $speedBtn.dataset.n = speedBoost ? '+' + speedBoost : ''; }
 
   let grid, piece, nextKind, bag;
@@ -1776,7 +1790,10 @@
     for (const y of rows) grid.splice(y, 1);
     for (let i = 0; i < n; i++) grid.unshift(Array(COLS).fill(null));
 
-    score += [0, 100, 300, 500, 800][n] * (level + 1);
+    combo++;
+    const comboMul = Math.min(5, combo);
+    // 줄 수별 기본 점수: 1줄 100 · 2줄 300 · 3줄 700 · 4줄 1500 (속도 단계·콤보 배수 적용)
+    score += [0, 100, 300, 700, 1500][n] * (level + 1) * comboMul;
     lines += n;
     if (mode === 'battle') {
       let sendN = [0, 0, 1, 2, 4][n];
@@ -1793,13 +1810,19 @@
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
     popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
     if (perfect) {
-      score += 2000 * (level + 1);
+      score += 5000 * (level + 1); // 판 전체 클리어 보너스
       sfxApplause(3.5);
       boardFlash = performance.now();
     } else if (n === 4) {
       sfxApplause(b2b ? 4 : 3);
     }
     say(word);
+    if (combo >= 2) {
+      setTimeout(() => {
+        popText = { text: 'COMBO x' + comboMul, t: performance.now(), big: combo >= 3, color: combo >= 4 ? 'rainbow' : '#ff5fa2' };
+        if (audioCtx) [660, 880, 1100].slice(0, Math.min(3, combo)).forEach((f, i) => tone('square', f, 0, audioCtx.currentTime + i * 0.06, 0.12, 0.07));
+      }, 650);
+    }
     if (n >= 3) boardFlash = performance.now();
     shake(6 + n * 3, 260 + n * 90);
     sfxClear(n);
@@ -1812,12 +1835,12 @@
   }
 
   // ===== 스테이지: 점수를 넘으면 다음 단계, 단계마다 빨라지고 바닥이 올라옴 =====
-  let stage = 1, lastRise = 0;
+  let stage = 1, lastRise = 0, combo = 0;
   function stageGoal(st) {
-    const base = [0, 2000, 5000, 9000, 14000, 20000, 27000, 35000, 44000, 54000];
+    const base = [0, 1500, 3800, 7000, 11000, 16000, 22000, 29000, 37000, 46000];
     return st < base.length ? base[st] : base[base.length - 1] + (st - base.length + 1) * 12000;
   }
-  function riseEvery() { return Math.max(14000, 40000 - (stage - 2) * 2500); }
+  function riseEvery() { return Math.max(10000, 30000 - (stage - 2) * 2500); }
   function stageUp() {
     stage++;
     popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
@@ -1836,7 +1859,7 @@
   function updateLevel() {
     while (score >= stageGoal(stage)) stageUp();
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = (stage - 1) + Math.floor(lines / 20) + Math.floor(playTime / 90000) + (isHard() ? 6 : 0) + speedBoost;
+    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isHard() ? 6 : 0) + speedBoost;
     if (nl !== level) { level = nl; updateHud(); }
     // 2단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
     if (mode !== 'battle' && stage >= 2 && state === 'playing' && playTime - lastRise > riseEvery()) {
@@ -1917,6 +1940,7 @@
     dropCounter = 0;
     updateHud();
     const rows = fullRows();
+    if (!rows.length) combo = 0;
     if (!rows.length && holes >= 2) sfxBoo();
     checkDanger();
     if (rows.length) {
@@ -1929,7 +1953,7 @@
   }
 
   function dropInterval() {
-    return Math.max(90, Math.round(800 * Math.pow(0.9, level)));
+    return Math.max(70, Math.round(650 * Math.pow(0.87, level)));
   }
 
   function fitNum(el) {
@@ -2044,6 +2068,22 @@
       for (let x = 0; x < COLS; x++) {
         const k = grid[y][x];
         if (k) drawCell(ctx, x, y, CELL, COLORS[k]);
+      }
+    }
+    if (piece && shadowOn && state === 'playing') {
+      let gy = piece.y;
+      while (!collides(piece.cells, piece.x, gy + 1)) gy++;
+      if (gy > piece.y) {
+        ctx.save();
+        for (const [x, y] of piece.cells) {
+          if (gy + y < 0) continue;
+          const px = (piece.x + x) * CELL, py = (gy + y) * CELL;
+          ctx.globalAlpha = 0.18; ctx.fillStyle = COLORS[piece.kind];
+          roundRect(ctx, px + 2, py + 2, CELL - 4, CELL - 4, CELL * 0.14); ctx.fill();
+          ctx.globalAlpha = 0.75; ctx.strokeStyle = COLORS[piece.kind]; ctx.lineWidth = 2;
+          roundRect(ctx, px + 3, py + 3, CELL - 6, CELL - 6, CELL * 0.12); ctx.stroke();
+        }
+        ctx.restore();
       }
     }
     if (piece) {
@@ -2221,7 +2261,7 @@
     danger = false; document.body.classList.remove('danger');
     grid = newGrid();
     if (isHard()) fillHardStart();
-    score = 0; lines = 0; level = 0; stage = 1; lastRise = 0;
+    score = 0; lines = 0; level = 0; stage = 1; lastRise = 0; combo = 0;
     speedBoost = 0; speedLabel();
     stageSong();
     playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
@@ -2275,12 +2315,14 @@
     if (mode === 'battle') return;
     if (state === 'playing') {
       state = 'paused';
+      stopMusic();
       if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
       showOverlay(dots('PAUSE', '#f4fff0', 'mid'), 'RESUME');
       $overlay.classList.add('paused');
     } else if (state === 'paused') {
       state = 'playing';
       if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      startMusic();
       hideOverlay();
     }
   }
@@ -2888,7 +2930,7 @@
     if (true) {
       // 왼쪽 한 줄에 모두: NEXT, LEVEL, SCORE, LINES, 로고, 멈춤, 음악
       $panel.append(boxes[0], boxes[3], boxes[1], boxes[2]);
-      $infoL.append($panel, $opp, $vlogo, $speedBtn.parentElement, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
+      $infoL.append($panel, $opp, $vlogo, $speedBtn.parentElement, $shadowBtn.parentElement, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $infoR.style.display = 'none';
       $side.style.display = 'none';
     } else {
@@ -2896,7 +2938,7 @@
       $vlogo.remove();
       $panel.remove();
       $infoR.style.display = '';
-      document.querySelector('.sys').append($speedBtn.parentElement, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
+      document.querySelector('.sys').append($speedBtn.parentElement, $shadowBtn.parentElement, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $side.style.display = '';
     }
   }
