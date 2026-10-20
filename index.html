@@ -861,6 +861,8 @@
   .overlay .keys { margin-top: 12px; }
   .lcd-label .ln { background: none !important; -webkit-mask-image: none !important; mask-image: none !important; height: 7px !important; display: block; }
   .lcd-label .ln canvas { display: block; image-rendering: pixelated; }
+  .lcd-label { overflow: hidden; }
+  .lcd-label .ln { min-width: 0; overflow: hidden; }
   .overlay button.bgm-link { white-space: nowrap; font-size: 9px !important; letter-spacing: 0 !important; padding: 10px 8px !important; overflow: hidden; }
   .overlay button.bgm-link span { overflow: hidden; text-overflow: ellipsis; }
 
@@ -2688,6 +2690,8 @@
   }
   window.addEventListener('resize', drawSpectrum);
   setTimeout(drawSpectrum, 50);
+  try { document.fonts.ready.then(drawSpectrum); } catch (e) {}
+  setTimeout(drawSpectrum, 1500);
   if (window.self !== window.top) document.documentElement.classList.add('framed');
   const $vlogo = document.createElement('div');
   $vlogo.className = 'vlogo';
