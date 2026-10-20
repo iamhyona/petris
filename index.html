@@ -894,7 +894,20 @@
   .overlay.over, .overlay.paused { padding-top: 0 !important; gap: 14px !important; }
   .overlay.paused #overlay-msg, .overlay.over #overlay-msg { margin-bottom: 28px !important; }
   .overlay.over .rank-link { margin-top: 18px !important; }
-  .overlay.paused .keys { margin-top: 28px !important; }
+  .overlay.paused .keys, .overlay.paused .ov-music, .overlay.paused .keys-touch { display: none !important; }
+  .overlay .keys-touch { display: none; }
+  @media (hover: none), (pointer: coarse) {
+    .overlay .keys-touch {
+      display: block; margin-top: 48px;
+      font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      font-size: 12px; font-weight: 500; line-height: 2.1; color: rgba(184,224,160,0.7); letter-spacing: 0;
+    }
+    .overlay .keys-touch kbd {
+      display: inline-block; padding: 1px 7px; margin: 0 2px; border-radius: 5px;
+      border: 1px solid rgba(184,224,160,0.4); font-family: inherit; font-size: 11px; color: #d8f5c4;
+    }
+  }
+  .overlay.over .keys-touch, .overlay.battle .keys-touch, html.embed .keys-touch { display: none !important; }
   .overlay.over .keys, .overlay.over .credit { display: none !important; }
   .rank-form { display: flex; gap: 6px; width: 232px; margin: 14px auto 0; }
   .rank-form .vs-in { flex: 1; min-width: 0; padding: 10px; font-size: 15px; }
@@ -974,7 +987,8 @@
         <button id="btn-bgm" class="bgm-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M3 0h5v6h-1v1h-2v-1h-1v-1h3v-3h-3v4h-1v1h-2v-1h-1v-1h3z"/></svg><span id="bgm-name">BGM</span></button>
         <div class="credit">MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA</div>
         <button id="btn-rank" class="rank-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1 0h6v1h1v2h-1v1h-1v1h-1v1h1v1h1v1h-6v-1h1v-1h1v-1h-1v-1h-1v-1h-1v-2h1z"/></svg>RANKING</button>
-        <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기<br><kbd>P</kbd> 멈춤 &nbsp; <kbd>M</kbd> 음악</div>
+        <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기</div>
+        <div class="keys-touch"><kbd>← 밀기 →</kbd> 이동 &nbsp; <kbd>탭</kbd> 회전<br><kbd>↓ 천천히 밀기</kbd> 천천히 &nbsp; <kbd>↓ 튕기기</kbd> 빨리 내리기</div>
         <button id="overlay-music" class="ov-music" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button>
       </div>
       <div id="vs" class="vs">
@@ -2506,7 +2520,7 @@
     isHost = true;
     roomCode = makeCode();
     vsOpen('방 만드는 중', '<p class="vs-msg">잠시만요…</p>');
-    peer = new Peer(PEER_PREFIX + roomCode);
+    peer = new Peer(PEER_PREFIX + roomCode, PEER_OPTS);
     peer.on('open', () => {
       vsOpen('방 코드', `
         <div class="vs-code">${roomCode}</div>
@@ -2523,22 +2537,36 @@
     });
   }
 
+  // 휴대폰 데이터망에서도 연결되도록 STUN·TURN(중계) 서버 사용
+  const PEER_OPTS = {
+    debug: 0,
+    config: {
+      iceServers: [
+        { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
+        { urls: ['turn:openrelay.metered.ca:80', 'turn:openrelay.metered.ca:443', 'turn:openrelay.metered.ca:443?transport=tcp'],
+          username: 'openrelayproject', credential: 'openrelayproject' }
+      ]
+    }
+  };
   function joinRoom(code) {
     cleanupPeer();
     isHost = false;
     roomCode = code;
     vsOpen('연결 중', `<div class="vs-code">${esc(code)}</div><p class="vs-msg">방에 들어가는 중…</p>`);
-    peer = new Peer();
+    peer = new Peer(PEER_OPTS);
     peer.on('open', () => setupConn(peer.connect(PEER_PREFIX + code, { reliable: true })));
     peer.on('error', err => vsError(err.type === 'peer-unavailable' ? 'nofound' : err.type));
+    const myPeer = peer;
+    setTimeout(() => { if (peer === myPeer && !(conn && conn.open) && mode !== 'battle') vsError('timeout'); }, 20000);
   }
 
   function vsError(type) {
+    const why = (type && type !== 'nofound') ? `<br><small style="opacity:.5">(${esc(String(type))})</small>` : '';
     const msg = type === 'nofound' ? '그 코드의 방을 찾을 수 없어요.<br>코드를 다시 확인해 주세요.'
       : type === 'network' || type === 'server-error' ? '연결 서버에 접속하지 못했어요.<br>잠시 후 다시 해 주세요.'
       : '연결에 실패했어요.<br>와이파이나 데이터를 바꿔서 다시 해 보세요.';
     cleanupPeer();
-    vsOpen('앗', `<p class="vs-msg">${msg}</p><button class="vs-btn" id="vs-back">다시 하기</button>`);
+    vsOpen('앗', `<p class="vs-msg">${msg}${why}</p><button class="vs-btn" id="vs-back">다시 하기</button>`);
     document.getElementById('vs-back').onclick = vsMenu;
   }
 
