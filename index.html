@@ -588,7 +588,90 @@
       font-family: "Silkscreen", monospace; font-size: 10px; color: #d8f5c4;
     }
   }
+  /* ===== 메뉴 · 대결 · 순위표 ===== */
+  .overlay .menu { display: flex; gap: 10px; }
+  .overlay.paused .menu, .overlay.battle .menu { display: none; }
+  .overlay .exit { display: none; }
+  .overlay.battle .exit { display: inline-block; }
+  .overlay button.sec, .vs button.sec {
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 1px;
+    padding: 10px 14px; border-radius: 10px;
+    background: rgba(184,224,160,0.1); color: #b8e0a0;
+    box-shadow: inset 0 0 0 1.5px rgba(184,224,160,0.4);
+  }
+  .vs {
+    position: absolute; inset: 0; z-index: 5;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(5,10,7,0.88);
+    border-radius: inherit;
+  }
+  .vs.show { display: flex; }
+  .vs-card {
+    width: min(86%, 300px);
+    display: flex; flex-direction: column; align-items: stretch; gap: 12px;
+    color: #d8f5c4; text-align: center;
+  }
+  .vs-title { font-family: "Silkscreen", monospace; font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+  .vs-body { display: flex; flex-direction: column; gap: 10px; }
+  .vs-lbl { font-family: "Silkscreen", monospace; font-size: 10px; color: #6f9a72; text-align: left; letter-spacing: 1px; }
+  .vs-in {
+    width: 100%; padding: 12px; border-radius: 10px; border: none;
+    background: #0b1a10; color: #d8f5c4; font-size: 16px;
+    box-shadow: inset 0 0 0 1.5px rgba(184,224,160,0.35);
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif;
+  }
+  .vs-in.warn { box-shadow: inset 0 0 0 2px #e8284f; }
+  .vs-in.code { font-family: "Silkscreen", monospace; text-transform: uppercase; letter-spacing: 6px; text-align: center; font-size: 20px; }
+  .vs-btn {
+    padding: 13px; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(180deg, #f0405f, #c41d3f); color: #fff;
+    font-size: 15px; font-weight: 700;
+    box-shadow: 0 4px 0 #7a1028;
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif;
+  }
+  .vs-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #7a1028; }
+  .vs-row { display: flex; gap: 8px; }
+  .vs-row .vs-in { flex: 1; }
+  .vs-row .vs-btn { flex: 0 0 76px; }
+  .vs-or { font-size: 12px; color: #6f9a72; margin-top: 6px; }
+  .vs-msg { font-size: 14px; line-height: 1.7; color: #b8e0a0; margin: 4px 0; }
+  .vs-code {
+    font-family: "Silkscreen", monospace; font-size: 46px; font-weight: 700; letter-spacing: 10px;
+    color: #fff; text-shadow: 0 0 14px rgba(150,240,120,0.5);
+  }
+  .vs-count { font-family: "Silkscreen", monospace; font-size: 90px; font-weight: 700; color: #fff; text-shadow: 0 0 20px rgba(150,240,120,0.6); }
+  .vs-dots { display: flex; justify-content: center; gap: 8px; }
+  .vs-dots i { width: 8px; height: 8px; border-radius: 50%; background: #b8e0a0; animation: dot 1.2s infinite; }
+  .vs-dots i:nth-child(2) { animation-delay: .2s; } .vs-dots i:nth-child(3) { animation-delay: .4s; }
+  @keyframes dot { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+  .rank { list-style: none; margin: 0; padding: 0; max-height: 52vh; overflow: auto; text-align: left; }
+  .rank li { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-bottom: 1px dashed rgba(184,224,160,0.18); font-size: 14px; }
+  .rank li b { font-family: "Silkscreen", monospace; width: 22px; color: #6f9a72; }
+  .rank li:nth-child(1) b { color: #f2b000; } .rank li:nth-child(2) b { color: #cfd8dc; } .rank li:nth-child(3) b { color: #f26a0d; }
+  .rank li span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rank li em { font-style: normal; font-family: "Silkscreen", monospace; color: #fff; }
+  .rank li.me { background: rgba(184,224,160,0.1); border-radius: 6px; }
+  /* 상대 미니 화면 */
+  .opp { display: none; flex-direction: column; align-items: center; gap: 4px; }
+  body.battle .opp { display: flex; }
+  body.battle .vlogo { display: none !important; }
+  .opp-name { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; font-size: 11px; color: #b8e0a0; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .opp canvas { width: 60px; height: auto; border: 1px solid rgba(120,200,110,0.3); border-radius: 3px; image-rendering: pixelated; }
+  .opp-score { font-family: "Silkscreen", monospace; font-size: 11px; color: #d8f5c4; }
+  .opp-warn { font-family: "Silkscreen", monospace; font-size: 12px; color: #ff5470; min-height: 14px; }
+  /* 2인용 안 화면: 메뉴·버튼 숨김 */
+  html.embed .opp { display: none !important; }
+  html.embed .overlay button, html.embed .overlay .menu, html.embed .overlay .keys { display: none !important; }
+  .pc-only { display: none; }
+  @media (hover: hover) and (pointer: fine) { .pc-only { display: inline-block; } }
+  /* 위험할 때 화면 테두리 빨갛게 깜빡임 */
+  body.danger .screen { animation: dangerPulse 0.6s ease-in-out infinite; }
+  @keyframes dangerPulse {
+    0%, 100% { box-shadow: inset 0 0 0 2px rgba(255,40,80,0.9), inset 0 0 30px rgba(255,40,80,0.35); }
+    50% { box-shadow: inset 0 0 0 2px rgba(255,40,80,0.2), inset 0 0 10px rgba(255,40,80,0.1); }
+  }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
 <div class="gb">
@@ -624,8 +707,21 @@
       <div id="overlay" class="overlay">
         <div id="overlay-msg">PETRIS</div>
         <button id="overlay-btn">START</button>
+        <div class="menu">
+          <button id="btn-vs" class="sec">VS 대결</button>
+          <button id="btn-rank" class="sec">순위표</button>
+          <button id="btn-2p" class="sec pc-only">2P (PC)</button>
+        </div>
+        <button id="btn-exit" class="sec exit">나가기</button>
         <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기<br><kbd>P</kbd> 멈춤 &nbsp; <kbd>M</kbd> 음악</div>
         <button id="overlay-music" class="ov-music" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button>
+      </div>
+      <div id="vs" class="vs">
+        <div class="vs-card">
+          <div class="vs-title" id="vs-title">VS</div>
+          <div class="vs-body" id="vs-body"></div>
+          <button class="sec" id="vs-close">닫기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -679,12 +775,18 @@
 
 <script>
 (() => {
+  const QS = new URLSearchParams(location.search);
+  const EMBED = QS.has('embed');
+  const PNUM = QS.get('p') || '1';
+  if (QS.has('local') && !EMBED) { initLocal2P(); return; }
+  if (EMBED) document.documentElement.classList.add('embed');
   let COLS = 10;
   const CELL = 30;
   let ROWS = 20;
   const COLORS = {
     I: '#00a8e0', O: '#f2b000', T: '#8a3cf0',
-    S: '#10b870', Z: '#e8284f', J: '#2a5ef0', L: '#f26a0d'
+    S: '#10b870', Z: '#e8284f', J: '#2a5ef0', L: '#f26a0d',
+    G: '#59665d'
   };
   const SHAPES = {
     I: [[0,0],[1,0],[2,0],[3,0]],
@@ -806,6 +908,73 @@
     tone('sine', hard ? 190 : 140, 40, t, hard ? 0.25 : 0.12, hard ? 0.6 : 0.3);
     noise(t, hard ? 0.16 : 0.06, hard ? 0.4 : 0.15, hard ? 1400 : 800);
   }
+  // 음성 (영어 아나운서)
+  function say(text, pitch = 1.1, rate = 1) {
+    try {
+      if (!window.speechSynthesis) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.pitch = pitch; u.rate = rate; u.volume = 1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  // 야유
+  let lastBoo = 0;
+  function sfxBoo() {
+    if (!audioCtx) return;
+    const now = performance.now();
+    if (now - lastBoo < 5000) return;
+    lastBoo = now;
+    const t = audioCtx.currentTime;
+    for (let i = 0; i < 5; i++) {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), f = audioCtx.createBiquadFilter();
+      o.type = 'sawtooth';
+      const f0 = 150 + Math.random() * 60;
+      o.frequency.setValueAtTime(f0, t);
+      o.frequency.linearRampToValueAtTime(f0 * 0.7, t + 1.1);
+      f.type = 'lowpass'; f.frequency.value = 600;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.05, t + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+      o.connect(f).connect(g).connect(audioCtx.destination);
+      o.start(t + i * 0.03); o.stop(t + 1.3);
+    }
+    say('Boooo', 0.2, 0.6);
+  }
+  // 박수 (짧은 잡음을 여러 번 겹침)
+  function sfxApplause(sec = 2.5) {
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const n = Math.floor(sec * 60);
+    for (let i = 0; i < n; i++) {
+      const at = t + Math.random() * sec;
+      const fade = 1 - (at - t) / sec;
+      const src = audioCtx.createBufferSource();
+      src.buffer = getNoise();
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = 1200 + Math.random() * 2200; f.Q.value = 1.2;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.25 * fade + 0.03, at);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + 0.05);
+      src.connect(f).connect(g).connect(audioCtx.destination);
+      src.start(at, Math.random() * 0.4, 0.06);
+    }
+  }
+  // 위험 사이렌
+  function sirenAt(t, dur) {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(620, t);
+    o.frequency.linearRampToValueAtTime(980, t + dur / 2);
+    o.frequency.linearRampToValueAtTime(620, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.045, t + 0.05);
+    g.gain.setValueAtTime(0.045, t + dur - 0.05);
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur);
+  }
+
   function sfxClearStart() {
     if (!audioCtx) return;
     tone('square', 660, 1980, audioCtx.currentTime, 0.3, 0.06);
@@ -835,8 +1004,9 @@
   function scheduleMusic() {
     if (!musicRunning) return;
     while (nextNoteTime < audioCtx.currentTime + 0.25) {
-      const beat = beatLen();
+      const beat = beatLen() * (danger ? 0.72 : 1);
       const bar = SONG[measureIndex];
+      if (danger) { sirenAt(nextNoteTime, 2 * beat); sirenAt(nextNoteTime + 2 * beat, 2 * beat); }
       // 멜로디 (사각파)
       let t = nextNoteTime;
       for (const [n, beats] of bar.mel) {
@@ -884,10 +1054,20 @@
     return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
   }
 
+  let rng = Math.random;
+  let mode = 'solo', lockDims = false, pendingGarbage = 0;
+  function seeded(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
   function refillBag() {
     bag = [...KINDS];
     for (let i = bag.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(rng() * (i + 1));
       [bag[i], bag[j]] = [bag[j], bag[i]];
     }
   }
@@ -898,6 +1078,7 @@
   }
 
   function spawn() {
+    if (pendingGarbage > 0 && !applyGarbage()) return;
     const kind = nextKind || takeKind();
     nextKind = takeKind();
     piece = {
@@ -968,9 +1149,27 @@
 
     score += [0, 100, 300, 500, 800][n] * (level + 1);
     lines += n;
+    if (mode === 'battle') {
+      let sendN = [0, 0, 1, 2, 4][n];
+      const cancel = Math.min(pendingGarbage, sendN);
+      pendingGarbage -= cancel; sendN -= cancel;
+      if (sendN > 0) vsSend({ t: 'gb', n: sendN });
+    }
     updateLevel();
     updateHud();
-    popText = { text: ['', 'SINGLE', 'DOUBLE', 'TRIPLE', 'PETRIS!'][n], t: performance.now(), big: n === 4 };
+    const perfect = grid.every(r => r.every(c => !c));
+    popText = { text: perfect ? 'PERFECT!' : ['', 'NICE!', 'GREAT!', 'EXCELLENT!', 'PETRIS!'][n], t: performance.now(), big: n === 4 || perfect };
+    if (perfect) {
+      score += 2000 * (level + 1);
+      say('Perfect!', 1.2);
+      sfxApplause(3.5);
+      boardFlash = performance.now();
+    } else if (n === 4) {
+      say('Amazing!', 1.2);
+      sfxApplause(3);
+    } else {
+      say(['', 'Nice!', 'Great!', 'Excellent!'][n], 1.1);
+    }
     if (n >= 3) boardFlash = performance.now();
     shake(6 + n * 3, 260 + n * 90);
     sfxClear(n);
@@ -978,6 +1177,7 @@
 
     clearing = null;
     state = 'playing';
+    checkDanger();
     spawn();
   }
 
@@ -1031,9 +1231,25 @@
     lockPiece(true);
   }
 
+  let danger = false;
+  function checkDanger() {
+    const d = grid.slice(0, 5).some(r => r.some(c => c));
+    if (d !== danger) {
+      danger = d;
+      document.body.classList.toggle('danger', danger);
+    }
+  }
   function lockPiece(hard) {
     const cells = piece.cells.map(([x, y]) => [piece.x + x, piece.y + y]);
     merge();
+    // 블록 바로 아래가 비어 있으면 구멍(삑사리)
+    let holes = 0;
+    const lowest = {};
+    for (const [x, y] of cells) if (lowest[x] === undefined || y > lowest[x]) lowest[x] = y;
+    for (const x in lowest) {
+      const y = lowest[x] + 1;
+      if (y < ROWS && !grid[y][x]) holes++;
+    }
     flashes.push({ cells, t: performance.now() });
     shake(hard ? 8 : 3, hard ? 240 : 140);
     sfxLand(hard);
@@ -1042,6 +1258,8 @@
     dropCounter = 0;
     updateHud();
     const rows = fullRows();
+    if (!rows.length && holes >= 2) sfxBoo();
+    checkDanger();
     if (rows.length) {
       clearing = { rows, t: performance.now() };
       state = 'clearing';
@@ -1285,6 +1503,7 @@
     }
 
     if (state === 'playing' || state === 'clearing' || particles.length || popText || flashes.length) draw();
+    if (mode === 'battle' && (state === 'playing' || state === 'clearing')) sendBoard(now);
     $startBtn.classList.toggle('is-play', !(state === 'playing' || state === 'clearing'));
     requestAnimationFrame(loop);
   }
@@ -1302,6 +1521,7 @@
 
   function startGame() {
     unlockAudio();
+    danger = false; document.body.classList.remove('danger');
     grid = newGrid();
     score = 0; lines = 0; level = 0;
     playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0;
@@ -1320,10 +1540,18 @@
     piece = null;
     stopMusic();
     draw();
+    if (mode === 'battle') {
+      vsSend({ t: 'lose', s: score });
+      showBattleResult(false);
+      submitScore('vs');
+      return;
+    }
+    submitScore('solo');
     showOverlay(`GAME OVER<br><small>SCORE ${score}</small>`, 'RETRY');
   }
 
   function togglePause() {
+    if (mode === 'battle') return;
     if (state === 'playing') {
       state = 'paused';
       if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
@@ -1337,6 +1565,7 @@
   }
 
   function startOrPause() {
+    if (mode === 'battle') { if (state === 'over') requestRematch(); return; }
     if (state === 'playing' || state === 'paused') togglePause();
     else if (state === 'ready' || state === 'over') startGame();
   }
@@ -1355,6 +1584,8 @@
     ' ': 'drop', x: 'rotate', X: 'rotate', z: 'drop', Z: 'drop'
   };
   document.addEventListener('keydown', (e) => {
+    if (e.target && e.target.tagName === 'INPUT') return;
+    if ($vs.classList.contains('show')) return;
     if (e.key === 'p' || e.key === 'P' || e.key === 'Enter' || e.key === 'Escape') {
       e.preventDefault();
       startOrPause();
@@ -1398,7 +1629,7 @@
   const $gb = document.querySelector('.gb');
   let g = null;
   $gb.addEventListener('touchstart', (e) => {
-    if (e.target.closest('button')) return;
+    if (e.target.closest('button, input, .vs')) return;
     e.preventDefault();
     const t = e.touches[0];
     g = { sx: t.clientX, sy: t.clientY, lx: t.clientX, ly: t.clientY, upAcc: 0,
@@ -1461,6 +1692,365 @@
   const $infoL = document.querySelector('.screen .info-l');
   const $infoR = document.querySelector('.screen .info-r');
   const boxes = [...$side.querySelectorAll('.box')]; // NEXT, SCORE, LINES, LEVEL
+  // ================= 온라인 대결 (방 코드) =================
+  const $vs = document.getElementById('vs');
+  const $vsTitle = document.getElementById('vs-title');
+  const $vsBody = document.getElementById('vs-body');
+  const PEER_PREFIX = 'petris-v1-';
+  let peer = null, conn = null, isHost = false, roomCode = '';
+  let oppName = '', oppData = null, myReady = false, oppReady = false, lastSent = 0;
+  const RANK_URL = '';
+
+  function getName() { try { return localStorage.getItem('petris-name') || ''; } catch (e) { return ''; } }
+  function setName(n) { try { localStorage.setItem('petris-name', n); } catch (e) {} }
+  const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function vsOpen(title, html, closable = true) {
+    $vsTitle.textContent = title;
+    $vsBody.innerHTML = html;
+    document.getElementById('vs-close').style.display = closable ? '' : 'none';
+    $vs.classList.add('show');
+  }
+  function vsHide() { $vs.classList.remove('show'); }
+  function vsSend(d) {
+    if (EMBED) { parent.postMessage({ pet: 1, from: PNUM, d }, '*'); return; }
+    try { if (conn && conn.open) conn.send(d); } catch (e) {}
+  }
+
+  function makeCode() {
+    const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let c = '';
+    for (let i = 0; i < 4; i++) c += a[Math.floor(Math.random() * a.length)];
+    return c;
+  }
+
+  function cleanupPeer() {
+    try { if (conn) conn.close(); } catch (e) {}
+    try { if (peer) peer.destroy(); } catch (e) {}
+    peer = null; conn = null; oppData = null; oppName = '';
+    myReady = false; oppReady = false;
+  }
+
+  function vsMenu() {
+    if (typeof Peer === 'undefined') {
+      vsOpen('VS', '<p class="vs-msg">대결 기능을 불러오지 못했어요.<br>인터넷 연결을 확인해 주세요.</p>');
+      return;
+    }
+    vsOpen('VS 대결', `
+      <label class="vs-lbl">닉네임</label>
+      <input id="vs-name" class="vs-in" maxlength="8" placeholder="닉네임" value="${esc(getName())}">
+      <button class="vs-btn" id="vs-host">방 만들기</button>
+      <div class="vs-or">또는 코드로 참가</div>
+      <div class="vs-row">
+        <input id="vs-code" class="vs-in code" maxlength="4" placeholder="ABCD" autocapitalize="characters" autocomplete="off">
+        <button class="vs-btn" id="vs-join">참가</button>
+      </div>`);
+    const saveName = () => {
+      const v = document.getElementById('vs-name').value.trim();
+      if (v) setName(v);
+      return v;
+    };
+    document.getElementById('vs-host').onclick = () => {
+      if (!saveName()) return nameNeeded();
+      hostRoom();
+    };
+    document.getElementById('vs-join').onclick = () => {
+      if (!saveName()) return nameNeeded();
+      const code = document.getElementById('vs-code').value.trim().toUpperCase();
+      if (code.length !== 4) { document.getElementById('vs-code').focus(); return; }
+      joinRoom(code);
+    };
+  }
+  function nameNeeded() {
+    const el = document.getElementById('vs-name');
+    el.classList.add('warn'); el.focus();
+  }
+
+  function hostRoom() {
+    cleanupPeer();
+    isHost = true;
+    roomCode = makeCode();
+    vsOpen('방 만드는 중', '<p class="vs-msg">잠시만요…</p>');
+    peer = new Peer(PEER_PREFIX + roomCode);
+    peer.on('open', () => {
+      vsOpen('방 코드', `
+        <div class="vs-code">${roomCode}</div>
+        <p class="vs-msg">상대에게 이 코드를 알려주세요.<br>상대가 들어오면 바로 시작해요.</p>
+        <div class="vs-dots"><i></i><i></i><i></i></div>`);
+    });
+    peer.on('connection', c => {
+      if (conn && conn.open) { c.close(); return; }
+      setupConn(c);
+    });
+    peer.on('error', err => {
+      if (err.type === 'unavailable-id') hostRoom();
+      else vsError(err.type);
+    });
+  }
+
+  function joinRoom(code) {
+    cleanupPeer();
+    isHost = false;
+    roomCode = code;
+    vsOpen('연결 중', `<div class="vs-code">${esc(code)}</div><p class="vs-msg">방에 들어가는 중…</p>`);
+    peer = new Peer();
+    peer.on('open', () => setupConn(peer.connect(PEER_PREFIX + code, { reliable: true })));
+    peer.on('error', err => vsError(err.type === 'peer-unavailable' ? 'nofound' : err.type));
+  }
+
+  function vsError(type) {
+    const msg = type === 'nofound' ? '그 코드의 방을 찾을 수 없어요.<br>코드를 다시 확인해 주세요.'
+      : type === 'network' || type === 'server-error' ? '연결 서버에 접속하지 못했어요.<br>잠시 후 다시 해 주세요.'
+      : '연결에 실패했어요.<br>와이파이나 데이터를 바꿔서 다시 해 보세요.';
+    cleanupPeer();
+    vsOpen('앗', `<p class="vs-msg">${msg}</p><button class="vs-btn" id="vs-back">다시 하기</button>`);
+    document.getElementById('vs-back').onclick = vsMenu;
+  }
+
+  function setupConn(c) {
+    conn = c;
+    c.on('open', () => {
+      vsSend({ t: 'hi', name: getName() || '익명' });
+      if (isHost) setTimeout(hostGo, 400);
+    });
+    c.on('data', onVsData);
+    c.on('close', onVsClose);
+    c.on('error', () => onVsClose());
+  }
+
+  function hostGo() {
+    myReady = false; oppReady = false;
+    const seed = Math.floor(Math.random() * 2 ** 31);
+    const d = { t: 'go', seed, cols: COLS, rows: ROWS };
+    vsSend(d);
+    beginBattle(d);
+  }
+
+  function setDims(c, r) {
+    COLS = c; ROWS = r;
+    boardCanvas.width = COLS * CELL;
+    boardCanvas.height = ROWS * CELL;
+    grid = newGrid();
+    fitBoard();
+    draw();
+  }
+
+  function beginBattle(d) {
+    mode = 'battle';
+    lockDims = true;
+    document.body.classList.add('battle');
+    setDims(d.cols, d.rows);
+    rng = seeded(d.seed);
+    pendingGarbage = 0;
+    oppData = null;
+    drawOpp();
+    hideOverlay();
+    $overlay.classList.remove('battle');
+    let n = 3;
+    const tick = () => {
+      if (mode !== 'battle') return;
+      if (n > 0) {
+        vsOpen(oppName ? 'VS ' + oppName : 'VS', `<div class="vs-count">${n}</div>`, false);
+        sfxTick(n);
+        n--;
+        setTimeout(tick, 800);
+      } else {
+        vsHide();
+        startGame();
+      }
+    };
+    tick();
+  }
+
+  function onVsData(d) {
+    if (!d || !d.t) return;
+    if (d.t === 'hi') { oppName = String(d.name || '').slice(0, 8); drawOpp(); }
+    else if (d.t === 'go') { if (!isHost) beginBattle(d); }
+    else if (d.t === 'b') { oppData = d; drawOpp(); }
+    else if (d.t === 'gb') {
+      pendingGarbage += Math.min(10, d.n | 0);
+      shake(4, 160);
+      buzz(20);
+      drawOpp();
+    }
+    else if (d.t === 'lose') {
+      if (state === 'playing' || state === 'clearing' || state === 'ready') winBattle();
+    }
+    else if (d.t === 'again') {
+      oppReady = true;
+      if (isHost && myReady) hostGo();
+    }
+    else if (d.t === 'bye') { onVsClose(); }
+  }
+
+  function onVsClose() {
+    if (mode !== 'battle' && !$vs.classList.contains('show')) return;
+    const wasPlaying = state === 'playing' || state === 'clearing';
+    conn = null;
+    if (mode === 'battle' && wasPlaying) {
+      winBattle('상대 연결이 끊겼어요');
+    } else if (mode === 'battle') {
+      showOverlay('상대가 나갔어요', 'OK');
+      $overlay.classList.add('battle');
+    } else {
+      vsError('closed');
+    }
+  }
+
+  function winBattle(note) {
+    state = 'over';
+    piece = null;
+    stopMusic();
+    draw();
+    showBattleResult(true, note);
+    submitScore('vs');
+  }
+
+  function showBattleResult(win, note) {
+    const sub = note ? `<small>${note}</small>` : `<small>SCORE ${score}</small>`;
+    showOverlay(`${win ? 'WIN!' : 'LOSE'}<br>${sub}`, conn ? '다시 대결' : 'OK');
+    $overlay.classList.add('battle');
+    popText = { text: win ? 'WIN!' : 'LOSE', t: performance.now(), big: win };
+  }
+
+  function requestRematch() {
+    if (!conn) { exitBattle(); return; }
+    myReady = true;
+    vsSend({ t: 'again' });
+    showOverlay('상대를 기다리는 중…', '다시 대결');
+    $overlay.classList.add('battle');
+    if (isHost && oppReady) hostGo();
+  }
+
+  function exitBattle() {
+    vsSend({ t: 'bye' });
+    cleanupPeer();
+    mode = 'solo';
+    lockDims = false;
+    rng = Math.random;
+    pendingGarbage = 0;
+    document.body.classList.remove('battle');
+    $overlay.classList.remove('battle');
+    state = 'ready';
+    fitBoard();
+    grid = newGrid();
+    draw();
+    vsHide();
+    showOverlay('PETRIS', 'START');
+  }
+
+  // 받은 방해 줄을 바닥에 올림 (구멍 한 칸)
+  function applyGarbage() {
+    const k = Math.min(pendingGarbage, ROWS - 2);
+    pendingGarbage = 0;
+    const hole = Math.floor(Math.random() * COLS);
+    let topOut = false;
+    for (let i = 0; i < k; i++) {
+      const removed = grid.shift();
+      if (removed.some(c => c)) topOut = true;
+      const row = Array(COLS).fill('G');
+      row[hole] = null;
+      grid.push(row);
+    }
+    shake(5, 200);
+    if (topOut) { gameOver(); return false; }
+    return true;
+  }
+
+  // 내 화면 상태를 상대에게 전송
+  function sendBoard(now) {
+    if (now - lastSent < 130) return;
+    lastSent = now;
+    let g = '';
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) g += grid[y][x] || '.';
+    if (piece) {
+      const arr = g.split('');
+      for (const [x, y] of piece.cells) {
+        const px = piece.x + x, py = piece.y + y;
+        if (py >= 0 && py < ROWS && px >= 0 && px < COLS) arr[py * COLS + px] = piece.kind;
+      }
+      g = arr.join('');
+    }
+    vsSend({ t: 'b', g, c: COLS, r: ROWS, s: score, l: lines });
+  }
+
+  // 상대 미니 화면
+  const $opp = document.createElement('div');
+  $opp.className = 'opp';
+  $opp.innerHTML = '<div class="opp-name" id="opp-name">상대</div><canvas id="opp-cv" width="60" height="120"></canvas><div class="opp-score" id="opp-score">0</div><div class="opp-warn" id="opp-warn"></div>';
+  const oppCv = $opp.querySelector('canvas');
+  const octx = oppCv.getContext('2d');
+  function drawOpp() {
+    document.getElementById('opp-name') && (document.getElementById('opp-name').textContent = oppName || '상대');
+    const w = document.getElementById('opp-warn');
+    if (w) w.textContent = pendingGarbage > 0 ? '▲' + pendingGarbage : '';
+    const c = oppData ? oppData.c : COLS, r = oppData ? oppData.r : ROWS;
+    const cs = 6;
+    oppCv.width = c * cs; oppCv.height = r * cs;
+    octx.fillStyle = '#08100b';
+    octx.fillRect(0, 0, oppCv.width, oppCv.height);
+    if (!oppData) return;
+    for (let i = 0; i < oppData.g.length; i++) {
+      const k = oppData.g[i];
+      if (k === '.') continue;
+      octx.fillStyle = COLORS[k] || '#888';
+      octx.fillRect((i % c) * cs, Math.floor(i / c) * cs, cs - 1, cs - 1);
+    }
+    const sc = document.getElementById('opp-score');
+    if (sc) sc.textContent = oppData.s;
+  }
+
+  function sfxTick(n) {
+    if (!audioCtx) return;
+    tone('square', n === 1 ? 880 : 660, 0, audioCtx.currentTime, 0.12, 0.07);
+  }
+
+  // ================= 순위표 =================
+  function submitScore(m) {
+    if (EMBED || !RANK_URL || score <= 0) return;
+    const n = getName() || '익명';
+    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${level}&m=${m}`;
+    fetch(RANK_URL + q, { mode: 'no-cors' }).catch(() => {});
+  }
+
+  async function showRank() {
+    if (!RANK_URL) {
+      vsOpen('순위표', '<p class="vs-msg">순위표를 준비 중이에요.</p>');
+      return;
+    }
+    vsOpen('순위표', '<p class="vs-msg">불러오는 중…</p>');
+    try {
+      const res = await fetch(RANK_URL + '?a=top');
+      const data = await res.json();
+      const me = getName();
+      const rows = (data.top || []).map((r, i) => `
+        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}</span><em>${r.s}</em></li>`).join('');
+      vsOpen('순위표', rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>');
+    } catch (e) {
+      vsOpen('순위표', '<p class="vs-msg">순위표를 불러오지 못했어요.</p>');
+    }
+  }
+
+  if (EMBED) {
+    window.addEventListener('message', (e) => {
+      const m = e.data;
+      if (!m || !m.pet || !m.d) return;
+      if (m.d.t === 'key') { if (act[m.d.a]) act[m.d.a](); return; }
+      if (m.d.t === 'go') { oppName = m.d.opp || ''; beginBattle(m.d); return; }
+      onVsData(m.d);
+    });
+    if (PNUM === '2') musicOn = false;
+    setTimeout(() => parent.postMessage({ pet: 1, from: PNUM, d: { t: 'ready' } }, '*'), 300);
+  }
+  document.getElementById('btn-vs').addEventListener('click', vsMenu);
+  document.getElementById('btn-rank').addEventListener('click', showRank);
+  document.getElementById('btn-2p').addEventListener('click', () => { location.href = location.pathname + '?local'; });
+  document.getElementById('btn-exit').addEventListener('click', exitBattle);
+  document.getElementById('vs-close').addEventListener('click', () => {
+    if (mode !== 'battle') cleanupPeer();
+    vsHide();
+  });
+
   if (window.self !== window.top) document.documentElement.classList.add('framed');
   const $vlogo = document.createElement('div');
   $vlogo.className = 'vlogo';
@@ -1472,7 +2062,7 @@
     if (true) {
       // 왼쪽 한 줄에 모두: NEXT, LEVEL, SCORE, LINES, 로고, 멈춤, 음악
       $panel.append(boxes[0], boxes[3], boxes[1], boxes[2]);
-      $infoL.append($panel, $vlogo);
+      $infoL.append($panel, $opp, $vlogo);
       $infoR.style.display = 'none';
       $side.style.display = 'none';
     } else {
@@ -1502,7 +2092,7 @@
     const cols = Math.max(10, Math.min(13, Math.floor(availW / 25)));
     const cellW = availW / cols;
     const rows = Math.max(20, Math.min(50, Math.floor(availH / cellW)));
-    if ((rows !== ROWS || cols !== COLS) && (state === 'ready' || state === 'over')) {
+    if ((rows !== ROWS || cols !== COLS) && (state === 'ready' || state === 'over') && !lockDims) {
       ROWS = rows;
       COLS = cols;
       boardCanvas.width = COLS * CELL;
@@ -1523,9 +2113,119 @@
   score = 0; lines = 0; level = 0;
   updateHud();
   draw();
-  showOverlay('PETRIS', 'START');
+  showOverlay(EMBED ? 'PLAYER ' + PNUM : 'PETRIS', 'START');
   requestAnimationFrame(loop);
 })();
+
+// ================= PC 2인용 (한 화면에 둘) =================
+function initLocal2P() {
+  document.body.innerHTML = `
+    <div class="l2">
+      <div class="l2-top">
+        <span class="l2-logo"><b style="color:#e8284f">P</b><b style="color:#f26a0d">E</b><b style="color:#f2b000">T</b><b style="color:#10b870">R</b><b style="color:#00a8e0">I</b><b style="color:#8a3cf0">S</b> <em>2P</em></span>
+        <a class="l2-exit" href="./">나가기</a>
+      </div>
+      <div class="l2-row">
+        <div class="l2-side">
+          <div class="l2-name">PLAYER 1</div>
+          <iframe id="f1" src="?embed&p=1"></iframe>
+          <div class="l2-keys"><kbd>A</kbd><kbd>D</kbd> 이동 <kbd>W</kbd> 회전 <kbd>S</kbd> 천천히 <kbd>SPACE</kbd> 빨리</div>
+          <div class="l2-score" id="w1">0승</div>
+        </div>
+        <div class="l2-side">
+          <div class="l2-name">PLAYER 2</div>
+          <iframe id="f2" src="?embed&p=2"></iframe>
+          <div class="l2-keys"><kbd>←</kbd><kbd>→</kbd> 이동 <kbd>↑</kbd> 회전 <kbd>↓</kbd> 천천히 <kbd>ENTER</kbd> 빨리</div>
+          <div class="l2-score" id="w2">0승</div>
+        </div>
+      </div>
+      <div class="l2-ov" id="l2ov">
+        <div class="l2-msg" id="l2msg">둘이 한 키보드로 대결!</div>
+        <button class="l2-btn" id="l2start">START</button>
+        <div class="l2-hint">Enter 키 또는 버튼으로 시작</div>
+      </div>
+    </div>`;
+  const css = document.createElement('style');
+  css.textContent = `
+    body { margin: 0; background: #0b0b0f; color: #d8f5c4; font-family: "Silkscreen", -apple-system, "Apple SD Gothic Neo", sans-serif; overflow: hidden; }
+    .l2 { height: 100vh; display: flex; flex-direction: column; }
+    .l2-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 24px; }
+    .l2-logo { font-size: 22px; letter-spacing: 3px; }
+    .l2-logo b { text-shadow: 2px 2px 0 #000; }
+    .l2-logo em { font-style: normal; color: #fff; margin-left: 6px; }
+    .l2-exit { color: #b8e0a0; text-decoration: none; font-size: 13px; border: 1px solid rgba(184,224,160,.4); padding: 6px 12px; border-radius: 8px; }
+    .l2-row { flex: 1; display: flex; justify-content: center; gap: 28px; padding: 0 20px 12px; min-height: 0; }
+    .l2-side { flex: 0 1 460px; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 0; }
+    .l2-name { font-size: 15px; letter-spacing: 2px; }
+    .l2-side iframe { flex: 1; width: 100%; border: 0; border-radius: 14px; pointer-events: none; background: #17171f; min-height: 0; }
+    .l2-keys { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; font-size: 12px; color: rgba(184,224,160,.75); }
+    .l2-keys kbd { font-family: "Silkscreen", monospace; font-size: 10px; border: 1px solid rgba(184,224,160,.45); border-radius: 5px; padding: 1px 6px; margin: 0 2px; color: #fff; }
+    .l2-score { font-size: 14px; color: #fff; }
+    .l2-ov { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: rgba(5,10,7,.82); }
+    .l2-ov.hide { display: none; }
+    .l2-msg { font-size: 30px; text-align: center; line-height: 1.5; font-family: "Silkscreen", -apple-system, "Apple SD Gothic Neo", sans-serif; }
+    .l2-btn { font-family: "Silkscreen", monospace; font-size: 20px; letter-spacing: 3px; padding: 18px 40px; border: 0; border-radius: 14px; color: #fff; cursor: pointer; background: linear-gradient(180deg,#f0405f,#c41d3f); box-shadow: 0 6px 0 #7a1028, 0 10px 18px rgba(0,0,0,.5); }
+    .l2-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #7a1028; }
+    .l2-hint { font-size: 12px; color: rgba(184,224,160,.6); font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; }`;
+  document.head.appendChild(css);
+
+  const f = { 1: document.getElementById('f1'), 2: document.getElementById('f2') };
+  const ready = { 1: false, 2: false };
+  const wins = { 1: 0, 2: 0 };
+  let playing = false, shownAt = 0;
+  const ov = document.getElementById('l2ov');
+  const msg = document.getElementById('l2msg');
+  const post = (p, d) => f[p].contentWindow.postMessage({ pet: 1, d }, '*');
+
+  function start() {
+    if (!ready[1] || !ready[2]) { msg.textContent = '준비 중…'; setTimeout(start, 300); return; }
+    const seed = Math.floor(Math.random() * 2 ** 31);
+    post(1, { t: 'go', seed, cols: 10, rows: 22, opp: 'P2' });
+    post(2, { t: 'go', seed, cols: 10, rows: 22, opp: 'P1' });
+    ov.classList.add('hide');
+    playing = true;
+  }
+  document.getElementById('l2start').addEventListener('click', start);
+
+  window.addEventListener('message', (e) => {
+    const m = e.data;
+    if (!m || !m.pet || !m.from) return;
+    const me = m.from, other = me === '1' ? '2' : '1';
+    if (m.d.t === 'ready') { ready[me] = true; return; }
+    if (m.d.t === 'gb') post(other, m.d);
+    if (m.d.t === 'lose' && playing) {
+      playing = false;
+      post(other, { t: 'lose' });
+      wins[other]++;
+      document.getElementById('w1').textContent = wins[1] + '승';
+      document.getElementById('w2').textContent = wins[2] + '승';
+      setTimeout(() => {
+        msg.innerHTML = 'PLAYER ' + other + ' WIN!<br><small style="font-size:16px">' + wins[1] + ' : ' + wins[2] + '</small>';
+        document.getElementById('l2start').textContent = 'AGAIN';
+        ov.classList.remove('hide');
+        shownAt = performance.now();
+      }, 1800);
+    }
+  });
+
+  const keys = {
+    KeyA: [1, 'left'], KeyD: [1, 'right'], KeyW: [1, 'rotate'], KeyS: [1, 'down'], Space: [1, 'drop'],
+    ArrowLeft: [2, 'left'], ArrowRight: [2, 'right'], ArrowUp: [2, 'rotate'], ArrowDown: [2, 'down'],
+    Enter: [2, 'drop'], NumpadEnter: [2, 'drop'], Slash: [2, 'drop'],
+  };
+  document.addEventListener('keydown', (e) => {
+    if (!playing) {
+      if ((e.code === 'Enter' || e.code === 'KeyR') && !ov.classList.contains('hide') && performance.now() - shownAt > 1000) {
+        e.preventDefault(); start();
+      }
+      return;
+    }
+    const k = keys[e.code];
+    if (!k) return;
+    e.preventDefault();
+    post(k[0], { t: 'key', a: k[1] });
+  });
+}
 </script>
 </body>
 </html>
