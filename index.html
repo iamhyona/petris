@@ -844,7 +844,9 @@
   /* 상단 이름: 잘 보이는 픽셀 글꼴 */
   .lcd-label .copy { font-family: "Press Start 2P", monospace; font-size: 8px; letter-spacing: 1px; color: #b4b4cc; line-height: 1; }
   /* 시작 화면: 로고 아래 메뉴를 조금 아래로 */
-  .overlay #overlay-msg { margin-bottom: 44px !important; }
+  .overlay #overlay-msg { margin-bottom: 72px !important; }
+  .overlay .keys { margin-top: 48px !important; }
+  .overlay:not(.paused):not(.battle) { padding-top: 50px; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -1311,10 +1313,18 @@
       audioCtx.decodeAudioData(arr.buffer).then(buf => { voxBuf[k] = buf; }).catch(() => {});
     });
   }
-  function say(text, pitch = 1.1, rate = 1) {
+  // 목소리: 기기에 들어있는 여자 영어 음성 사용
+  function femaleVoice() {
+    try {
+      const v = speechSynthesis.getVoices().filter(x => /^en/i.test(x.lang));
+      return v.find(x => /samantha|female|zira|aria|jenny|karen|victoria|google us english/i.test(x.name)) || v[0] || null;
+    } catch (e) { return null; }
+  }
+  try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {}
+  function say(text, pitch = 1.2, rate = 1) {
     const key = text.toLowerCase().replace(/[^a-z]/g, '').replace(/o+$/, m => m.length > 2 ? '' : m);
     const k = key.startsWith('boo') || key === 'b' ? 'boo' : key;
-    if (audioCtx && voxBuf[k]) {
+    if (!window.speechSynthesis && audioCtx && voxBuf[k]) {
       const src = audioCtx.createBufferSource();
       const g = audioCtx.createGain();
       src.buffer = voxBuf[k];
@@ -1326,7 +1336,8 @@
     try {
       if (!window.speechSynthesis) return;
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.pitch = pitch; u.rate = rate; u.volume = 1;
+      u.lang = 'en-US'; u.pitch = Math.max(pitch, 1.2); u.rate = rate; u.volume = 1;
+      const fv = femaleVoice(); if (fv) u.voice = fv;
       speechSynthesis.cancel();
       speechSynthesis.speak(u);
     } catch (e) {}
