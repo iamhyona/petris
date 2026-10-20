@@ -1189,9 +1189,9 @@
   SONGS.paganini = { name: 'PAGANINI ETUDE 6', unit: 0.30, bar: 4, div: 2, drum: 'khskkhsh', bars: PMD.paganini };
   SONGS.fantaisie = { name: 'FANTAISIE IMPROMPTU', unit: 0.34, bar: 4, div: 2, drum: 'khshkksh', bars: PMD.fantaisie };
   const SONG_ORDER = ['tetris', 'turkish', 'elise', 'pathetique', 'campanella', 'paganini', 'fantaisie', 'mountain', 'bee'];
-  if (!SONG_ORDER.includes(songId)) songId = 'tetris';
   let songId = (() => { try { return localStorage.getItem('petris-bgm') || 'tetris'; } catch (e) { return 'tetris'; } })();
   if (!SONGS[songId]) songId = 'tetris';
+  if (!SONG_ORDER.includes(songId)) songId = 'tetris';
 
   function ensureAudio() {
     if (!audioCtx) {
