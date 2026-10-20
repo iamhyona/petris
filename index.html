@@ -1289,6 +1289,7 @@
     for (let i = 0; i < n; i++) v.setUint8(44 + i, 128);
     return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
   }
+  let ttsUnlocked = false;
   function unlockAudio() {
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     try {
@@ -1303,6 +1304,15 @@
     } catch (e) {}
     ensureAudio();
     loadVox();
+    // 아이폰: 첫 터치 때 음성 기능을 한 번 깨워야 이후 목소리가 나옴
+    try {
+      if (!ttsUnlocked && window.speechSynthesis) {
+        const u0 = new SpeechSynthesisUtterance(' ');
+        u0.volume = 0; u0.lang = 'en-US';
+        speechSynthesis.speak(u0);
+        ttsUnlocked = true;
+      }
+    } catch (e) {}
     if (audioCtx) {
       // 아주 짧은 무음을 한 번 재생해서 오디오를 깨움
       const b = audioCtx.createBuffer(1, 1, 22050);
@@ -1377,10 +1387,12 @@
   function say(text, pitch = 1.2, rate = 1) {
     const key = text.toLowerCase().replace(/[^a-z]/g, '').replace(/o+$/, m => m.length > 2 ? '' : m);
     const k = key.startsWith('boo') || key === 'b' ? 'boo' : key;
-    if (!window.speechSynthesis && audioCtx && voxBuf[k]) {
+    const noTts = !window.speechSynthesis || !speechSynthesis.getVoices().length;
+    if (noTts && audioCtx && voxBuf[k]) {
       const src = audioCtx.createBufferSource();
       const g = audioCtx.createGain();
       src.buffer = voxBuf[k];
+      src.playbackRate.value = 1.25;
       g.gain.value = 1.4;
       src.connect(g).connect(audioCtx.destination);
       src.start(audioCtx.currentTime + 0.05);
@@ -1391,8 +1403,9 @@
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US'; u.pitch = Math.max(pitch, 1.2); u.rate = rate; u.volume = 1;
       const fv = femaleVoice(); if (fv) u.voice = fv;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
+      if (speechSynthesis.speaking) speechSynthesis.cancel();
+      speechSynthesis.resume();
+      setTimeout(() => speechSynthesis.speak(u), 0);
     } catch (e) {}
   }
   // 야유
