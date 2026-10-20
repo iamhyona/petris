@@ -254,7 +254,7 @@
     .help { display: none; }
   }
   /* 모바일: 게임보이 본체가 화면 전체를 쓰도록 재배치 */
-  @media (max-width: 520px) {
+  @media all {
     body { display: block; padding: 0; height: 100vh; height: 100dvh; overflow: hidden; }
     .gb {
       width: 100vw;
@@ -302,7 +302,7 @@
   }
   .mpad { display: none; }
   .screen .info:empty { display: none; }
-  @media (max-width: 520px) {
+  @media all {
     .controls { display: none; }
     .bezel { padding: 2px; }
     .screen { flex-direction: row; align-items: stretch; justify-content: center; padding: 3px; gap: 3px; }
@@ -560,9 +560,33 @@
   }
   .panel .box + .box { border-top: 1px dashed rgba(184,224,160,0.2) !important; }
   .info .num { text-shadow: 0 0 8px rgba(150,240,120,0.45), 0 0 1px #d8f5c4; }
-  @media (max-width: 520px) {
+  @media all {
     .bezel { padding: 0 4px 4px; border-radius: 12px 12px 34px 12px; }
     .framed .lcd-label { padding-top: 8px; }
+  }
+  /* PC: 가운데 세로 화면으로 */
+  @media (min-width: 521px) {
+    body { background: #0b0b0f; }
+    .gb {
+      max-width: 460px; margin: 0 auto;
+      border-left: 1px solid rgba(255,255,255,0.05);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 0 60px rgba(0,0,0,0.6);
+    }
+  }
+  .overlay .keys { display: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .overlay .keys {
+      display: block;
+      font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      font-size: 12px; font-weight: 500; line-height: 1.9;
+      color: rgba(184,224,160,0.7); letter-spacing: 0;
+    }
+    .overlay .keys kbd {
+      display: inline-block; min-width: 20px; padding: 1px 6px; margin: 0 2px;
+      border-radius: 5px; border: 1px solid rgba(184,224,160,0.4);
+      font-family: "Silkscreen", monospace; font-size: 10px; color: #d8f5c4;
+    }
   }
 </style>
 </head>
@@ -600,6 +624,7 @@
       <div id="overlay" class="overlay">
         <div id="overlay-msg">PETRIS</div>
         <button id="overlay-btn">START</button>
+        <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기<br><kbd>P</kbd> 멈춤 &nbsp; <kbd>M</kbd> 음악</div>
         <button id="overlay-music" class="ov-music" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button>
       </div>
     </div>
@@ -693,13 +718,21 @@
 
   // ================= 배경음악 (Web Audio로 만든 칩튠) =================
   // 민요 '코로베이니키' 멜로디를 사각파로 직접 합성해서 반복 재생합니다.
-  const N = { A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.26, F5:698.46, G5:783.99, A5:880, R:0 };
-  const MELODY = [
-    [N.E5,1],[N.B4,.5],[N.C5,.5],[N.D5,1],[N.C5,.5],[N.B4,.5],[N.A4,1],[N.A4,.5],[N.C5,.5],[N.E5,1],[N.D5,.5],[N.C5,.5],
-    [N.B4,1.5],[N.C5,.5],[N.D5,1],[N.E5,1],[N.C5,1],[N.A4,1],[N.A4,1],[N.R,1],
-    [N.D5,1.5],[N.F5,.5],[N.A5,1],[N.G5,.5],[N.F5,.5],[N.E5,1.5],[N.C5,.5],[N.E5,1],[N.D5,.5],[N.C5,.5],
-    [N.B4,1],[N.B4,.5],[N.C5,.5],[N.D5,1],[N.E5,1],[N.C5,1],[N.A4,1],[N.A4,1],[N.R,1]
+  // 원곡 멜로디(러시아 민요 '코로베이니키') — 마디 단위 [미디 음, 박자]
+  const M = n => 440 * Math.pow(2, (n - 69) / 12);
+  const PART_A = [
+    { mel: [[76,1],[71,.5],[72,.5],[74,1],[72,.5],[71,.5]], bass: 40 },
+    { mel: [[69,1],[69,.5],[72,.5],[76,1],[74,.5],[72,.5]], bass: 45 },
+    { mel: [[71,1.5],[72,.5],[74,1],[76,1]],                bass: 44 },
+    { mel: [[72,1],[69,1],[69,1],[0,1]],                    bass: 45 },
   ];
+  const PART_B = [
+    { mel: [[0,.5],[74,1],[77,.5],[81,1],[79,.5],[77,.5]],  bass: 38 },
+    { mel: [[76,1.5],[72,.5],[76,1],[74,.5],[72,.5]],       bass: 36 },
+    { mel: [[71,1],[71,.5],[72,.5],[74,1],[76,1]],          bass: 40 },
+    { mel: [[72,1],[69,1],[69,1],[0,1]],                    bass: 45 },
+  ];
+  const SONG = [...PART_A, ...PART_A, ...PART_B, ...PART_B];
   const BEAT = 0.36; // 한 박(초)
 
   let audioCtx = null;
@@ -707,7 +740,7 @@
   let musicRunning = false;
   let musicTimer = null;
   let nextNoteTime = 0;
-  let noteIndex = 0;
+  let measureIndex = 0;
 
   function ensureAudio() {
     if (!audioCtx) {
@@ -786,30 +819,42 @@
     tone('sine', 130, 35, t, 0.4, 0.6);
   }
 
-  function playNote(freq, start, dur) {
-    if (!freq) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.linearRampToValueAtTime(0.09, start + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + dur * 0.9);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start(start);
-    osc.stop(start + dur);
+  function voice(type, freq, start, dur, vol) {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.linearRampToValueAtTime(vol, start + 0.008);
+    g.gain.setValueAtTime(vol, start + dur * 0.75);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur * 0.97);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(start);
+    o.stop(start + dur);
   }
 
   function scheduleMusic() {
     if (!musicRunning) return;
-    while (nextNoteTime < audioCtx.currentTime + 0.15) {
-      const [freq, beats] = MELODY[noteIndex];
-      const dur = beats * beatLen();
-      playNote(freq, nextNoteTime, dur);
-      nextNoteTime += dur;
-      noteIndex = (noteIndex + 1) % MELODY.length;
+    while (nextNoteTime < audioCtx.currentTime + 0.25) {
+      const beat = beatLen();
+      const bar = SONG[measureIndex];
+      // 멜로디 (사각파)
+      let t = nextNoteTime;
+      for (const [n, beats] of bar.mel) {
+        if (n) voice('square', M(n), t, beats * beat, 0.07);
+        t += beats * beat;
+      }
+      // 베이스: 8분음표로 한 옥타브씩 오르내림 (삼각파)
+      for (let i = 0; i < 8; i++) {
+        voice('triangle', M(bar.bass + (i % 2 ? 12 : 0)), nextNoteTime + i * beat / 2, beat / 2 * 0.9, 0.16);
+      }
+      // 하이햇
+      for (let i = 0; i < 8; i++) {
+        noise(nextNoteTime + i * beat / 2, 0.03, i % 2 ? 0.025 : 0.045, 9000);
+      }
+      nextNoteTime += 4 * beat;
+      measureIndex = (measureIndex + 1) % SONG.length;
     }
-    musicTimer = setTimeout(scheduleMusic, 25);
+    musicTimer = setTimeout(scheduleMusic, 30);
   }
 
   function startMusic() {
@@ -817,7 +862,7 @@
     if (!ensureAudio()) return;
     musicRunning = true;
     nextNoteTime = audioCtx.currentTime + 0.05;
-    noteIndex = 0;
+    measureIndex = 0;
     scheduleMusic();
   }
 
@@ -1310,7 +1355,7 @@
     ' ': 'drop', x: 'rotate', X: 'rotate', z: 'drop', Z: 'drop'
   };
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'p' || e.key === 'P' || e.key === 'Enter') {
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Enter' || e.key === 'Escape') {
       e.preventDefault();
       startOrPause();
       return;
@@ -1396,6 +1441,9 @@
     g = null;
   }, { passive: false });
   $gb.addEventListener('touchcancel', () => { g = null; });
+  document.querySelector('.screen .info-l').addEventListener('click', () => {
+    if (state === 'playing' || state === 'paused') togglePause();
+  });
 
   // 버튼 연결
   $overlayBtn.addEventListener('click', startOrPause);
@@ -1421,7 +1469,7 @@
   const $panel = document.createElement('div');
   $panel.className = 'panel';
   function placeInfo() {
-    if (window.innerWidth <= 520) {
+    if (true) {
       // 왼쪽 한 줄에 모두: NEXT, LEVEL, SCORE, LINES, 로고, 멈춤, 음악
       $panel.append(boxes[0], boxes[3], boxes[1], boxes[2]);
       $infoL.append($panel, $vlogo);
@@ -1438,7 +1486,7 @@
   }
   function fitBoard() {
     placeInfo();
-    if (window.innerWidth > 520) {
+    if (false) {
       boardCanvas.style.width = '';
       boardCanvas.style.height = '';
       return;
