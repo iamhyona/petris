@@ -751,6 +751,19 @@
   .info .sock #start-btn::after { content: 'PAUSE'; }
   .info .sock #start-btn.is-play::after { content: 'PLAY'; }
   .info .sock #sel-btn::after { content: 'MUSIC'; }
+  .info .sock #restart-btn::after { content: 'RESTART'; font-size: 10px; }
+  body.battle .info .sock:has(#restart-btn) { display: none; }
+  /* 로고를 LINES와 RESTART 사이 세로 가운데에 */
+  .info .vlogo { margin: auto 0 !important; }
+  .info .sock:has(#restart-btn) { margin-top: 0 !important; }
+  body.battle .info .sock:has(#start-btn) { margin-top: auto !important; }
+  /* 화면이 낮은 폰: 로고·버튼을 줄여서 PAUSE·MUSIC이 잘리지 않게 */
+  @media (max-height: 760px) {
+    .info .vlogo { gap: 3px; }
+    .info .vlogo b { width: 19px !important; height: 19px !important; font-size: 11px !important; border-radius: 4px !important; }
+    .info .sock .sysb { height: 34px !important; }
+  }
+  @media (max-height: 600px) { .info .vlogo { display: none !important; } }
   .info .sock #sel-btn.off::after { content: 'MUSIC'; }
   .info .sock #sel-btn:not(.off) { border-color: #5b8a60 !important; text-shadow: 0 0 8px rgba(150,240,120,0.6); }
   .info .sock #sel-btn.off { color: #4a6650 !important; border-color: #22382a !important; }
@@ -804,14 +817,14 @@
     margin-top: 6px; min-width: 0 !important; padding: 10px 14px !important;
     font-family: "Press Start 2P", "Silkscreen", monospace !important;
     font-size: 10px !important; letter-spacing: 1px; line-height: 1;
-    color: #8fe39a !important; background: transparent !important;
-    border: 2px solid rgba(143,227,154,0.8) !important; border-radius: 0 !important;
+    color: #f2b000 !important; background: transparent !important;
+    border: 2px solid rgba(242,176,0,0.85) !important; border-radius: 0 !important;
     box-shadow: none !important; text-shadow: none !important; transform: none !important;
   }
   .overlay button.bgm-link svg { width: 12px; height: 12px; fill: currentColor; shape-rendering: crispEdges; }
   .overlay button.bgm-link::before { content: none !important; }
   .overlay button.bgm-link:hover, .overlay button.bgm-link:focus-visible, .overlay button.bgm-link:active {
-    background: #8fe39a !important; color: #0b150e !important;
+    background: #f2b000 !important; color: #0b150e !important;
   }
   .overlay .rank-link { margin-top: 0 !important; }
   .overlay.paused .bgm-link, .overlay.battle .bgm-link, html.embed .bgm-link { display: none !important; }
@@ -832,6 +845,23 @@
   .lcd-label .ln canvas { display: block; image-rendering: pixelated; }
   .overlay button.bgm-link { white-space: nowrap; font-size: 9px !important; letter-spacing: 0 !important; padding: 10px 8px !important; overflow: hidden; }
   .overlay button.bgm-link span { overflow: hidden; text-overflow: ellipsis; }
+
+  /* 메뉴 선택 화살표: 픽셀 삼각형 */
+  .overlay button::before, .vs .vs-btn::before {
+    content: '' !important;
+    position: absolute; left: 22px; top: 50%;
+    width: 8px; height: 14px; margin-top: -7px; transform: none !important;
+    background: currentColor;
+    clip-path: polygon(0 0, 2px 0, 2px 2px, 4px 2px, 4px 4px, 6px 4px, 6px 6px, 8px 6px, 8px 8px, 6px 8px, 6px 10px, 4px 10px, 4px 12px, 2px 12px, 2px 14px, 0 14px);
+  }
+  /* 상단 이름: 잘 보이는 픽셀 글꼴 */
+  .lcd-label .copy { font-family: "Press Start 2P", monospace; font-size: 8px; letter-spacing: 1px; color: #b4b4cc; line-height: 1; }
+  /* 시작 화면: 로고 아래 메뉴를 조금 아래로 */
+  .overlay #overlay-msg { margin-bottom: 72px !important; }
+  .overlay .keys { margin-top: 48px !important; }
+  .overlay:not(.paused):not(.battle) { padding-top: 50px; }
+  /* 시작·게임오버 화면에선 PLAY·MUSIC 버튼도 뒤로 (딤 처리) */
+  body.ov:has(.overlay:not(.paused)) .info .sock { z-index: 1 !important; pointer-events: none; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -843,7 +873,7 @@
   </div>
 
   <div class="bezel">
-    <div class="lcd-label"><i class="ln"></i><span><em class="led"></em>© 2026 PARK HYONA</span><i class="ln"></i></div>
+    <div class="lcd-label"><i class="ln"></i><span class="copy">© 2026 PARK HYONA</span><i class="ln"></i></div>
     <div class="screen">
       <div class="info info-l"></div>
       <canvas id="board" width="300" height="600"></canvas>
@@ -863,7 +893,7 @@
         </div>
         <div class="box">
           <div class="lbl">STAGE</div>
-          <div class="num" id="level">0</div>
+          <div class="num" id="level">001</div>
         </div>
       </div>
       <div id="overlay" class="overlay">
@@ -927,6 +957,7 @@
   </div>
 
   <div class="sys">
+    <span class="sock"><button class="pb sysb" id="restart-btn" aria-label="처음부터 다시"></button></span>
     <span class="sock"><button class="pb sysb" id="start-btn" aria-label="잠시 멈춤"><svg class="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></button></span>
     <span class="sock"><button class="pb sysb" id="sel-btn" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button></span>
   </div>
@@ -1021,6 +1052,7 @@
   const $overlayBtn = document.getElementById('overlay-btn');
   const $startBtn = document.getElementById('start-btn');
   const $selBtn = document.getElementById('sel-btn');
+  const $restartBtn = document.getElementById('restart-btn');
 
   let grid, piece, nextKind, bag;
   let score, lines, level;
@@ -1190,7 +1222,13 @@
   SONGS.fantaisie = { name: 'FANTAISIE IMPROMPTU', unit: 0.34, bar: 4, div: 2, drum: 'khshkksh', bars: PMD.fantaisie };
   const SONG_ORDER = ['tetris', 'turkish', 'elise', 'pathetique', 'campanella', 'paganini', 'fantaisie', 'mountain', 'bee'];
   let songId = (() => { try { return localStorage.getItem('petris-bgm') || 'tetris'; } catch (e) { return 'tetris'; } })();
-  if (!SONGS[songId] || !SONG_ORDER.includes(songId)) songId = 'tetris';
+  if (!SONGS[songId]) songId = 'tetris';
+  if (!SONG_ORDER.includes(songId)) songId = 'tetris';
+  let baseSong = songId;
+  function stageSong() {
+    songId = SONG_ORDER[(SONG_ORDER.indexOf(baseSong) + stage - 1) % SONG_ORDER.length];
+    if (typeof bgmLabel === 'function') bgmLabel();
+  }
 
   function ensureAudio() {
     if (!audioCtx) {
@@ -1292,10 +1330,18 @@
       audioCtx.decodeAudioData(arr.buffer).then(buf => { voxBuf[k] = buf; }).catch(() => {});
     });
   }
-  function say(text, pitch = 1.1, rate = 1) {
+  // 목소리: 기기에 들어있는 여자 영어 음성 사용
+  function femaleVoice() {
+    try {
+      const v = speechSynthesis.getVoices().filter(x => /^en/i.test(x.lang));
+      return v.find(x => /samantha|female|zira|aria|jenny|karen|victoria|google us english/i.test(x.name)) || v[0] || null;
+    } catch (e) { return null; }
+  }
+  try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {}
+  function say(text, pitch = 1.2, rate = 1) {
     const key = text.toLowerCase().replace(/[^a-z]/g, '').replace(/o+$/, m => m.length > 2 ? '' : m);
     const k = key.startsWith('boo') || key === 'b' ? 'boo' : key;
-    if (audioCtx && voxBuf[k]) {
+    if (!window.speechSynthesis && audioCtx && voxBuf[k]) {
       const src = audioCtx.createBufferSource();
       const g = audioCtx.createGain();
       src.buffer = voxBuf[k];
@@ -1307,7 +1353,8 @@
     try {
       if (!window.speechSynthesis) return;
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.pitch = pitch; u.rate = rate; u.volume = 1;
+      u.lang = 'en-US'; u.pitch = Math.max(pitch, 1.2); u.rate = rate; u.volume = 1;
+      const fv = femaleVoice(); if (fv) u.voice = fv;
       speechSynthesis.cancel();
       speechSynthesis.speak(u);
     } catch (e) {}
@@ -1659,7 +1706,7 @@
     const base = [0, 2000, 5000, 9000, 14000, 20000, 27000, 35000, 44000, 54000];
     return st < base.length ? base[st] : base[base.length - 1] + (st - base.length + 1) * 12000;
   }
-  function riseEvery() { return Math.max(7000, 30000 - (stage - 3) * 3500); }
+  function riseEvery() { return Math.max(14000, 40000 - (stage - 3) * 2500); }
   function stageUp() {
     stage++;
     popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
@@ -1671,12 +1718,14 @@
     }
     lastRise = playTime;
     updateHud();
+    stageSong();
+    if (musicRunning) { stopMusic(); setTimeout(startMusic, 700); }
     setTimeout(() => say('Next stage'), 450);
   }
   function updateLevel() {
     while (score >= stageGoal(stage)) stageUp();
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = (stage - 1) * 2 + Math.floor(lines / 15) + Math.floor(playTime / 60000);
+    const nl = (stage - 1) + Math.floor(lines / 20) + Math.floor(playTime / 90000);
     if (nl !== level) { level = nl; updateHud(); }
     // 3단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
     if (mode !== 'battle' && stage >= 3 && state === 'playing' && playTime - lastRise > riseEvery()) {
@@ -1769,13 +1818,21 @@
   }
 
   function dropInterval() {
-    return Math.max(70, 800 - level * 65);
+    return Math.max(90, Math.round(800 * Math.pow(0.9, level)));
   }
 
+  function fitNum(el) {
+    el.style.removeProperty('font-size'); el.style.removeProperty('letter-spacing');
+    let fs = parseFloat(getComputedStyle(el).fontSize);
+    if (!el.clientWidth || el.scrollWidth <= el.clientWidth) return;
+    el.style.setProperty('letter-spacing', '0', 'important');
+    while (el.scrollWidth > el.clientWidth && fs > 8) { fs -= 0.5; el.style.setProperty('font-size', fs + 'px', 'important'); }
+  }
   function updateHud() {
     $score.textContent = score;
+    fitNum($score);
     $lines.textContent = String(lines).padStart(3, '0');
-    $level.textContent = String(stage).padStart(2, '0');
+    $level.textContent = String(stage).padStart(3, '0');
   }
 
   // ================= 그리기 =================
@@ -2014,11 +2071,13 @@
     $overlayMsg.innerHTML = msg;
     $overlayBtn.textContent = btnText;
     $overlay.style.display = 'flex';
+    document.body.classList.add('ov');
   }
 
   function hideOverlay() {
     $overlay.classList.remove('paused');
     $overlay.style.display = 'none';
+    document.body.classList.remove('ov');
   }
 
   function startGame() {
@@ -2026,6 +2085,7 @@
     danger = false; document.body.classList.remove('danger');
     grid = newGrid();
     score = 0; lines = 0; level = 0; stage = 1; lastRise = 0;
+    stageSong();
     playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
     bag = []; nextKind = null;
     updateHud();
@@ -2197,6 +2257,11 @@
   document.getElementById('overlay-music').addEventListener('click', toggleMusic);
   $startBtn.addEventListener('click', startOrPause);
   $selBtn.addEventListener('click', toggleMusic);
+  $restartBtn.addEventListener('click', () => {
+    if (mode === 'battle' || state === 'ready') return;
+    stopMusic();
+    startGame();
+  });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && state === 'playing') togglePause();
@@ -2566,6 +2631,7 @@
   bgmLabel();
   document.getElementById('btn-bgm').addEventListener('click', () => {
     songId = SONG_ORDER[(SONG_ORDER.indexOf(songId) + 1) % SONG_ORDER.length];
+    baseSong = songId;
     try { localStorage.setItem('petris-bgm', songId); } catch (e) {}
     bgmLabel();
     unlockAudio();
@@ -2615,7 +2681,7 @@
     if (true) {
       // 왼쪽 한 줄에 모두: NEXT, LEVEL, SCORE, LINES, 로고, 멈춤, 음악
       $panel.append(boxes[0], boxes[3], boxes[1], boxes[2]);
-      $infoL.append($panel, $opp, $vlogo, $startBtn.parentElement, $selBtn.parentElement);
+      $infoL.append($panel, $opp, $vlogo, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $infoR.style.display = 'none';
       $side.style.display = 'none';
     } else {
@@ -2623,7 +2689,7 @@
       $vlogo.remove();
       $panel.remove();
       $infoR.style.display = '';
-      document.querySelector('.sys').append($startBtn.parentElement, $selBtn.parentElement);
+      document.querySelector('.sys').append($restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $side.style.display = '';
     }
   }
