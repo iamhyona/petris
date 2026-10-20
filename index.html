@@ -804,14 +804,14 @@
     margin-top: 6px; min-width: 0 !important; padding: 10px 14px !important;
     font-family: "Press Start 2P", "Silkscreen", monospace !important;
     font-size: 10px !important; letter-spacing: 1px; line-height: 1;
-    color: #8fe39a !important; background: transparent !important;
-    border: 2px solid rgba(143,227,154,0.8) !important; border-radius: 0 !important;
+    color: #f2b000 !important; background: transparent !important;
+    border: 2px solid rgba(242,176,0,0.85) !important; border-radius: 0 !important;
     box-shadow: none !important; text-shadow: none !important; transform: none !important;
   }
   .overlay button.bgm-link svg { width: 12px; height: 12px; fill: currentColor; shape-rendering: crispEdges; }
   .overlay button.bgm-link::before { content: none !important; }
   .overlay button.bgm-link:hover, .overlay button.bgm-link:focus-visible, .overlay button.bgm-link:active {
-    background: #8fe39a !important; color: #0b150e !important;
+    background: #f2b000 !important; color: #0b150e !important;
   }
   .overlay .rank-link { margin-top: 0 !important; }
   .overlay.paused .bgm-link, .overlay.battle .bgm-link, html.embed .bgm-link { display: none !important; }
@@ -841,6 +841,10 @@
     background: currentColor;
     clip-path: polygon(0 0, 2px 0, 2px 2px, 4px 2px, 4px 4px, 6px 4px, 6px 6px, 8px 6px, 8px 8px, 6px 8px, 6px 10px, 4px 10px, 4px 12px, 2px 12px, 2px 14px, 0 14px);
   }
+  /* 상단 이름: 잘 보이는 픽셀 글꼴 */
+  .lcd-label .copy { font-family: "Press Start 2P", monospace; font-size: 8px; letter-spacing: 1px; color: #b4b4cc; line-height: 1; }
+  /* 시작 화면: 로고 아래 메뉴를 조금 아래로 */
+  .overlay #overlay-msg { margin-bottom: 44px !important; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -852,7 +856,7 @@
   </div>
 
   <div class="bezel">
-    <div class="lcd-label"><i class="ln"></i><span><em class="led"></em>© 2026 PARK HYONA</span><i class="ln"></i></div>
+    <div class="lcd-label"><i class="ln"></i><span class="copy">© 2026 PARK HYONA</span><i class="ln"></i></div>
     <div class="screen">
       <div class="info info-l"></div>
       <canvas id="board" width="300" height="600"></canvas>
@@ -1201,6 +1205,11 @@
   let songId = (() => { try { return localStorage.getItem('petris-bgm') || 'tetris'; } catch (e) { return 'tetris'; } })();
   if (!SONGS[songId]) songId = 'tetris';
   if (!SONG_ORDER.includes(songId)) songId = 'tetris';
+  let baseSong = songId;
+  function stageSong() {
+    songId = SONG_ORDER[(SONG_ORDER.indexOf(baseSong) + stage - 1) % SONG_ORDER.length];
+    if (typeof bgmLabel === 'function') bgmLabel();
+  }
 
   function ensureAudio() {
     if (!audioCtx) {
@@ -1669,7 +1678,7 @@
     const base = [0, 2000, 5000, 9000, 14000, 20000, 27000, 35000, 44000, 54000];
     return st < base.length ? base[st] : base[base.length - 1] + (st - base.length + 1) * 12000;
   }
-  function riseEvery() { return Math.max(7000, 30000 - (stage - 3) * 3500); }
+  function riseEvery() { return Math.max(14000, 40000 - (stage - 3) * 2500); }
   function stageUp() {
     stage++;
     popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
@@ -1681,12 +1690,14 @@
     }
     lastRise = playTime;
     updateHud();
+    stageSong();
+    if (musicRunning) { stopMusic(); setTimeout(startMusic, 700); }
     setTimeout(() => say('Next stage'), 450);
   }
   function updateLevel() {
     while (score >= stageGoal(stage)) stageUp();
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = (stage - 1) * 2 + Math.floor(lines / 15) + Math.floor(playTime / 60000);
+    const nl = (stage - 1) + Math.floor(lines / 20) + Math.floor(playTime / 90000);
     if (nl !== level) { level = nl; updateHud(); }
     // 3단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
     if (mode !== 'battle' && stage >= 3 && state === 'playing' && playTime - lastRise > riseEvery()) {
@@ -1779,11 +1790,19 @@
   }
 
   function dropInterval() {
-    return Math.max(70, 800 - level * 65);
+    return Math.max(90, Math.round(800 * Math.pow(0.9, level)));
   }
 
+  function fitNum(el) {
+    el.style.removeProperty('font-size'); el.style.removeProperty('letter-spacing');
+    let fs = parseFloat(getComputedStyle(el).fontSize);
+    if (!el.clientWidth || el.scrollWidth <= el.clientWidth) return;
+    el.style.setProperty('letter-spacing', '0', 'important');
+    while (el.scrollWidth > el.clientWidth && fs > 8) { fs -= 0.5; el.style.setProperty('font-size', fs + 'px', 'important'); }
+  }
   function updateHud() {
     $score.textContent = score;
+    fitNum($score);
     $lines.textContent = String(lines).padStart(3, '0');
     $level.textContent = String(stage).padStart(2, '0');
   }
@@ -2036,6 +2055,7 @@
     danger = false; document.body.classList.remove('danger');
     grid = newGrid();
     score = 0; lines = 0; level = 0; stage = 1; lastRise = 0;
+    stageSong();
     playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
     bag = []; nextKind = null;
     updateHud();
@@ -2576,6 +2596,7 @@
   bgmLabel();
   document.getElementById('btn-bgm').addEventListener('click', () => {
     songId = SONG_ORDER[(SONG_ORDER.indexOf(songId) + 1) % SONG_ORDER.length];
+    baseSong = songId;
     try { localStorage.setItem('petris-bgm', songId); } catch (e) {}
     bgmLabel();
     unlockAudio();
