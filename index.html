@@ -751,6 +751,8 @@
   .info .sock #start-btn::after { content: 'PAUSE'; }
   .info .sock #start-btn.is-play::after { content: 'PLAY'; }
   .info .sock #sel-btn::after { content: 'MUSIC'; }
+  .info .sock #restart-btn::after { content: 'RESTART'; font-size: 10px; }
+  body.battle .info .sock:has(#restart-btn) { display: none; }
   .info .sock #sel-btn.off::after { content: 'MUSIC'; }
   .info .sock #sel-btn:not(.off) { border-color: #5b8a60 !important; text-shadow: 0 0 8px rgba(150,240,120,0.6); }
   .info .sock #sel-btn.off { color: #4a6650 !important; border-color: #22382a !important; }
@@ -880,7 +882,7 @@
         </div>
         <div class="box">
           <div class="lbl">STAGE</div>
-          <div class="num" id="level">0</div>
+          <div class="num" id="level">001</div>
         </div>
       </div>
       <div id="overlay" class="overlay">
@@ -944,6 +946,7 @@
   </div>
 
   <div class="sys">
+    <span class="sock"><button class="pb sysb" id="restart-btn" aria-label="처음부터 다시"></button></span>
     <span class="sock"><button class="pb sysb" id="start-btn" aria-label="잠시 멈춤"><svg class="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></button></span>
     <span class="sock"><button class="pb sysb" id="sel-btn" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button></span>
   </div>
@@ -1038,6 +1041,7 @@
   const $overlayBtn = document.getElementById('overlay-btn');
   const $startBtn = document.getElementById('start-btn');
   const $selBtn = document.getElementById('sel-btn');
+  const $restartBtn = document.getElementById('restart-btn');
 
   let grid, piece, nextKind, bag;
   let score, lines, level;
@@ -1817,7 +1821,7 @@
     $score.textContent = score;
     fitNum($score);
     $lines.textContent = String(lines).padStart(3, '0');
-    $level.textContent = String(stage).padStart(2, '0');
+    $level.textContent = String(stage).padStart(3, '0');
   }
 
   // ================= 그리기 =================
@@ -2242,6 +2246,11 @@
   document.getElementById('overlay-music').addEventListener('click', toggleMusic);
   $startBtn.addEventListener('click', startOrPause);
   $selBtn.addEventListener('click', toggleMusic);
+  $restartBtn.addEventListener('click', () => {
+    if (mode === 'battle' || state === 'ready') return;
+    stopMusic();
+    startGame();
+  });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && state === 'playing') togglePause();
@@ -2661,7 +2670,7 @@
     if (true) {
       // 왼쪽 한 줄에 모두: NEXT, LEVEL, SCORE, LINES, 로고, 멈춤, 음악
       $panel.append(boxes[0], boxes[3], boxes[1], boxes[2]);
-      $infoL.append($panel, $opp, $vlogo, $startBtn.parentElement, $selBtn.parentElement);
+      $infoL.append($panel, $opp, $vlogo, $restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $infoR.style.display = 'none';
       $side.style.display = 'none';
     } else {
@@ -2669,7 +2678,7 @@
       $vlogo.remove();
       $panel.remove();
       $infoR.style.display = '';
-      document.querySelector('.sys').append($startBtn.parentElement, $selBtn.parentElement);
+      document.querySelector('.sys').append($restartBtn.parentElement, $startBtn.parentElement, $selBtn.parentElement);
       $side.style.display = '';
     }
   }
