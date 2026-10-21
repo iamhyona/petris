@@ -1772,7 +1772,16 @@
     return bag.pop();
   }
 
+  // 쌓인 뒤 다음 블록 입력 대기 0.1초, 바닥 닿은 뒤 쌓이기까지 여유 0.2초
+  const SPAWN_DELAY = 100, LOCK_DELAY = 200;
+  let spawnAt = 0, groundAt = 0, lockResets = 0;
+  function canInput() { return performance.now() - spawnAt >= SPAWN_DELAY; }
+  function touchGround() {
+    // 바닥에 닿은 상태에서 움직이거나 돌리면 여유 시간을 다시 줌 (최대 12번)
+    if (groundAt && lockResets < 12) { groundAt = performance.now(); lockResets++; }
+  }
   function spawn() {
+    spawnAt = performance.now(); groundAt = 0; lockResets = 0;
     if (pendingGarbage > 0 && !applyGarbage()) return;
     const kind = nextKind || takeKind();
     nextKind = takeKind();
@@ -1954,8 +1963,7 @@
       updateHud();
       return true;
     }
-    lockPiece(false);
-    return false;
+    return false; // 바닥이면 여유 시간 뒤에 쌓임
   }
 
   function hardDrop() {
@@ -2016,11 +2024,14 @@
   }
 
   function fitNum(el) {
+    // 박스 안쪽 폭에 맞춰 글자 크기를 줄임 (자릿수 상한 없음)
     el.style.removeProperty('font-size'); el.style.removeProperty('letter-spacing');
+    const box = el.parentElement, cs = getComputedStyle(box);
+    const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
     let fs = parseFloat(getComputedStyle(el).fontSize);
-    if (!el.clientWidth || el.scrollWidth <= el.clientWidth) return;
-    el.style.setProperty('letter-spacing', '0', 'important');
-    while (el.scrollWidth > el.clientWidth && fs > 8) { fs -= 0.5; el.style.setProperty('font-size', fs + 'px', 'important'); }
+    if (!avail || el.scrollWidth <= avail) return;
+    el.style.setProperty('letter-spacing', '-1px', 'important');
+    while (el.scrollWidth > avail && fs > 6) { fs -= 0.5; el.style.setProperty('font-size', fs + 'px', 'important'); }
   }
   function updateHud() {
     $score.textContent = score;
@@ -2258,7 +2269,13 @@
       if (dropCounter > dropInterval()) {
         dropCounter = 0;
         if (!collides(piece.cells, piece.x, piece.y + 1)) piece.y++;
-        else lockPiece(false);
+      }
+      // 바닥에 닿아도 0.2초 동안은 움직이거나 돌릴 수 있게 (그 뒤에 쌓임)
+      if (piece && state === 'playing') {
+        if (collides(piece.cells, piece.x, piece.y + 1)) {
+          if (!groundAt) groundAt = now;
+          else if (now - groundAt >= LOCK_DELAY) lockPiece(false);
+        } else groundAt = 0;
       }
     } else if (state === 'clearing' && now - clearing.t > 320) {
       finishClear();
@@ -2399,11 +2416,11 @@
 
   // ================= 조작 (키보드·버튼·터치 공통) =================
   const act = {
-    left()   { if (state === 'playing') { move(-1); draw(); } },
-    right()  { if (state === 'playing') { move(1); draw(); } },
-    down()   { if (state === 'playing') { if (softDrop()) dropCounter = 0; draw(); } },
-    rotate() { if (state === 'playing') { tryRotate(); draw(); } },
-    drop()   { if (state === 'playing') { hardDrop(); draw(); } },
+    left()   { if (state === 'playing' && canInput()) { move(-1); touchGround(); draw(); } },
+    right()  { if (state === 'playing' && canInput()) { move(1); touchGround(); draw(); } },
+    down()   { if (state === 'playing' && canInput()) { if (softDrop()) dropCounter = 0; draw(); } },
+    rotate() { if (state === 'playing' && canInput()) { tryRotate(); touchGround(); draw(); } },
+    drop()   { if (state === 'playing' && canInput()) { hardDrop(); draw(); } },
   };
 
   const keyMap = {
