@@ -926,6 +926,14 @@
   .overlay #overlay-msg { margin-bottom: 72px !important; }
   .overlay .keys { margin-top: 48px !important; }
   .overlay:not(.paused):not(.battle) { padding-top: 50px; }
+  /* 화면이 짧은 폰: 시작 화면 간격을 줄여 안내 문구까지 보이게 */
+  @media (max-height: 900px) {
+    .overlay:not(.paused):not(.battle):not(.over) { padding-top: 10px; }
+    .overlay:not(.paused):not(.over) #overlay-msg { margin-bottom: 36px !important; }
+    .overlay .keys-touch { margin-top: 22px !important; }
+    .overlay button.bgm-link { margin-top: 18px !important; }
+    .overlay .credit { margin-top: 4px !important; }
+  }
   /* 게임 오버: 이름 등록 */
   .overlay.over, .overlay.paused { padding-top: 0 !important; gap: 14px !important; }
   .overlay.paused #overlay-msg, .overlay.over #overlay-msg { margin-bottom: 28px !important; }
