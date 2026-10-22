@@ -1855,7 +1855,7 @@
     combo++;
     const comboMul = Math.min(5, combo);
     // 줄 수별 기본 점수: 1줄 100 · 2줄 300 · 3줄 700 · 4줄 1500 (속도 단계·콤보 배수 적용)
-    score += [0, 100, 300, 700, 1500][n] * (level + 1) * comboMul;
+    score += Math.round([0, 100, 300, 700, 1500][n] * (level + 1) * comboMul * modeMul());
     lines += n;
     if (mode === 'battle') {
       let sendN = [0, 0, 1, 2, 4][n];
@@ -1872,7 +1872,7 @@
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
     popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
     if (perfect) {
-      score += 5000 * (level + 1); // 판 전체 클리어 보너스
+      score += Math.round(5000 * (level + 1) * modeMul()); // 판 전체 클리어 보너스
       sfxApplause(3.5);
       boardFlash = performance.now();
     } else if (n === 4) {
@@ -2312,12 +2312,14 @@
   let gameMode = 'normal'; // easy | normal | hard
   function isHard() { return gameMode === 'hard' && mode !== 'battle'; }
   function isEasy() { return gameMode === 'easy' && mode !== 'battle'; }
+  // 모드별 점수 배율: EASY ×0.5 · NORMAL ×1 · HARD ×2
+  function modeMul() { return isEasy() ? 0.5 : isHard() ? 2 : 1; }
   function chooseMode() {
     unlockAudio();
     vsOpen('', `<div class="mode-pick">
-      <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE</button>
-      <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE</button>
-      <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE</button>
+      <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
+      <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
+      <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
     </div>`);
     $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
       gameMode = b.dataset.m;
