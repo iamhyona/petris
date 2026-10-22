@@ -2339,6 +2339,7 @@
 
   function startGame() {
     unlockAudio();
+    if (typeof fitBoard === 'function' && !lockDims) fitBoard(); // 시작 직전 실제 화면 높이에 맞춤
     danger = false; document.body.classList.remove('danger', 'warn');
     grid = newGrid();
     if (isHard()) fillHardStart();
@@ -3070,6 +3071,9 @@
     boardCanvas.style.height = fillH + 'px';
   }
   window.addEventListener('resize', fitBoard);
+  // 카톡 등 인앱 브라우저는 하단 바가 생겨도 resize가 안 올 때가 있어 화면 크기 변화를 직접 감시
+  if (window.visualViewport) visualViewport.addEventListener('resize', fitBoard);
+  if (window.ResizeObserver) new ResizeObserver(() => fitBoard()).observe($screen);
   window.addEventListener('orientationchange', () => setTimeout(fitBoard, 200));
   fitBoard();
   setTimeout(fitBoard, 100);
