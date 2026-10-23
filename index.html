@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792729440";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792729583";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1471,8 +1471,23 @@
   if (!SONGS[songId]) songId = 'tetris';
   if (!SONG_ORDER.includes(songId)) songId = 'tetris';
   let baseSong = songId;
+  // 첫 곡은 테트리스, 이후는 셔플 재생 (한 바퀴 다 돌 때까지 같은 곡 안 나옴)
+  let songBag = [], songT0 = 0;
+  function nextSong() {
+    if (!songBag.length) {
+      songBag = SONG_ORDER.filter(k => k !== songId);
+      for (let i = songBag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [songBag[i], songBag[j]] = [songBag[j], songBag[i]]; }
+    }
+    return songBag.pop();
+  }
+  function songEnded() { // 곡이 한 바퀴 끝났을 때 40초 이상 들었으면 다음 곡으로
+    if (nextNoteTime - songT0 < 40) return false;
+    songId = nextSong(); barIdx = 0; loopN = 0; songT0 = nextNoteTime;
+    if (typeof bgmLabel === 'function') bgmLabel();
+    return true;
+  }
   function stageSong() {
-    songId = SONG_ORDER[(SONG_ORDER.indexOf(baseSong) + stage - 1) % SONG_ORDER.length];
+    if (stage <= 1) { songId = 'tetris'; songBag = []; } else songId = nextSong();
     if (typeof bgmLabel === 'function') bgmLabel();
   }
 
@@ -1747,7 +1762,7 @@
       if (danger) { sirenAt(nextNoteTime, len / 2); sirenAt(nextNoteTime + len / 2, len / 2); }
       nextNoteTime += len;
       barIdx++;
-      if (barIdx % song.bars.length === 0) { loopN++; noise(nextNoteTime - 0.02, 0.5, 0.06, 7000); }
+      if (barIdx % song.bars.length === 0) { loopN++; noise(nextNoteTime - 0.02, 0.5, 0.06, 7000); if (songEnded()) break; }
     }
     musicTimer = setTimeout(scheduleMusic, 30);
   }
@@ -1797,7 +1812,7 @@
 
       nextNoteTime += 4 * beat;
       barIdx = (barIdx + 1) % (ARR.length * 4);
-      if (barIdx === 0) loopN++;
+      if (barIdx === 0) { loopN++; if (songEnded()) break; }
     }
     musicTimer = setTimeout(scheduleMusic, 30);
   }
@@ -1807,7 +1822,7 @@
     if (!ensureAudio()) return;
     musicRunning = true;
     nextNoteTime = audioCtx.currentTime + 0.05;
-    barIdx = 0; loopN = 0;
+    barIdx = 0; loopN = 0; songT0 = nextNoteTime;
     scheduleMusic();
   }
 
