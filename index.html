@@ -1664,7 +1664,7 @@
   }
 
   function voice(type, freq, start, dur, vol) {
-    vol *= 0.7; // 배경음악 볼륨 (효과음은 그대로)
+    vol *= 0.45; // 배경음악 볼륨 (효과음은 그대로)
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.type = type;
     o.frequency.value = freq;
@@ -1677,8 +1677,8 @@
     o.stop(start + dur);
   }
 
-  function kick(t) { tone('sine', 160, 38, t, 0.16, 0.385); }
-  function snare(t) { noise(t, 0.13, 0.154, 6000); tone('triangle', 200, 120, t, 0.07, 0.084); }
+  function kick(t) { tone('sine', 160, 38, t, 0.16, 0.25); }
+  function snare(t) { noise(t, 0.13, 0.1, 6000); tone('triangle', 200, 120, t, 0.07, 0.055); }
 
   function scheduleSong(song) {
     while (nextNoteTime < audioCtx.currentTime + 0.25) {
