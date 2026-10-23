@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792750627";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792750697";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -662,6 +662,7 @@
   .vs-msg { font-size: 14px; line-height: 1.7; color: #b8e0a0; margin: 4px 0; }
   .phS-row2 { display: flex; gap: 10px; width: 232px; max-width: 100%; } /* RANKING · SETTINGS 한 줄 */
   .phS .phS-row2 .phS-b { width: auto !important; flex: 1 1 0; font-size: 12px !important; letter-spacing: .08em !important; }
+  #overlay .phS-logo { width: min(250px, 68vw) !important; height: 84px !important; } /* 시작 화면 PETRIS 글자 조금 작게 */
   .set-list { text-align: left; }
   .set-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px dashed rgba(184,224,160,0.18); font-size: 14px; color: #dfe8d8; }
   .set-row:last-child { border-bottom: 0; }
@@ -1957,7 +1958,7 @@
   // 연출용 상태
   let lastTetris = false;
   let playTime = 0, clearing = null, particles = [], flashes = [], popText = null, boardFlash = 0;
-  let shakeEnd = 0, shakeDur = 1, shakeAmp = 0;
+  let shakeEnd = 0, shakeDur = 1, shakeAmp = 0, thumpAt = -1e9, thumpAmp = 0, dropDist = 0;
   const $bezel = document.querySelector('.bezel');
 
   function fullRows() {
@@ -2124,6 +2125,7 @@
       piece.y++;
       dist++;
     }
+    dropDist = dist;
     lockPiece(true);
   }
 
@@ -2168,9 +2170,11 @@
     flashes.push({ cells, t: performance.now() });
     sfxLand(hard);
     buzz(hard ? 25 : 10);
-    if (hard) { // 빨리 내리기: 화면 흔들림 + 착지 먼지
-      shake(5, 180);
-      if (SET.fx) for (const [x, y] of cells) for (let k = 0; k < 2; k++) particles.push({ x: (x + 0.5) * CELL, y: (y + 1) * CELL, vx: (Math.random() * 2 - 1) * 3, vy: -Math.random() * 3 - 1, life: 0.6, color: '#e9f6dc', size: 2 + Math.random() * 3, rot: 0, vr: 0 });
+    if (hard && SET.fx) { // 빨리 내리기: 판 전체가 '쿵' 내려앉았다 튕기고 + 착지 먼지
+      thumpAt = performance.now(); thumpAmp = 6 + Math.min(8, dropDist * 0.45);
+      shake(3, 140);
+      const low = Math.max(...cells.map(c => c[1]));
+      for (const [x, y] of cells) if (y === low || !cells.some(c => c[0] === x && c[1] > y)) for (let k = 0; k < 4; k++) particles.push({ x: (x + Math.random()) * CELL, y: (y + 1) * CELL, vx: (Math.random() * 2 - 1) * 4, vy: -Math.random() * 4 - 1.5, life: 0.75, color: k % 2 ? '#ffffff' : '#cfe8bf', size: 3 + Math.random() * 4, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.3 });
     }
     piece = null;
     dropCounter = 0;
@@ -2502,9 +2506,11 @@
     }
 
     // 화면 흔들림
-    if (now < shakeEnd) {
-      const a = shakeAmp * (shakeEnd - now) / shakeDur;
-      $bezel.style.transform = `translate(${(Math.random() * 2 - 1) * a}px, ${(Math.random() * 2 - 1) * a * 0.5 + a * 0.5}px)`;
+    const tt = (now - thumpAt) / 420; // 쿵: 아래로 꺼졌다가 통통 튀며 제자리
+    const thump = tt >= 0 && tt < 1 ? thumpAmp * Math.exp(-tt * 4) * Math.cos(tt * 9) : 0;
+    if (now < shakeEnd || thump) {
+      const a = now < shakeEnd ? shakeAmp * (shakeEnd - now) / shakeDur : 0;
+      $bezel.style.transform = `translate(${(Math.random() * 2 - 1) * a}px, ${(Math.random() * 2 - 1) * a * 0.5 + a * 0.5 + thump}px)`;
     } else if ($bezel.style.transform) {
       $bezel.style.transform = '';
     }
