@@ -1787,7 +1787,7 @@
   }
 
   // 쌓인 뒤 다음 블록 입력 대기 0.1초, 바닥 닿은 뒤 쌓이기까지 여유 0.2초
-  const SPAWN_DELAY = 100, LOCK_DELAY = 200;
+  const SPAWN_DELAY = 30, LOCK_DELAY = 200;
   let spawnAt = 0, groundAt = 0, lockResets = 0;
   function canInput() { return performance.now() - spawnAt >= SPAWN_DELAY; }
   function touchGround() {
@@ -2434,7 +2434,7 @@
   const act = {
     left()   { if (state === 'playing' && canInput()) { move(-1); touchGround(); draw(); } },
     right()  { if (state === 'playing' && canInput()) { move(1); touchGround(); draw(); } },
-    down()   { if (state === 'playing' && canInput()) { if (softDrop()) dropCounter = 0; draw(); } },
+    down()   { if (state === 'playing' && canInput()) { if (softDrop()) dropCounter = 0; else if (collides(piece.cells, piece.x, piece.y + 1)) lockPiece(false); draw(); } }, // 바닥에서 계속 누르면 바로 쌓임
     rotate() { if (state === 'playing' && canInput()) { tryRotate(); touchGround(); draw(); } },
     drop()   { if (state === 'playing' && canInput()) { hardDrop(); draw(); } },
   };
@@ -2467,6 +2467,7 @@
     const name = keyMap[e.key];
     if (name) {
       e.preventDefault();
+      if (name === 'drop' && e.repeat) return; // 꾹 누를 때 다음 블록까지 연달아 떨어지지 않게
       act[name]();
     }
   });
