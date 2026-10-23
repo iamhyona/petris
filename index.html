@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722603";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722686";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1825,10 +1825,10 @@
 
   function takeKind() {
     const M = typeof isMaster === 'function' && isMaster();
-    if (M) { itemCount++; if (itemCount >= 18 && rng() < 0.25) { itemCount = 0; return ['B', 'B', 'LB', 'SL'][Math.floor(rng() * 4)]; } }
+    if (M) { itemCount++; if (itemCount >= 25 && rng() < 0.2) { itemCount = 0; return ['B', 'B', 'LB', 'SL'][Math.floor(rng() * 4)]; } }
     if (!bag || bag.length === 0) refillBag();
     const k = bag.pop();
-    if (M) { trapCount++; if (trapCount >= 6 && rng() < 0.45) { trapCount = 0; return variant(['#R', '#Q', '#F'][Math.floor(rng() * 3)], k); } }
+    if (M) { trapCount++; if (trapCount >= 5 && rng() < 0.5) { trapCount = 0; return variant(['#R', '#Q', '#F'][Math.floor(rng() * 3)], k); } }
     return k;
   }
 
@@ -1924,7 +1924,7 @@
     combo++;
     const comboMul = Math.min(5, combo);
     // 줄 수별 기본 점수: 1줄 100 · 2줄 300 · 3줄 700 · 4줄 1500 (속도 단계·콤보 배수 적용)
-    score += Math.round((n <= 4 ? [0, 100, 300, 700, 1500][n] : 1500 + (n - 4) * 800) * (level + 1) * comboMul * modeMul());
+    score += Math.round((n <= 4 ? [0, 100, 300, 700, 1500][n] : 1500 + (n - 4) * 800) * scoreLv() * comboMul * modeMul());
     lines += n;
     if (mode === 'battle') {
       let sendN = [0, 0, 1, 2, 4][Math.min(n, 4)];
@@ -1941,7 +1941,7 @@
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
     popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
     if (perfect) {
-      score += Math.round(5000 * (level + 1) * modeMul()); // 판 전체 클리어 보너스
+      score += Math.round(5000 * scoreLv() * modeMul()); // 판 전체 클리어 보너스
       sfxApplause(3.5);
       boardFlash = performance.now();
     } else if (n === 4) {
@@ -1973,7 +1973,9 @@
   }
   // 다음 단계까지 필요한 누적 줄: 8 · 18 · 30 · 44 · 60 … (단계마다 2줄씩 더)
   function stageLines(st) { return 6 * st + st * (st + 1); }
-  function riseEvery() { return isMaster() ? Math.max(5000, 11000 - (stage - 1) * 1200) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
+  // 점수 배율용 레벨: 난이도 보너스(하드 +6, 마스터 +12)는 빼고 계산 → 속도만 빠르고 점수는 안 부풀게
+  function scoreLv() { return 1 + Math.max(0, level - (isMaster() ? 12 : isHard() ? 6 : 0)); }
+  function riseEvery() { return isMaster() ? Math.max(4000, 8000 - (stage - 1) * 1000) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
   function stageUp() {
     stage++;
     popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
@@ -1994,7 +1996,7 @@
   function updateLevel() {
     while (lines >= stageLines(stage)) stageUp(); // 지운 줄 수로 다음 단계 (모드 배율과 상관없이 같은 속도)
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isMaster() ? 10 : isHard() ? 6 : 0) + speedBoost;
+    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isMaster() ? 12 : isHard() ? 6 : 0) + speedBoost;
     if (nl !== level) { level = nl; updateHud(); }
     // 2단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
     if (mode !== 'battle' && (stage >= 2 || isMaster()) && state === 'playing' && playTime - lastRise > riseEvery()) {
@@ -2112,11 +2114,10 @@
         grid[y][x] = null; n++;
         for (let k = 0; k < 5; k++) particles.push({ x: (x + 0.5) * CELL, y: (y + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 7, vy: -Math.random() * 9 - 1, life: 1, color: col, size: 4 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.35 });
       }
-      // 남은 블록은 아래로 내려앉음
-      for (let x = 0; x < COLS; x++) { let w = ROWS - 1; for (let y = ROWS - 1; y >= 0; y--) if (grid[y][x]) { const v = grid[y][x]; grid[y][x] = null; grid[w][x] = v; w--; } }
+      // (내려앉지 않음: 터진 자리는 구멍으로 남음)
     }
     for (let k = 0; k < 24; k++) particles.push({ x: (bx + 0.5) * CELL, y: (by + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 10, vy: -Math.random() * 12 - 2, life: 1, color: hsl2hex(k * 15, 90, 62), size: 5 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.4 });
-    score += 10 + Math.round(n * 20 * (level + 1) * modeMul());
+    score += 10 + Math.round(n * 10 * modeMul()); // 컬러 폭탄: 블록당 10점 (레벨 배율 없음)
     popText = { text: 'COLOR BOMB!', t: performance.now(), big: true, color: 'rainbow' };
     boardFlash = performance.now();
     shake(8, 320);
