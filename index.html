@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792720773";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722603";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1825,10 +1825,10 @@
 
   function takeKind() {
     const M = typeof isMaster === 'function' && isMaster();
-    if (M) { itemCount++; if (itemCount >= 12 && rng() < 0.35) { itemCount = 0; return ['B', 'B', 'LB', 'SL'][Math.floor(rng() * 4)]; } }
+    if (M) { itemCount++; if (itemCount >= 18 && rng() < 0.25) { itemCount = 0; return ['B', 'B', 'LB', 'SL'][Math.floor(rng() * 4)]; } }
     if (!bag || bag.length === 0) refillBag();
     const k = bag.pop();
-    if (M) { trapCount++; if (trapCount >= 9 && rng() < 0.3) { trapCount = 0; return variant(['#R', '#Q', '#F'][Math.floor(rng() * 3)], k); } }
+    if (M) { trapCount++; if (trapCount >= 6 && rng() < 0.45) { trapCount = 0; return variant(['#R', '#Q', '#F'][Math.floor(rng() * 3)], k); } }
     return k;
   }
 
@@ -1973,7 +1973,7 @@
   }
   // 다음 단계까지 필요한 누적 줄: 8 · 18 · 30 · 44 · 60 … (단계마다 2줄씩 더)
   function stageLines(st) { return 6 * st + st * (st + 1); }
-  function riseEvery() { return Math.max(7000, 18000 - (stage - 2) * 1500); }
+  function riseEvery() { return isMaster() ? Math.max(5000, 11000 - (stage - 1) * 1200) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
   function stageUp() {
     stage++;
     popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
@@ -1994,10 +1994,10 @@
   function updateLevel() {
     while (lines >= stageLines(stage)) stageUp(); // 지운 줄 수로 다음 단계 (모드 배율과 상관없이 같은 속도)
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isHard() ? 6 : 0) + speedBoost;
+    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isMaster() ? 10 : isHard() ? 6 : 0) + speedBoost;
     if (nl !== level) { level = nl; updateHud(); }
     // 2단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
-    if (mode !== 'battle' && stage >= 2 && state === 'playing' && playTime - lastRise > riseEvery()) {
+    if (mode !== 'battle' && (stage >= 2 || isMaster()) && state === 'playing' && playTime - lastRise > riseEvery()) {
       lastRise = playTime;
       pendingGarbage += 1;
       shake(3, 150);
@@ -2451,7 +2451,7 @@
     }));
   }
   function fillHardStart() {
-    const h = Math.min(6, Math.floor(ROWS * 0.28));
+    const h = isMaster() ? Math.min(8, Math.floor(ROWS * 0.4)) : Math.min(6, Math.floor(ROWS * 0.28)); // 마스터는 바닥 8줄
     for (let i = 0; i < h; i++) {
       const y = ROWS - 1 - i;
       const holes = new Set([Math.floor(rng() * COLS)]);
