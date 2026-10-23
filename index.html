@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792727036";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792729440";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1055,7 +1055,7 @@
         <button id="btn-restart2" class="sec ov-only">RESTART</button>
         <button id="btn-home" class="sec ov-only">MAIN MENU</button>
         <button id="btn-bgm" class="bgm-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M3 0h5v6h-1v1h-2v-1h-1v-1h3v-3h-3v4h-1v1h-2v-1h-1v-1h3z"/></svg><span id="bgm-name">BGM</span></button>
-        <div class="credit">MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA</div>
+        <div class="credit">MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA · FLUTETUNES.COM</div>
         <div class="credit-note"><span>이 게임은 서울 마포구에 사는 박현아가 만든</span><br><span>비상업용 게임이에요. 지치고 힘들 때</span><br><span>잠시 머리 식히며 마음껏 즐겨 주세요.</span></div>
         <button id="btn-rank" class="rank-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1 0h6v1h1v2h-1v1h-1v1h-1v1h1v1h1v1h-6v-1h1v-1h1v-1h-1v-1h-1v-1h-1v-2h1z"/></svg>RANKING</button>
         <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기</div>
@@ -1447,7 +1447,26 @@
   SONGS.campanella = { name: 'LA CAMPANELLA', unit: 0.38, bar: 3, div: 2, drum: 'khshsh', bars: PMD.campanella };
   SONGS.paganini = { name: 'PAGANINI ETUDE 6', unit: 0.30, bar: 4, div: 2, drum: 'khskkhsh', bars: PMD.paganini };
   SONGS.fantaisie = { name: 'FANTAISIE IMPROMPTU', unit: 0.34, bar: 4, div: 2, drum: 'khshkksh', bars: PMD.fantaisie };
-  const SONG_ORDER = ['tetris', 'turkish', 'elise', 'pathetique', 'campanella', 'paganini', 'fantaisie', 'mountain', 'bee'];
+  // 새 곡 4개 (멜로디: flutetunes.com MIDI · 퍼블릭 도메인 곡, 2글자/음 압축)
+  const FT = {"D":[8,4,16,2,12,6,1,0.5,3,34,5,19,0.25,0.3333333333333333],"k":"0A^A\\AYBZB\\AYBZB\\AZBYBWA^B^B\\B\\BYBZB\\AYBZB\\AZBYBWA^A\\AYBZB\\AYBZB\\AZBYBWA^B^B\\B\\BYBZB\\AYBZB\\AZBYBWA0A^AaA_A^B\\BZCUC^AaA_A^B\\BZCUCWAWBYB\\BZBYBWBUASARA^A^AaA_A^B\\BZCUC^AaA_A^B\\BZCUCWAWBYB\\BZBYBWBaA_A^A^A\\AYBZB\\AYBZB\\AZBYBWA^B^B\\B\\BYBZB\\AYBZB\\AZBYBWA^A\\AYBZB\\AYBZB\\AZBYBWA^B^B\\B\\BYBZB\\AYBZB\\AZBYBWA","m":"\\D`DeD`D[D`D\\D`DYD`DXD`DYD`DeD`D[D`D\\D`DYD`DXD`D\\D`D\\DYDaD^D[D^D[DWD`D\\DYD`D^D\\D[DYDXDTDXD[D`D^D\\D`DeD`D[D`D\\D`DYD`DXD`DYD`DeD`D[D`D\\D`DYD`DXD`D\\D`D\\DYDaD^D[D^D[DWDcD^D`DcD`D\\DWD[D\\E\\D`DeD`D[D`D\\D`DYD`DXD`DYD`DeD`D[D`D\\D`DYD`DXD`D\\D`D\\DYDaD^D[D^D[DWD`D\\DYD`D^D\\D[DYDXDTDXD[D`D^D\\D`DeD`D[D`D\\D`DYD`DXD`DYD`DeD`D[D`D\\D`DYD`DXD`D\\D`D\\DYDaD^D[D^D[DWDcD^D`DcD`D\\DWD[D\\EcDaD`D^D\\D[D\\D^D`D\\D^DaD`DaDcD0D[D0D\\D^D`D0D^D0D`D0DeD0DbD0DYD[D\\D0D[D0DYDWDVDTDVDSDTEWFYGZGYBWDUDWDTDUDRDYF[G\\G[BYDXDYDVDXDTD^D[DTD[D^D[DaD[D`D[D^D[D\\DYDTDYD\\DYD`DYD^DYD\\DYD[DYD\\DYD^DYD`DYDaDYD^DYD`B^D\\D[D\\DYEcDaD`D^D\\D[D\\D^D`D\\D^DaD`DaDcD0D[D0D\\D^D`D0D^D0D`D0DeD0DbD0DYD[D\\D0D[D0DYDWDVDTDVDSDTEWFYGZGYBWDUDWDTDUDRDYF[G\\G[BYDXDYDVDXDTD^D[DTD[D^D[DaD[D`D[D^D[D\\DYDTDYD\\DYD`DYD^DYD\\DYD[DYD\\DYD^DYD`DYDaDYD^DYD`B^D\\D[D\\DYETDUDWD0DUD0DZBYD0DWD0DUBYDWDUDTDWDUDTDUDRDUDXDYD[DXDYD\\D^G`GaD`D[DTD^D\\D[D^D\\D[DYD`ETDUDWD0DUD0DZBYD0DWD0DUBYDWDUDTDWDUDTDUDRDUDXDYD[DXDYD\\D^G`GaD`D[DTD^D\\D[D^D\\D[DYD`EcD0D`D0D^D0D]E^D0D`BaD0D[DYD\\D[DYDWD\\D^D`D\\D^DaDeD0DcD0DaD0D`D^DaD`D^D`D\\EcDaD`D0DaD0D^B`D0DaD0D`D0D^D\\D[DYDYDXDVDXDTDXD[D\\D^D[D\\D`DaD0D`D0D^D0D\\D[D^D\\D[D\\DYEcD0D`D0D^D0D]E^D0D`BaD0D[DYD\\D[DYDWD\\D^D`D\\D^DaDeD0DcD0DaD0D`D^DaD`D^D`D\\EcDaD`D0DaD0D^B`D0DaD0D`D0D^D\\D[DYDYDXDVDXDTDXD[D\\D^D[D\\D`DaD0D`D0D^D0D\\D[D^D\\D[D\\DYE","t":"aG0GaG`GaG0GaG0G^G0G\\G0GZD^G0G\\G0G\\G[G\\G0G\\G0GYG0GWG0GUG0GYG\\GWG0GWG\\GUG0GUG\\GTG0GTG\\GWG0GWG\\GYG0GYG\\GUG0GUG\\GWG0GUG0GWH0H\\H0H^H0H`H0HaG0GaG`GaG0GaG0G^G0G\\G0GZD^G0G\\G0G\\G[G\\G0G\\G0GYG0GWG0GUG0GYG\\GWG0GWG\\GUG0GUG\\GTG0GTG\\GWG0GWG\\GYG0GYG\\GWG0GWG\\GUG0GRG0GUH0HhGjGlGmG0GmGlGmG0GmG0GjG0GhG0GfDjG0GhG0GhGgGhG0GhG0GeG0GcG0GaG0GeGhGcG0GcGhGaG0GaGhG`G0G`GhGcG0GcGhGeG0GeGhGaG0GaGhGcG0GaG0GcH0HhGjGlGmG0GmGlGmG0GmG0GjG0GhG0GfDjG0GhG0GhGgGhG0GhG0GeG0GcG0GaG0GeGhGcG0GcGhGaG0GaGhG`G0G`GhGcG0GcGhGeG0GeGhGcG0GcGhGaG0G^G0GaG0I\\I[G\\G0GZG0GYBRBWIVGWG0GUG0GTBMBRG0GRGPGTG0GTGRGUG0GUGTGVG0GVGRGWGYG[G\\G^G]G^G_G`G0G`G\\GWB\\G0G\\G[G\\G0GZG0GYBRBWG0GWGVGWG0GUG0GTBMBRG0GRGPGTG0GTGRGUG0GUGTGVG0GVGTGWG0GWGUGYG0GYGWG[G0G[GYG\\G0GPG0GQG0GUGTGUG0G[GZG[G0G\\G[G\\G0GcG0GfG0GUGTGUG0G[GZG[G0G\\G[G\\G0GcG0GfG0GUGTGUG0GcG0GfG0GUGTGUG0GcG0GfG0GcG0GfG0GcG0GfG0GcG0GhH0HhGjGlGmG0GmGlGmG0GmG0GjG0GhG0GfDjG0GhG0GhGgGhG0GhG0GeG0GcG0GaG0GeGhGcG0GcGhGaG0GaGhG`G0G`GhGcG0GcGhGeG0GeGhGcG0GcGhGaG0GaGhGeG0GeGhGcG0GcGhGaG0GaGhG`G0G`GhGcG0GcGhGeG0GeGhGcG0GcGhGaG0GaGhGeG0GeGhGcG0GcGhGfG0GfGhGeG0GeGhGaG0GaGhGcG0GcGhGfG0GfGhGeG0GeGhGaG0GaGhGcG0GcGhGaG0GaGhGcG0GcGhGaG0GaGhGcG0GcGhGaG0GaGhGcG0GhG0GmD","s":"0JmH0HjH0HmG0GlG0GiG0GjG0GhH0HhH0HhG0GgH0HgH0HgG0GfH0HfH0HfG0GeH0HjH0HfH0HjH0HeG0KaH0H^H0HaG0G`G0GfG0GeG0GmH0HmH0HmG0GlH0HlH0HlG0GjH0HjH0HjG0GiH0HlH0HjH0HlH0HiG0KmH0HjH0HmG0GlG0GiG0GjG0GhH0HhH0HhG0GgH0HgH0HgG0GfH0HfH0HfG0GeH0HjH0HfH0HjH0HeG0KjH0HgH0HjG0GiG0IhH0HeH0HhG0GgG0IfH0HcH0HfG0GeG0IeHiHlHqHjD0IgG0GiG0GjG0GlG0GmG0GjG0GiG0LgG0GiG0GjG0GlG0GmG0GjG0GiG0LgG0GiG0GjG0IiG0GjG0GlG0IjG0GlG0GmG0GmGoGoG0GoGqDPMTMWMZM\\M`McMfMQMTMWMYM]M`McMeMPMTMWMZM\\M`McMfMQMTMWMYM]M`McMeMSMWMZM^M_McMfMjMTMWMYM]M`McMeMiMSMWMZM^M_McMfMjMTMWMYM]M`McMeMiMWMZM]MaMcMfMiMmMYN]N`NeNiNlNWMZM]MaMcMfMiMmMYN]N`NeNiNlN\\M`McMfMhMlMoMrM]M`McMeMiMlMoMqM\\M`McMfMhMlMoMrM]M`McMeMiMlMoMqM0BmH0HjH0HmG0GlG0GiG0GjG0GhH0HhH0HhG0GgH0HgH0HgG0GfH0HfH0HfG0GeH0HjH0HfH0HjH0HeG0KaH0H^H0HaG0G`G0GfG0GeG0GmH0HmH0HmG0GlH0HlH0HlG0GjH0HjH0HjG0GiH0HlH0HjH0HlH0HiD0BmH0HjH0HmG0GlG0GiG0GjG0GhH0HhH0HhG0GgH0HgH0HgG0GfH0HfH0HfG0GeH0HjH0HfH0HjH0HeG0KjH0HgH0HjG0GiG0IhH0HeH0HhG0GgG0IfH0HcH0HfG0GeG0IeHiHlHqHjD","bk":":::?:::?:::?:::??=?BB=?BB?==?=?BB=?BB?==:::?:::?:::?:::?","bm":"AAAAA<A<AAAAA?DAAAAAA<A<AAAAA?DA?A<<AAAAD?AA<<AAAAAA?A<<AAAAD?AA<<AAAAAA?A:?<<AA?A:?<<AADA<AA:<A?<<<<:AADA<AA:<A?<<<<:AA","bt":"=B==DD=?=B==DD=B=B==DD=D=B==DD=BD:?ABB?DD:?AB=?=B?B?DDDD=B==DD==DD==D=D=DDD?","bs":":A:A:A<::B<A:A<:<=?:<:::<:::<A:AAAAA:A<::B<A:A<:<=?:"};
+  function ftBars(s, bs, bar, skip, scale, tr, nseg) {
+    const D = FT.D, ns = [];
+    for (let i = 0, t = 0; i < s.length; i += 2) { const p = s.charCodeAt(i) - 48, d = D[s.charCodeAt(i + 1) - 65]; if (p && t + d > skip) ns.push([Math.max(0, t - skip), p + 30 + tr, d - Math.max(0, skip - t)]); t += d; }
+    const end = Math.max(...ns.map(n => n[0] + n[2])), nb = Math.ceil(end / bar - 1e-6), raw = Array.from({ length: nb }, () => []);
+    for (let [t, p, d] of ns) while (d > 1e-6) { const b = Math.floor((t + 1e-6) / bar), x = Math.min(d, (b + 1) * bar - t); raw[b].push([t - b * bar, p, x]); t += x; d -= x; }
+    return raw.map((lst, b) => {
+      const mel = []; let cur = 0;
+      const put = (p, x) => { const l = mel[mel.length - 1]; if (!p && l && !l[0]) l[1] += x; else mel.push([p, x]); };
+      for (const [t, p, x] of lst) { if (t > cur + 1e-6) put(0, t - cur); put(p, x); cur = t + x; }
+      if (cur < bar - 1e-6) put(0, bar - cur);
+      return { mel: mel.map(([p, x]) => [p, Math.round(x / scale * 1e4) / 1e4]), bass: [...bs.slice(b * nseg, b * nseg + nseg)].map(c => c.charCodeAt(0) - 18) };
+    });
+  }
+  SONGS.minuet = { name: 'BACH MINUET (TETRIS C)', unit: 0.40, bar: 3, div: 2, drum: 'khshsh', bars: ftBars(FT.m, FT.bm, 12, 0, 4, 0, 1) };
+  SONGS.kalinka = { name: 'KALINKA', unit: 0.36, bar: 4, div: 2, drum: 'khskkhsh', accel: true, bars: ftBars(FT.k, FT.bk, 32, 8, 8, 0, 2) };
+  SONGS.trepak = { name: 'TREPAK', unit: 0.34, bar: 4, div: 2, drum: 'kskskksk', bars: ftBars(FT.t, FT.bt, 16, 0, 4, 0, 2) };
+  SONGS.sugarplum = { name: 'SUGAR PLUM FAIRY', unit: 0.50, bar: 4, div: 2, drum: 'khshkhsh', bars: ftBars(FT.s, FT.bs, 16, 0, 4, -12, 2) };
+  const SONG_ORDER = ['tetris', 'minuet', 'turkish', 'elise', 'kalinka', 'pathetique', 'campanella', 'trepak', 'paganini', 'fantaisie', 'sugarplum', 'mountain', 'bee'];
   let songId = (() => { try { return localStorage.getItem('petris-bgm') || 'tetris'; } catch (e) { return 'tetris'; } })();
   if (!SONGS[songId]) songId = 'tetris';
   if (!SONG_ORDER.includes(songId)) songId = 'tetris';
@@ -1722,7 +1741,7 @@
         const d = song.drum[i % song.drum.length];
         if (d === 'k') kick(at);
         else if (d === 's') snare(at);
-        noise(at, 0.03, i % 2 ? 0.02 : 0.035, 9000);
+        noise(at, 0.03, i % 2 ? 0.012 : 0.022, 9000);
       }
       const len = song.bar * u;
       if (danger) { sirenAt(nextNoteTime, len / 2); sirenAt(nextNoteTime + len / 2, len / 2); }
