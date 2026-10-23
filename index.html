@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722835";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722836";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2378,10 +2378,10 @@
       drawCellPx(nctx, offX + (x - minX) * size, offY + (y - minY) * size, size, pieceColor(nextKind));
       decorate(nctx, nextKind, offX + (x - minX) * size, offY + (y - minY) * size, size);
     }
-    if (fogOn) { // 안개: NEXT 가림
-      nctx.fillStyle = 'rgba(150,165,160,0.92)'; nctx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
-      nctx.fillStyle = '#2b3330'; nctx.font = 'bold ' + Math.round(nextCanvas.height * 0.45) + 'px monospace'; nctx.textAlign = 'center'; nctx.textBaseline = 'middle';
-      nctx.fillText('?', nextCanvas.width / 2, nextCanvas.height / 2);
+    if (fogOn) { // 안개: NEXT 가림 (블록은 지우고 물음표만)
+      nctx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+      nctx.fillStyle = '#b8e0a0'; nctx.shadowColor = 'rgba(184,224,160,.6)'; nctx.shadowBlur = 8; nctx.font = 'bold ' + Math.round(nextCanvas.height * 0.45) + 'px monospace'; nctx.textAlign = 'center'; nctx.textBaseline = 'middle';
+      nctx.fillText('?', nextCanvas.width / 2, nextCanvas.height / 2); nctx.shadowBlur = 0;
     }
   }
 
@@ -2451,8 +2451,8 @@
       <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
       <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
       <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
-      <button class="vs-btn mode-btn master" data-m="master">MASTER MODE<small class="mul">SCORE ×3 · 긴 블록 · 아이템 · 함정</small></button>
-      <button class="vs-btn mode-btn god" data-m="god">GOD MODE<small class="mul">SCORE ×5 · 괴상한 블록 · 함정만</small></button>
+      <button class="vs-btn mode-btn master" data-m="master">ITEM MODE<small class="mul">SCORE ×3 · 긴 블록 · 아이템 · 함정</small></button>
+      <button class="vs-btn mode-btn god" data-m="god">MASTER MODE<small class="mul">SCORE ×5 · 괴상한 블록 · 함정만</small></button>
     </div>`);
     $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
       gameMode = b.dataset.m;
@@ -3052,7 +3052,7 @@
   async function showRank(se) {
     se = (se === '1' || se === 1) ? '1' : '2'; // 시즌 1(개편 전) · 시즌 2(개편 후)
     if (!RANK_URL) {
-      const MODE = { easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'MASTER', god: 'GOD', vs: 'VS' };
+      const MODE = { easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
       const top = localRanks().sort((a, b) => b.s - a.s);
       const me = getName();
       const rows = top.map((r, i) => `<li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${r.s.toLocaleString()}</em></li>`).join('');
@@ -3066,7 +3066,7 @@
       const res = await fetch(RANK_URL + '?a=top&season=' + se);
       const data = await res.json();
       const me = getName();
-      const MODE = { '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '마스터': 'MASTER', '갓': 'GOD', '대결': 'VS' };
+      const MODE = { '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
       const rows = (data.top || []).map((r, i) => `
         <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', tabs + (rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>')); bindTabs();
