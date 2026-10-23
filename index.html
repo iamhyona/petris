@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792734265";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792739304";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -975,6 +975,10 @@
   .overlay .rank-form .rank-save::before { content: none !important; }
   .overlay .rank-form .rank-save:disabled { opacity: .5; }
   .mode-pick { display: flex; flex-direction: column; gap: 12px; }
+  .mode-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .vs .mt-btn { flex: 1 1 0; min-width: 0; padding: 11px 2px !important; font: 400 9px "Press Start 2P", monospace !important; letter-spacing: 0 !important; color: #6f9a72 !important; background: #0b150e !important; border: 2px solid rgba(184,224,160,.25) !important; border-radius: 0 !important; box-shadow: none !important; cursor: pointer; white-space: nowrap; }
+  .vs .mt-btn::before, .vs .mt-btn::after { content: none !important; display: none !important; }
+  .vs .mt-btn.on { color: #0b150e !important; background: #b8e0a0 !important; border-color: #b8e0a0 !important; }
   .vs .mode-btn { display: flex !important; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px !important; font-size: 14px !important; }
   .vs .mode-btn small { font-family: Galmuri11, -apple-system, "Apple SD Gothic Neo", sans-serif; font-size: 12px; letter-spacing: 0; opacity: .75; }
   .vs .mode-btn.hard { border-color: #e8284f !important; color: #ff8aa0 !important; box-shadow: inset 0 0 0 2px #0b150e, inset 0 0 0 4px rgba(232,40,79,0.22) !important; }
@@ -1018,7 +1022,7 @@
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html,body{height:var(--app-h,100dvh)!important}.gb{height:var(--app-h,100dvh)!important}</style>
-</head>
+<link rel="stylesheet" href="../games/ph.css?v=1"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style></head>
 <body>
 <div class="gb">
   <div class="brand">
@@ -1051,6 +1055,7 @@
         </div>
       </div>
       <div id="overlay" class="overlay">
+        <div class="phS"><i class="phS-sp a"></i><div class="phS-logo" data-word="PETRIS"></div><div class="phS-show"><svg viewBox="0 0 34 34"><rect x="6.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/></svg><svg viewBox="0 0 34 34"><rect x="21.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/></svg><svg viewBox="0 0 34 34"><rect x="10.0" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="17.5" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="10.0" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="17.5" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/></svg><svg viewBox="0 0 34 34"><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="21.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#10b870"/></svg><svg viewBox="0 0 34 34"><rect x="2.5" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="10.0" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="17.5" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="25.0" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/></svg><svg viewBox="0 0 34 34"><rect x="6.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/></svg><svg viewBox="0 0 34 34"><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/></svg></div><i class="phS-sp b"></i><div class="phS-btns"><button class="phS-b" data-click="overlay-btn">SINGLE PLAY</button><button class="phS-b" data-click="btn-vs">ONLINE PLAY</button><button class="phS-b gold" data-click="btn-rank">RANKING</button></div><i class="phS-sp c"></i><div class="phS-credit"><small>MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA · FLUTETUNES.COM</small>이 게임은 서울 마포구에 사는 박현아가 만든<br>비상업용 게임이에요. 지치고 힘들 때<br>잠시 머리 식히며 마음껏 즐겨 주세요.</div></div>
         <div id="overlay-msg">PETRIS</div>
         <button id="overlay-btn">START</button>
         <div class="menu">
@@ -1567,7 +1572,7 @@
     return noiseBuf;
   }
   // 배경음악 전용 볼륨 (효과음은 그대로): 음악 스케줄 중에 만든 소리만 이 버스로 보냄
-  const BGM_VOL = 0.6;
+  const BGM_VOL = 0.3; // 배경음악 볼륨 (효과음은 그대로)
   let inMusic = false, mBus = null;
   function OUT() {
     if (!inMusic) return audioCtx.destination;
@@ -2031,7 +2036,7 @@
   // 다음 단계까지 필요한 누적 줄: 8 · 18 · 30 · 44 · 60 … (단계마다 2줄씩 더)
   function stageLines(st) { return 6 * st + st * (st + 1); }
   // 점수 배율용 레벨: 난이도 보너스(하드 +6, 마스터 +12)는 빼고 계산 → 속도만 빠르고 점수는 안 부풀게
-  function scoreLv() { return 1 + Math.max(0, level - (isGod() ? 6 : isMaster() ? 12 : isHard() ? 6 : 0)); }
+  function scoreLv() { return 1 + Math.max(0, level - (isHard() ? 6 : 0)); }
   function riseEvery() { return isGod() ? Math.max(3000, 6500 - (stage - 1) * 800) : isMaster() ? Math.max(4000, 8000 - (stage - 1) * 1000) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
   function stageUp() {
     stage++;
@@ -2053,7 +2058,7 @@
   function updateLevel() {
     while (lines >= stageLines(stage)) stageUp(); // 지운 줄 수로 다음 단계 (모드 배율과 상관없이 같은 속도)
     // 속도: 스테이지마다 2단계 + 15줄마다 + 1분마다
-    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isGod() ? 6 : isMaster() ? 12 : isHard() ? 6 : 0) + speedBoost;
+    const nl = Math.round((stage - 1) * 1.5) + Math.floor(lines / 12) + Math.floor(playTime / 60000) + (isHard() ? 6 : 0) + speedBoost; // 하드(아이템 하드 포함)는 하드 속도로 시작
     if (nl !== level) { level = nl; updateHud(); }
     // 2단계부터 바닥에서 한 줄씩 밀려 올라옴 (혼자 하기)
     if (mode !== 'battle' && (stage >= 2 || isMaster()) && state === 'playing' && playTime - lastRise > riseEvery()) {
@@ -2489,43 +2494,49 @@
   function showOverlay(msg, btnText) {
     $overlayMsg.innerHTML = msg;
     $overlayBtn.textContent = btnText;
+    $overlay.classList.toggle('start', btnText === 'SINGLE PLAY' && !EMBED);
     $overlay.style.display = 'flex';
     document.body.classList.add('ov');
   }
 
   function hideOverlay() {
-    $overlay.classList.remove('paused', 'over');
+    $overlay.classList.remove('paused', 'over', 'start');
     $overlay.style.display = 'none';
     document.body.classList.remove('ov');
   }
 
-  // 난이도: NORMAL / HARD (혼자 하기)
-  let gameMode = 'normal'; // easy | normal | hard | master | god
-  function isHard() { return (gameMode === 'hard' || gameMode === 'master' || gameMode === 'god') && mode !== 'battle'; } // 마스터도 하드 속도·바닥 블록
-  function isMaster() { return (gameMode === 'master' || gameMode === 'god') && mode !== 'battle'; } // GOD도 마스터 규칙 포함
-  function isGod() { return gameMode === 'god' && mode !== 'battle'; }
+  // 게임 방식(gType): basic · item · time  ×  레벨(gameMode): easy · normal · hard
+  let gameMode = 'normal';
+  let gType = (() => { try { const t = localStorage.getItem('petris-gtype'); return ['basic', 'item', 'time'].includes(t) ? t : 'basic'; } catch (e) { return 'basic'; } })();
+  function isHard() { return gameMode === 'hard' && mode !== 'battle'; } // 하드: 빠른 속도 · 바닥 블록
+  function isMaster() { return gType === 'item' && mode !== 'battle'; } // 아이템 방식: 긴 블록 · 아이템 · 함정
+  function isGod() { return gType === 'item' && gameMode === 'hard' && mode !== 'battle'; } // 아이템 하드(옛 마스터): 괴상한 블록 · 함정만
   function isEasy() { return gameMode === 'easy' && mode !== 'battle'; }
-  // 타임어택: 노멀 규칙 그대로(아이템·함정·추가 블록 없음), 3분 동안 최고 점수
+  // 타임어택: 아이템·함정 없이 3분 동안 최고 점수 (레벨은 그대로 적용)
   const TIME_LIMIT = 180000;
   let lastSec = -1, timeUp = false;
-  function isTime() { return gameMode === 'time' && mode !== 'battle'; }
-  // 모드별 점수 배율: EASY ×0.5 · NORMAL ×1 · HARD ×2
-  function modeMul() { return isEasy() ? 0.5 : isGod() ? 5 : isMaster() ? 3 : isHard() ? 2 : 1; }
+  function isTime() { return gType === 'time' && mode !== 'battle'; }
+  // 점수 배율: 기본·타임어택 EASY ×0.5 · NORMAL ×1 · HARD ×2 / 아이템 EASY ×1 · NORMAL ×2 · HARD ×5
+  function modeMul() { return isMaster() ? (isGod() ? 5 : isEasy() ? 1 : 2) : isEasy() ? 0.5 : isHard() ? 2 : 1; }
+  function modeCode() { return isTime() ? 'time-' + gameMode : isMaster() ? 'item-' + gameMode : isEasy() ? 'easy' : isHard() ? 'hard' : 'solo'; }
+  const MODE_DESC = {"basic": ["SCORE ×0.5 · 가이드", "SCORE ×1", "SCORE ×2 · 바닥 블록"], "item": ["SCORE ×1 · 긴 블록 · 아이템 · 함정", "SCORE ×2 · 긴 블록 · 아이템 · 함정", "SCORE ×5 · 괴상한 블록 · 함정만"], "time": ["3분 · SCORE ×0.5 · 가이드", "3분 · SCORE ×1", "3분 · SCORE ×2 · 바닥 블록"]};
   function chooseMode() {
     unlockAudio();
-    vsOpen('', `<div class="mode-pick">
-      <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
-      <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
-      <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
-      <button class="vs-btn mode-btn master" data-m="master">ITEM MODE<small class="mul">SCORE ×3 · 긴 블록 · 아이템 · 함정</small></button>
-      <button class="vs-btn mode-btn god" data-m="god">MASTER MODE<small class="mul">SCORE ×5 · 괴상한 블록 · 함정만</small></button>
-      <button class="vs-btn mode-btn time" data-m="time">TIME ATTACK<small class="mul">3분 · 기본 규칙 · 최고 점수 도전</small></button>
+    const render = () => {
+      const d = MODE_DESC[gType];
+      vsOpen('', `<div class="mode-tabs">${[['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME ATTACK']].map(([k, n]) => `<button class="mt-btn${gType === k ? ' on' : ''}" data-t="${k}">${n}</button>`).join('')}</div><div class="mode-pick">
+      <button class="vs-btn mode-btn easy" data-m="easy">EASY<small class="mul">${d[0]}</small></button>
+      <button class="vs-btn mode-btn" data-m="normal">NORMAL<small class="mul">${d[1]}</small></button>
+      <button class="vs-btn mode-btn hard" data-m="hard">HARD<small class="mul">${d[2]}</small></button>
     </div>`);
-    $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
-      gameMode = b.dataset.m;
-      vsHide();
-      startGame();
-    }));
+      $vsBody.querySelectorAll('.mt-btn').forEach(b => b.addEventListener('click', () => { gType = b.dataset.t; try { localStorage.setItem('petris-gtype', gType); } catch (e) {} render(); }));
+      $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
+        gameMode = b.dataset.m;
+        vsHide();
+        phTut('petris-tut', {"goal": "가로줄을 꽉 채우면 줄이 사라지고 점수가 올라요.<br>블록이 위까지 쌓이면 게임 끝!", "touch": [["← 밀기 →", "블록 옮기기"], ["탭", "블록 돌리기"], ["↓ 천천히 밀기", "천천히 내리기"], ["↓ 튕기기", "바로 내리기"]], "pc": [["← →", "블록 옮기기"], ["↑", "블록 돌리기"], ["↓", "천천히 내리기"], ["SPACE", "바로 내리기"]]}, startGame); // 처음 한 번 튜토리얼
+      }));
+    };
+    render();
   }
   function fillHardStart() {
     const h = isGod() ? Math.min(9, Math.floor(ROWS * 0.45)) : isMaster() ? Math.min(8, Math.floor(ROWS * 0.4)) : Math.min(6, Math.floor(ROWS * 0.28)); // 마스터는 바닥 8줄
@@ -2587,7 +2598,7 @@
         setName(n);
         f.querySelector('button').disabled = true; inp.disabled = true;
         note.textContent = '등록 중…';
-        const ok = await submitScore(isTime() ? 'time' : isGod() ? 'god' : isMaster() ? 'master' : isHard() ? 'hard' : isEasy() ? 'easy' : 'solo', true);
+        const ok = await submitScore(modeCode(), true);
         note.textContent = ok ? '등록 완료! RANKING에서 확인하세요' : '등록하지 못했어요. 잠시 후 다시 해주세요';
         if (!ok) { f.querySelector('button').disabled = false; inp.disabled = false; }
       });
@@ -3108,7 +3119,7 @@
     const n = getName() || '익명';
     if (wait) saveLocalRank({ n, s: score, m, d: Date.now() });
     if (!RANK_URL) return !!wait;
-    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}&season=${m === 'time' ? 'T' : '2'}`; // 시즌 2 (점수 체계 개편 이후)
+    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}&season=${String(m).startsWith('time') ? 'T' : '2'}`; // 시즌 2 (점수 체계 개편 이후)
     try {
       const r = fetch(RANK_URL + q, { mode: 'no-cors' });
       if (wait) await r;
@@ -3119,7 +3130,7 @@
   async function showRank(se) {
     se = (se === '1' || se === 1) ? '1' : se === 'T' ? 'T' : '2'; // 시즌 1(개편 전) · 시즌 2(개편 후)
     if (!RANK_URL) {
-      const MODE = { time: 'TIME', easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
+      const MODE = { 'time-easy': 'TIME EASY', 'time-normal': 'TIME', 'time-hard': 'TIME HARD', 'item-easy': 'ITEM EASY', 'item-normal': 'ITEM', 'item-hard': 'ITEM HARD', time: 'TIME', easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
       const top = localRanks().sort((a, b) => b.s - a.s);
       const me = getName();
       const rows = top.map((r, i) => `<li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${r.s.toLocaleString()}</em></li>`).join('');
@@ -3133,7 +3144,7 @@
       const res = await fetch(RANK_URL + '?a=top&season=' + se);
       const data = await res.json();
       const me = getName();
-      const MODE = { '타임어택': 'TIME', '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
+      const MODE = { '타임어택 이지': 'TIME EASY', '타임어택 노멀': 'TIME', '타임어택 하드': 'TIME HARD', '아이템 이지': 'ITEM EASY', '아이템 노멀': 'ITEM', '아이템 하드': 'ITEM HARD', '타임어택': 'TIME', '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
       const rows = (data.top || []).map((r, i) => `
         <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', tabs + (rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>')); bindTabs();
@@ -3401,5 +3412,5 @@ function initLocal2P() {
   });
 }
 </script>
-</body>
+<script src="../games/ph.js?v=1"></script></body>
 </html>
