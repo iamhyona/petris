@@ -1204,6 +1204,17 @@
     ['Z5', '#8a5a36', [[0,0],[1,0],[2,0],[2,1],[3,1]]],        // 긴 번개 Z
   ];
   const MASTER_KINDS = ['I5', 'L5', 'J5', 'T5', 'P5', 'S5', 'Z5'];
+  // 마스터 모드: 컬러 폭탄 (1칸) — 놓으면 바로 밑 블록과 같은 색 블록이 판에서 전부 터짐
+  SHAPES.B = [[0,0]]; COLORS.B = '#ffffff';
+  let bombCount = 0;
+  function hsl2hex(h, s, l) { s /= 100; l /= 100; const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l), f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1)); return '#' + [f(0), f(8), f(4)].map(v => Math.round(v * 255).toString(16).padStart(2, '0')).join(''); }
+  function pieceColor(k) { return k === 'B' ? hsl2hex((performance.now() / 5) % 360, 90, 62) : COLORS[k]; }
+  function bombMark(c, px, py, size) {
+    const cx = px + size / 2, cy = py + size / 2, r = size * 0.32;
+    c.save(); c.fillStyle = '#fff'; c.shadowColor = '#fff'; c.shadowBlur = size * 0.3; c.beginPath();
+    for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 - Math.PI / 2, rr = i % 2 ? r * 0.35 : r; c.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); }
+    c.closePath(); c.fill(); c.restore();
+  }
   SPECIALS.forEach(([k, c, sh]) => { SHAPES[k] = sh; COLORS[k] = c; });
   function kindsNow() {
     if (typeof isMaster === 'function' && isMaster()) return KINDS.concat(MASTER_KINDS); // 마스터: 확장 블록 추가
@@ -1786,6 +1797,7 @@
   }
 
   function takeKind() {
+    if (typeof isMaster === 'function' && isMaster()) { bombCount++; if (bombCount >= 12 && rng() < 0.35) { bombCount = 0; return 'B'; } }
     if (!bag || bag.length === 0) refillBag();
     return bag.pop();
   }
@@ -2005,6 +2017,7 @@
     }
   }
   function lockPiece(hard) {
+    if (piece.kind === 'B') { colorBomb(); return; }
     const cells = piece.cells.map(([x, y]) => [piece.x + x, piece.y + y]);
     merge();
     score += 10; updateHud(); // 블록 하나 놓을 때 10점 (줄 제거는 100점부터)
@@ -2033,6 +2046,34 @@
     } else {
       spawn();
     }
+  }
+
+  function colorBomb() {
+    const bx = piece.x + piece.cells[0][0], by = piece.y + piece.cells[0][1];
+    let target = (by + 1 < ROWS && grid[by + 1][bx]) || null;
+    if (!target) { const cnt = {}; let best = 0; for (const r of grid) for (const c of r) if (c) cnt[c] = (cnt[c] || 0) + 1; for (const k in cnt) if (cnt[k] > best) { best = cnt[k]; target = k; } }
+    let n = 0;
+    if (target) {
+      const col = COLORS[target];
+      for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (grid[y][x] === target) {
+        grid[y][x] = null; n++;
+        for (let k = 0; k < 5; k++) particles.push({ x: (x + 0.5) * CELL, y: (y + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 7, vy: -Math.random() * 9 - 1, life: 1, color: col, size: 4 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.35 });
+      }
+      // 남은 블록은 아래로 내려앉음
+      for (let x = 0; x < COLS; x++) { let w = ROWS - 1; for (let y = ROWS - 1; y >= 0; y--) if (grid[y][x]) { const v = grid[y][x]; grid[y][x] = null; grid[w][x] = v; w--; } }
+    }
+    for (let k = 0; k < 24; k++) particles.push({ x: (bx + 0.5) * CELL, y: (by + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 10, vy: -Math.random() * 12 - 2, life: 1, color: hsl2hex(k * 15, 90, 62), size: 5 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.4 });
+    score += 10 + Math.round(n * 20 * (level + 1) * modeMul());
+    popText = { text: 'COLOR BOMB!', t: performance.now(), big: true, color: 'rainbow' };
+    boardFlash = performance.now();
+    shake(8, 320);
+    sfxClear(Math.min(4, 1 + Math.floor(n / 8)));
+    buzz([30, 30, 60]);
+    piece = null; dropCounter = 0;
+    updateHud(); checkDanger();
+    const rows = fullRows();
+    if (rows.length) { clearing = { rows, t: performance.now() }; state = 'clearing'; sfxClearStart(); }
+    else spawn();
   }
 
   function dropInterval() {
@@ -2176,7 +2217,7 @@
     }
     if (piece) {
       for (const [x, y] of piece.cells) {
-        if (piece.y + y >= 0) drawCell(ctx, piece.x + x, piece.y + y, CELL, COLORS[piece.kind]);
+        if (piece.y + y >= 0) { drawCell(ctx, piece.x + x, piece.y + y, CELL, pieceColor(piece.kind)); if (piece.kind === 'B') bombMark(ctx, (piece.x + x) * CELL, (piece.y + y) * CELL, CELL); }
       }
     }
 
@@ -2270,7 +2311,8 @@
     const offX = (nextCanvas.width - w * size) / 2;
     const offY = (nextCanvas.height - h * size) / 2;
     for (const [x, y] of cells) {
-      drawCellPx(nctx, offX + (x - minX) * size, offY + (y - minY) * size, size, COLORS[nextKind]);
+      drawCellPx(nctx, offX + (x - minX) * size, offY + (y - minY) * size, size, pieceColor(nextKind));
+      if (nextKind === 'B') bombMark(nctx, offX + (x - minX) * size, offY + (y - minY) * size, size);
     }
   }
 
@@ -2338,7 +2380,7 @@
       <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
       <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
       <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
-      <button class="vs-btn mode-btn master" data-m="master">MASTER MODE<small class="mul">SCORE ×3 · 긴 블록 추가</small></button>
+      <button class="vs-btn mode-btn master" data-m="master">MASTER MODE<small class="mul">SCORE ×3 · 긴 블록 · 컬러 폭탄</small></button>
     </div>`);
     $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
       gameMode = b.dataset.m;
@@ -2367,7 +2409,7 @@
     shadowOn = isEasy(); shadowLabel();
     stageSong();
     playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
-    bag = []; nextKind = null;
+    bag = []; nextKind = null; bombCount = 0;
     updateHud();
     spawn();
     dropCounter = 0;
