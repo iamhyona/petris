@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792763000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792765000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2487,7 +2487,11 @@
   }
 
   // ================= 루프 & 상태 =================
-  function loop(time = 0) {
+  function loop(time = 0) { // 혹시 오류가 나도 게임이 멈추지 않게
+    try { loopStep(time); } catch (err) { try { console.error(err); } catch (e) {} }
+    requestAnimationFrame(loop);
+  }
+  function loopStep(time = 0) {
     const delta = Math.min(100, time - lastTime);
     lastTime = time;
     const now = performance.now();
@@ -2526,7 +2530,6 @@
     if (state === 'playing' || state === 'clearing' || particles.length || popText || flashes.length) draw();
     if (mode === 'battle' && (state === 'playing' || state === 'clearing')) sendBoard(now);
     $startBtn.classList.toggle('is-play', !(state === 'playing' || state === 'clearing'));
-    requestAnimationFrame(loop);
   }
 
   function showOverlay(msg, btnText) {
@@ -2746,17 +2749,23 @@
   $gb.addEventListener('touchstart', (e) => {
     if (e.target.closest('button, input, .vs')) return;
     e.preventDefault();
-    const t = e.touches[0];
-    g = { sx: t.clientX, sy: t.clientY, lx: t.clientX, ly: t.clientY, upAcc: 0,
+    if (g && e.touches.length > 1 && [...e.touches].some(x => x.identifier === g.id)) return; // 두 번째 손가락은 무시 (첫 손가락 동작 유지)
+    const t = e.changedTouches[0] || e.touches[0];
+    g = { id: t.identifier, sx: t.clientX, sy: t.clientY, lx: t.clientX, ly: t.clientY, upAcc: 0,
           t0: performance.now(), max: 0, axis: null, rotated: false,
-          inInfo: !!e.target.closest('.info'), sp: spawnAt }; // 이 손가락 동작이 시작된 블록
+          inInfo: !!e.target.closest('.info'), sp: spawnAt, live: state === 'playing' && !!piece }; // 이 손가락 동작이 시작된 블록
   }, { passive: false });
   $gb.addEventListener('touchmove', (e) => {
     if (!g) return;
     e.preventDefault();
     if (state !== 'playing') return;
-    if (g.sp !== spawnAt) return; // 블록이 쌓이고 새 블록이 나오면, 같은 손가락 동작은 새 블록에 적용 안 함
-    const t = e.touches[0];
+    const t = [...e.touches].find(x => x.identifier === g.id);
+    if (!t) return;
+    if (g.sp !== spawnAt) { // 새 블록이 나왔으면: 지금 손가락 위치에서 다시 시작 (좌우·회전은 바로 되고, 아래로 내리기만 이어지지 않게)
+      const wasDown = g.live && g.axis === 'y';
+      Object.assign(g, { sp: spawnAt, sx: t.clientX, sy: t.clientY, lx: t.clientX, ly: t.clientY, axis: null, max: 0, rotated: false, slid: false, t0: performance.now(), live: true, reanch: true, noDown: g.noDown || wasDown });
+      return;
+    }
     const dx = t.clientX - g.sx, dy = t.clientY - g.sy;
     g.max = Math.max(g.max, Math.hypot(dx, dy));
     if (!g.axis && g.max > 16) g.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
@@ -2768,7 +2777,7 @@
       while (g.lx - t.clientX >= step) { act.left(); g.lx -= step; }
     } else if (g.axis === 'y') {
       if (t.clientY > g.ly) {
-        while (t.clientY - g.ly >= step) { act.down(); g.ly += step; }
+        while (t.clientY - g.ly >= step) { if (!g.noDown) act.down(); g.ly += step; }
       } else {
         // 위로 40px 이상 올리면 한 번만 회전 (손가락을 떼야 다시 회전)
         if (!g.rotated && g.sy - t.clientY >= 40) { act.rotate(); g.rotated = true; }
@@ -2779,18 +2788,20 @@
   $gb.addEventListener('touchend', (e) => {
     if (!g) return;
     e.preventDefault();
-    if (g.sp !== spawnAt && state === 'playing') { g = null; return; } // 이전 블록 때 시작한 동작은 무시
+    const ct = [...e.changedTouches].find(x => x.identifier === g.id);
+    if (!ct) return; // 다른 손가락을 뗀 것
+    if (g.sp !== spawnAt && state === 'playing' && g.live) { g = null; return; } // 이전 블록 때 시작한 동작은 무시 (줄 지우는 중에 시작한 터치는 새 블록에 적용)
     const dt = performance.now() - g.t0;
-    const dy = (e.changedTouches[0] ? e.changedTouches[0].clientY : g.ly) - g.sy;
-    if (g.max < 12 && dt < 280) {                                   // 탭
+    const dy = ct.clientY - g.sy;
+    if (g.max < 12 && dt < 280 && !g.reanch) {                      // 탭
       if (g.inInfo) { if (state === 'playing' || state === 'paused') togglePause(); }
       else act.rotate();
     }
-    else if (g.axis === 'y' && !g.slid && dy > 50 && dy / dt > 0.9) act.drop(); // 빠르게 튕기기
+    else if (g.axis === 'y' && !g.slid && !g.noDown && dy > 50 && dy / dt > 0.9) act.drop(); // 빠르게 튕기기
     else if (g.axis === 'y' && !g.rotated && -dy > 30) act.rotate(); // 짧게 쓸어올리기
     g = null;
   }, { passive: false });
-  $gb.addEventListener('touchcancel', () => { g = null; });
+  $gb.addEventListener('touchcancel', (e) => { if (!g || [...e.changedTouches].some(x => x.identifier === g.id)) g = null; });
   document.querySelector('.screen .info-l').addEventListener('click', (e) => {
     if (e.target.closest('button')) return;
     if (state === 'playing' || state === 'paused') togglePause();
