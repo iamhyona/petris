@@ -1991,6 +1991,7 @@
   function lockPiece(hard) {
     const cells = piece.cells.map(([x, y]) => [piece.x + x, piece.y + y]);
     merge();
+    score += 10; updateHud(); // 블록 하나 놓을 때 10점 (줄 제거는 100점부터)
     // 블록 바로 아래가 비어 있으면 구멍(삑사리)
     let holes = 0;
     const lowest = {};
