@@ -2002,6 +2002,7 @@
     }
     flashes.push({ cells, t: performance.now() });
     sfxLand(hard);
+    buzz(hard ? 25 : 10);
     piece = null;
     dropCounter = 0;
     updateHud();
