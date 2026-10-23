@@ -1920,10 +1920,10 @@
     combo++;
     const comboMul = Math.min(5, combo);
     // 줄 수별 기본 점수: 1줄 100 · 2줄 300 · 3줄 700 · 4줄 1500 (속도 단계·콤보 배수 적용)
-    score += Math.round([0, 100, 300, 700, 1500][n] * (level + 1) * comboMul * modeMul());
+    score += Math.round((n <= 4 ? [0, 100, 300, 700, 1500][n] : 1500 + (n - 4) * 800) * (level + 1) * comboMul * modeMul());
     lines += n;
     if (mode === 'battle') {
-      let sendN = [0, 0, 1, 2, 4][n];
+      let sendN = [0, 0, 1, 2, 4][Math.min(n, 4)];
       const cancel = Math.min(pendingGarbage, sendN);
       pendingGarbage -= cancel; sendN -= cancel;
       if (sendN > 0) vsSend({ t: 'gb', n: sendN });
@@ -1933,7 +1933,7 @@
     const perfect = grid.every(r => r.every(c => !c));
     const b2b = n === 4 && lastTetris;
     lastTetris = n === 4;
-    const word = perfect ? 'PERFECT' : b2b ? 'AMAZING' : ['', 'VERY GOOD', 'NICE', 'GREAT', 'EXCELLENT'][n];
+    const word = perfect ? 'PERFECT' : b2b ? 'AMAZING' : ['', 'VERY GOOD', 'NICE', 'GREAT', 'EXCELLENT'][Math.min(n, 4)];
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
     popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
     if (perfect) {
@@ -1952,7 +1952,7 @@
     }
     if (n >= 3) boardFlash = performance.now();
     shake(6 + n * 3, 260 + n * 90);
-    sfxClear(n);
+    sfxClear(Math.min(n, 4));
     buzz(n === 4 ? [40, 30, 70] : 30);
 
     clearing = null;
@@ -3023,7 +3023,7 @@
     try { localStorage.setItem('petris-ranks', JSON.stringify(list.slice(0, 2000))); } catch (e) {}
   }
   async function submitScore(m, wait) {
-    if (EMBED || score <= 0) return false;
+    if (EMBED || !(score > 0)) return false;
     const n = getName() || '익명';
     if (wait) saveLocalRank({ n, s: score, m, d: Date.now() });
     if (!RANK_URL) return !!wait;
