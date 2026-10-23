@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722686";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792722834";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1825,7 +1825,7 @@
 
   function takeKind() {
     const M = typeof isMaster === 'function' && isMaster();
-    if (M) { itemCount++; if (itemCount >= 25 && rng() < 0.2) { itemCount = 0; return ['B', 'B', 'LB', 'SL'][Math.floor(rng() * 4)]; } }
+    // 마스터는 함정만 (아이템 없음)
     if (!bag || bag.length === 0) refillBag();
     const k = bag.pop();
     if (M) { trapCount++; if (trapCount >= 5 && rng() < 0.5) { trapCount = 0; return variant(['#R', '#Q', '#F'][Math.floor(rng() * 3)], k); } }
@@ -2443,7 +2443,7 @@
       <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
       <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
       <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
-      <button class="vs-btn mode-btn master" data-m="master">MASTER MODE<small class="mul">SCORE ×3 · 긴 블록 · 아이템 · 함정</small></button>
+      <button class="vs-btn mode-btn master" data-m="master">MASTER MODE<small class="mul">SCORE ×3 · 긴 블록 · 함정</small></button>
     </div>`);
     $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
       gameMode = b.dataset.m;
