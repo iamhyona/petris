@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792720288";if(location.search&&!/^\?v=\d+$/.test(location.search))return;try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search!=="?v="+m[1])location.replace(location.pathname+"?v="+m[1])}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1664,7 +1665,7 @@
   }
 
   function voice(type, freq, start, dur, vol) {
-    vol *= 0.45; // 배경음악 볼륨 (효과음은 그대로)
+    vol *= 0.28; // 배경음악 볼륨 (효과음은 그대로)
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.type = type;
     o.frequency.value = freq;
@@ -1677,8 +1678,8 @@
     o.stop(start + dur);
   }
 
-  function kick(t) { tone('sine', 160, 38, t, 0.16, 0.25); }
-  function snare(t) { noise(t, 0.13, 0.1, 6000); tone('triangle', 200, 120, t, 0.07, 0.055); }
+  function kick(t) { tone('sine', 160, 38, t, 0.16, 0.16); }
+  function snare(t) { noise(t, 0.13, 0.065, 6000); tone('triangle', 200, 120, t, 0.07, 0.035); }
 
   function scheduleSong(song) {
     while (nextNoteTime < audioCtx.currentTime + 0.25) {
@@ -1753,7 +1754,7 @@
       // 드럼
       for (let i = 0; i < 8; i++) {
         const at = t0 + i * beat / 2;
-        if (!fx.intro) noise(at, 0.03, i % 2 ? 0.022 : 0.04, 9000);
+        if (!fx.intro) noise(at, 0.03, i % 2 ? 0.012 : 0.022, 9000);
         if (i === 0 || i === 4 || (!fx.intro && i === 7 && barIdx % 2)) kick(at);
         if (!fx.intro && (i === 2 || i === 6)) snare(at);
       }
@@ -1765,7 +1766,7 @@
         }
       }
       // 마지막 마디 끝에 심벌
-      if (barIdx % 4 === 3 && !fx.intro) noise(t0 + 3.5 * beat, 0.5, 0.06, 7000);
+      if (barIdx % 4 === 3 && !fx.intro) noise(t0 + 3.5 * beat, 0.5, 0.034, 7000);
 
       nextNoteTime += 4 * beat;
       barIdx = (barIdx + 1) % (ARR.length * 4);
