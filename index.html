@@ -900,6 +900,7 @@
     width: 232px !important; min-width: 232px !important; box-sizing: border-box; justify-content: center;
   }
   .overlay button.bgm-link { margin-top: 26px !important; }
+  #btn-bgm { display: none !important; } /* 시작 화면 음악 고르기 숨김 */
   .overlay button.rank-link { margin-top: 0 !important; }
   .overlay .credit { margin-top: 6px !important; }
   .overlay .keys { margin-top: 12px; }
@@ -1199,8 +1200,10 @@
     ['J5', '#5b86ff', [[0,0],[0,1],[1,1],[2,1],[3,1]]],        // 긴 J
     ['T5', '#a865ff', [[1,0],[0,1],[1,1],[2,1],[3,1]]],        // 긴 T
     ['P5', '#ffc933', [[0,0],[1,0],[0,1],[1,1],[0,2]]],        // O+1
+    ['S5', '#3fdc93', [[1,0],[2,0],[3,0],[0,1],[1,1]]],        // 긴 번개 S
+    ['Z5', '#ff5c78', [[0,0],[1,0],[2,0],[2,1],[3,1]]],        // 긴 번개 Z
   ];
-  const MASTER_KINDS = ['I5', 'L5', 'J5', 'T5', 'P5'];
+  const MASTER_KINDS = ['I5', 'L5', 'J5', 'T5', 'P5', 'S5', 'Z5'];
   SPECIALS.forEach(([k, c, sh]) => { SHAPES[k] = sh; COLORS[k] = c; });
   function kindsNow() {
     if (typeof isMaster === 'function' && isMaster()) return KINDS.concat(MASTER_KINDS); // 마스터: 확장 블록 추가
