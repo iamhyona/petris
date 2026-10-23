@@ -790,6 +790,7 @@
   .info .sock #speed-btn::after { content: 'SPEED' attr(data-n); font-size: 10px; }
   .info .sock #shadow-btn::after { content: 'SHADOW'; font-size: 10px; }
   .info .sock #shadow-btn:not(.on) { color: #4a6650 !important; border-color: #22382a !important; }
+  .info .sock #shadow-btn.lock { opacity: .3; cursor: not-allowed; }
   .info .sock #shadow-btn.on { border-color: #5b8a60 !important; text-shadow: 0 0 8px rgba(150,240,120,0.6); }
   /* 왼쪽 정보 박스: 내용 가운데 정렬, 자간 좁게 */
   .panel .box { align-items: center !important; text-align: center !important; }
@@ -1214,9 +1215,10 @@
   let speedBoost = 0;
   const $shadowBtn = document.getElementById('shadow-btn');
   let shadowOn = false; // 기본값: 꺼짐 (켠 상태를 기억하지 않음)
-  function shadowLabel() { $shadowBtn.classList.toggle('on', shadowOn); }
+  function shadowLabel() { let lock = false; try { lock = !isEasy(); } catch (e) {} $shadowBtn.classList.toggle('on', shadowOn); $shadowBtn.classList.toggle('lock', lock); }
   shadowLabel();
   $shadowBtn.addEventListener('click', () => {
+    if (!isEasy()) { shadowOn = false; shadowLabel(); return; } // 가이드는 EASY 모드에서만
     shadowOn = !shadowOn;
     shadowLabel();
     if (typeof draw === 'function') draw();
@@ -2142,7 +2144,7 @@
         if (k) drawCell(ctx, x, y, CELL, COLORS[k]);
       }
     }
-    if (piece && shadowOn && state === 'playing') {
+    if (piece && shadowOn && isEasy() && state === 'playing') {
       // 떨어질 자리에 블록 모양 그대로, 무채색으로 흐리게
       let gy = piece.y;
       while (!collides(piece.cells, piece.x, gy + 1)) gy++;
