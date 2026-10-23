@@ -2000,9 +2000,7 @@
       if (y < ROWS && !grid[y][x]) holes++;
     }
     flashes.push({ cells, t: performance.now() });
-    shake(hard ? 8 : 3, hard ? 240 : 140);
     sfxLand(hard);
-    buzz(hard ? 25 : 10);
     piece = null;
     dropCounter = 0;
     updateHud();
