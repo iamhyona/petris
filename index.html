@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792720288";if(location.search&&!/^\?v=\d+$/.test(location.search))return;try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search!=="?v="+m[1])location.replace(location.pathname+"?v="+m[1])}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792720584";if(location.search&&!/^\?v=\d+$/.test(location.search))return;try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search!=="?v="+m[1])location.replace(location.pathname+"?v="+m[1])}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -676,6 +676,9 @@
   .rank li span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .rank li em { font-style: normal; font-family: "Silkscreen", Galmuri11, monospace; color: #fff; }
   .rank li.me { background: rgba(184,224,160,0.1); border-radius: 6px; }
+  .rk-tabs { display: flex; gap: 8px; margin: 0 0 12px; }
+  .rk-tabs button { flex: 1; padding: 8px 4px !important; font-family: "Silkscreen", Galmuri11, monospace; font-size: 11px !important; letter-spacing: 1px; background: transparent; color: #6f9a72; border: 2px solid rgba(184,224,160,0.25); border-radius: 6px; cursor: pointer; }
+  .rk-tabs button.on { color: #0b150e; background: #b8e0a0; border-color: #b8e0a0; }
   .rank .rk-m { font-style: normal; margin-left: 6px; font-family: "Silkscreen", Galmuri11, monospace; font-size: 9px; color: #6f9a72; }
   /* 상대 미니 화면 */
   .opp { display: none; flex-direction: column; align-items: center; gap: 4px; }
@@ -3028,7 +3031,7 @@
     const n = getName() || '익명';
     if (wait) saveLocalRank({ n, s: score, m, d: Date.now() });
     if (!RANK_URL) return !!wait;
-    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}`;
+    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}&season=2`; // 시즌 2 (점수 체계 개편 이후)
     try {
       const r = fetch(RANK_URL + q, { mode: 'no-cors' });
       if (wait) await r;
@@ -3036,7 +3039,8 @@
     } catch (e) { return false; }
   }
 
-  async function showRank() {
+  async function showRank(se) {
+    se = (se === '1' || se === 1) ? '1' : '2'; // 시즌 1(개편 전) · 시즌 2(개편 후)
     if (!RANK_URL) {
       const MODE = { easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'MASTER', vs: 'VS' };
       const top = localRanks().sort((a, b) => b.s - a.s);
@@ -3045,15 +3049,17 @@
       vsOpen('RANKING', rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>게임이 끝나면 이름을 남겨 보세요!</p>');
       return;
     }
-    vsOpen('RANKING', '<p class="vs-msg">불러오는 중…</p>');
+    const tabs = `<div class="rk-tabs"><button class="rk-tab${se === '2' ? ' on' : ''}" data-s="2">SEASON 2</button><button class="rk-tab${se === '1' ? ' on' : ''}" data-s="1">SEASON 1</button></div>`;
+    const bindTabs = () => $vsBody.querySelectorAll('.rk-tab').forEach(b => b.addEventListener('click', () => { if (b.dataset.s !== se) showRank(b.dataset.s); }));
+    vsOpen('RANKING', tabs + '<p class="vs-msg">불러오는 중…</p>'); bindTabs();
     try {
-      const res = await fetch(RANK_URL + '?a=top');
+      const res = await fetch(RANK_URL + '?a=top&season=' + se);
       const data = await res.json();
       const me = getName();
       const MODE = { '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '마스터': 'MASTER', '대결': 'VS' };
       const rows = (data.top || []).map((r, i) => `
         <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
-      vsOpen('RANKING', rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>');
+      vsOpen('RANKING', tabs + (rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>')); bindTabs();
     } catch (e) {
       vsOpen('순위표', '<p class="vs-msg">순위표를 불러오지 못했어요.</p>');
     }
