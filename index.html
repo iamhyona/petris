@@ -1963,8 +1963,6 @@
   function softDrop() {
     if (!collides(piece.cells, piece.x, piece.y + 1)) {
       piece.y++;
-      score += 1;
-      updateHud();
       return true;
     }
     return false; // 바닥이면 여유 시간 뒤에 쌓임
@@ -1976,7 +1974,6 @@
       piece.y++;
       dist++;
     }
-    score += dist * 2;
     lockPiece(true);
   }
 
