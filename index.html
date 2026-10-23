@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792729643";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792730393";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -995,6 +995,11 @@
     background: #00a8e0 !important; color: #fff !important; border-color: #00a8e0 !important;
     box-shadow: inset 0 0 0 2px #00a8e0, inset 0 0 0 4px #0083b0 !important;
   }
+  .vs .mode-btn.time { border-color: #10b870 !important; color: #7ff0b8 !important; box-shadow: inset 0 0 0 2px #0b150e, inset 0 0 0 4px rgba(16,184,112,0.22) !important; }
+  .vs .mode-btn.time:hover, .vs .mode-btn.time:active, .vs .mode-btn.time:focus-visible { background: #10b870 !important; color: #04170d !important; border-color: #10b870 !important; box-shadow: inset 0 0 0 2px #10b870, inset 0 0 0 4px #0a8a52 !important; }
+  .vs .mode-btn.time:hover small, .vs .mode-btn.time:active small { color: #04170d; opacity: 1; }
+  #level.hurry { color: #ff5f7a !important; animation: hurry .5s steps(2) infinite; }
+  @keyframes hurry { 50% { opacity: .35; } }
   .vs-card { position: relative; }
   .vs-title:empty { display: none; }
   .screen:has(.vs.show) .overlay > * { visibility: hidden; }
@@ -1041,7 +1046,7 @@
           <div class="num" id="lines">0</div>
         </div>
         <div class="box">
-          <div class="lbl">STAGE</div>
+          <div class="lbl" id="lvl-lbl">STAGE</div>
           <div class="num" id="level">001</div>
         </div>
       </div>
@@ -2193,7 +2198,13 @@
     $score.textContent = score;
     fitNum($score);
     $lines.textContent = String(lines).padStart(3, '0');
-    $level.textContent = String(stage).padStart(3, '0');
+    let ta = false; try { ta = isTime(); } catch (e) {}
+    if (ta) { // 타임어택: STAGE 칸에 남은 시간
+      const s = Math.max(0, Math.ceil((TIME_LIMIT - playTime) / 1000));
+      $level.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+      $level.classList.toggle('hurry', s <= 10);
+    } else { $level.textContent = String(stage).padStart(3, '0'); $level.classList.remove('hurry'); }
+    const ll = document.getElementById('lvl-lbl'); if (ll) ll.textContent = ta ? 'TIME' : 'STAGE';
   }
 
   // ================= 그리기 =================
@@ -2424,6 +2435,12 @@
     const delta = Math.min(100, time - lastTime);
     lastTime = time;
     const now = performance.now();
+    if (isTime() && (state === 'playing' || state === 'clearing')) { // 타임어택 시계
+      if (state === 'clearing') playTime += delta;
+      const s = Math.ceil((TIME_LIMIT - playTime - (state === 'playing' ? delta : 0)) / 1000);
+      if (s !== lastSec) { lastSec = s; updateHud(); if (s <= 5 && s > 0 && audioCtx) tone('square', 880, 0, audioCtx.currentTime, 0.08, 0.05); }
+      if (state === 'playing' && playTime + delta >= TIME_LIMIT) { playTime = TIME_LIMIT; timeUp = true; updateHud(); gameOver(); }
+    }
     if (state === 'playing') {
       playTime += delta;
       if (fogOn && now > fogUntil) { fogOn = false; drawNext(); }
@@ -2477,6 +2494,10 @@
   function isMaster() { return (gameMode === 'master' || gameMode === 'god') && mode !== 'battle'; } // GOD도 마스터 규칙 포함
   function isGod() { return gameMode === 'god' && mode !== 'battle'; }
   function isEasy() { return gameMode === 'easy' && mode !== 'battle'; }
+  // 타임어택: 노멀 규칙 그대로(아이템·함정·추가 블록 없음), 3분 동안 최고 점수
+  const TIME_LIMIT = 180000;
+  let lastSec = -1, timeUp = false;
+  function isTime() { return gameMode === 'time' && mode !== 'battle'; }
   // 모드별 점수 배율: EASY ×0.5 · NORMAL ×1 · HARD ×2
   function modeMul() { return isEasy() ? 0.5 : isGod() ? 5 : isMaster() ? 3 : isHard() ? 2 : 1; }
   function chooseMode() {
@@ -2484,6 +2505,7 @@
     vsOpen('', `<div class="mode-pick">
       <button class="vs-btn mode-btn easy" data-m="easy">EASY MODE<small class="mul">SCORE ×0.5</small></button>
       <button class="vs-btn mode-btn" data-m="normal">NORMAL MODE<small class="mul">SCORE ×1</small></button>
+      <button class="vs-btn mode-btn time" data-m="time">TIME ATTACK<small class="mul">3분 · 기본 규칙 · 최고 점수 도전</small></button>
       <button class="vs-btn mode-btn hard" data-m="hard">HARD MODE<small class="mul">SCORE ×2</small></button>
       <button class="vs-btn mode-btn master" data-m="master">ITEM MODE<small class="mul">SCORE ×3 · 긴 블록 · 아이템 · 함정</small></button>
       <button class="vs-btn mode-btn god" data-m="god">MASTER MODE<small class="mul">SCORE ×5 · 괴상한 블록 · 함정만</small></button>
@@ -2514,7 +2536,7 @@
     speedBoost = 0; speedLabel();
     shadowOn = isEasy(); shadowLabel();
     stageSong();
-    playTime = 0; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
+    playTime = 0; timeUp = false; lastSec = -1; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
     bag = []; nextKind = null; bombCount = 0; itemCount = 0; trapCount = 0; fogOn = false; fogUntil = 0; slowUntil = 0;
     updateHud();
     spawn();
@@ -2536,9 +2558,9 @@
       submitScore('vs');
       return;
     }
-    say('Game over');
+    say(timeUp ? 'Time up' : 'Game over');
     const canRank = score > 0 && !EMBED;
-    showOverlay(`${dots('GAME', '#f4fff0', 'big')}${dots('OVER', '#f4fff0', 'big')}<div class="go-score"><span>SCORE</span><b>${score.toLocaleString()}</b></div>` +
+    showOverlay(`${timeUp ? dots('TIME', '#7ff0b8', 'big') + dots('OVER', '#7ff0b8', 'big') : dots('GAME', '#f4fff0', 'big') + dots('OVER', '#f4fff0', 'big')}<div class="go-score"><span>SCORE</span><b>${score.toLocaleString()}</b></div>` +
       (canRank ? `<form class="rank-form" id="rank-form" autocomplete="off">
         <input id="rank-name" class="vs-in" maxlength="8" placeholder="이름 (최대 8자)" value="${esc(getName())}">
         <button type="submit" class="rank-save">OK</button>
@@ -2554,7 +2576,7 @@
         setName(n);
         f.querySelector('button').disabled = true; inp.disabled = true;
         note.textContent = '등록 중…';
-        const ok = await submitScore(isGod() ? 'god' : isMaster() ? 'master' : isHard() ? 'hard' : isEasy() ? 'easy' : 'solo', true);
+        const ok = await submitScore(isTime() ? 'time' : isGod() ? 'god' : isMaster() ? 'master' : isHard() ? 'hard' : isEasy() ? 'easy' : 'solo', true);
         note.textContent = ok ? '등록 완료! RANKING에서 확인하세요' : '등록하지 못했어요. 잠시 후 다시 해주세요';
         if (!ok) { f.querySelector('button').disabled = false; inp.disabled = false; }
       });
@@ -3075,7 +3097,7 @@
     const n = getName() || '익명';
     if (wait) saveLocalRank({ n, s: score, m, d: Date.now() });
     if (!RANK_URL) return !!wait;
-    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}&season=2`; // 시즌 2 (점수 체계 개편 이후)
+    const q = `?a=add&n=${encodeURIComponent(n)}&s=${score}&l=${lines}&v=${stage}&m=${m}&season=${m === 'time' ? 'T' : '2'}`; // 시즌 2 (점수 체계 개편 이후)
     try {
       const r = fetch(RANK_URL + q, { mode: 'no-cors' });
       if (wait) await r;
@@ -3084,23 +3106,23 @@
   }
 
   async function showRank(se) {
-    se = (se === '1' || se === 1) ? '1' : '2'; // 시즌 1(개편 전) · 시즌 2(개편 후)
+    se = (se === '1' || se === 1) ? '1' : se === 'T' ? 'T' : '2'; // 시즌 1(개편 전) · 시즌 2(개편 후)
     if (!RANK_URL) {
-      const MODE = { easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
+      const MODE = { time: 'TIME', easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
       const top = localRanks().sort((a, b) => b.s - a.s);
       const me = getName();
       const rows = top.map((r, i) => `<li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${r.s.toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>게임이 끝나면 이름을 남겨 보세요!</p>');
       return;
     }
-    const tabs = `<div class="rk-tabs"><button class="rk-tab${se === '2' ? ' on' : ''}" data-s="2">SEASON 2</button><button class="rk-tab${se === '1' ? ' on' : ''}" data-s="1">SEASON 1</button></div>`;
+    const tabs = `<div class="rk-tabs"><button class="rk-tab${se === '2' ? ' on' : ''}" data-s="2">SEASON 2</button><button class="rk-tab${se === 'T' ? ' on' : ''}" data-s="T">TIME ATTACK</button><button class="rk-tab${se === '1' ? ' on' : ''}" data-s="1">SEASON 1</button></div>`;
     const bindTabs = () => $vsBody.querySelectorAll('.rk-tab').forEach(b => b.addEventListener('click', () => { if (b.dataset.s !== se) showRank(b.dataset.s); }));
     vsOpen('RANKING', tabs + '<p class="vs-msg">불러오는 중…</p>'); bindTabs();
     try {
       const res = await fetch(RANK_URL + '?a=top&season=' + se);
       const data = await res.json();
       const me = getName();
-      const MODE = { '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
+      const MODE = { '타임어택': 'TIME', '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
       const rows = (data.top || []).map((r, i) => `
         <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', tabs + (rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>')); bindTabs();
