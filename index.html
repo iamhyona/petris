@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792832000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792841000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2072,7 +2072,6 @@
     clearTimeout(stageGlowT); stageGlowT = setTimeout(() => document.body.classList.remove('stageup'), 950);
     stageSong();
     if (musicRunning) { stopMusic(); setTimeout(startMusic, 700); }
-    setTimeout(() => say('Next stage'), 450);
   }
   function updateLevel() {
     while (lines >= stageLines(stage)) stageUp(); // 지운 줄 수로 다음 단계 (모드 배율과 상관없이 같은 속도)
@@ -2548,12 +2547,12 @@
   // 게임 방식(gType): basic · item · time  ×  레벨(gameMode): easy · normal · hard
   let gameMode = 'normal';
   let gType = (() => { try { const t = localStorage.getItem('petris-gtype'); return ['basic', 'item', 'time'].includes(t) ? t : 'basic'; } catch (e) { return 'basic'; } })();
-  function isHard() { return (gameMode === 'hard' || gameMode === 'master') && mode !== 'battle'; } // 하드·마스터: 빠른 속도 · 바닥 블록
-  function isMasterLv() { return gameMode === 'master' && mode !== 'battle'; } // 마스터 레벨
+  function isHard() { return gameMode === 'hard' || gameMode === 'master'; } // 하드·마스터: 빠른 속도 · 바닥 블록
+  function isMasterLv() { return gameMode === 'master'; } // 마스터 레벨
   function lvOff() { return isGod() ? 6 : isMasterLv() ? 10 : isHard() ? 6 : 0; } // 시작 속도 단계
-  function isMaster() { return gType === 'item' && mode !== 'battle'; } // 아이템 방식: 긴 블록 · 아이템 · 함정
-  function isGod() { return gType === 'item' && gameMode === 'master' && mode !== 'battle'; } // 아이템 마스터: 괴상한 블록 · 함정만
-  function isEasy() { return gameMode === 'easy' && mode !== 'battle'; }
+  function isMaster() { return gType === 'item'; } // 아이템 방식: 긴 블록 · 아이템 · 함정
+  function isGod() { return gType === 'item' && gameMode === 'master'; } // 아이템 마스터: 괴상한 블록 · 함정만
+  function isEasy() { return gameMode === 'easy'; } // 대전도 방장이 고른 레벨·아이템전 그대로
   // 타임어택: 아이템·함정 없이 3분 동안 최고 점수 (레벨은 그대로 적용)
   const TIME_LIMIT = 180000;
   let lastSec = -1, timeUp = false;
@@ -2708,6 +2707,7 @@
     }
     if (e.key === 'm' || e.key === 'M') { toggleMusic(); return; }
     const name = keyMap[e.key];
+    if (name === 'left' || name === 'right') { e.preventDefault(); if (!e.repeat) dasStart(name); return; } // 좌우는 게임이 직접 반복 (맥·윈도우 키 반복 설정과 상관없이)
     if (name) {
       e.preventDefault();
       if (name === 'drop' && e.repeat) return; // 꾹 누를 때 다음 블록까지 연달아 떨어지지 않게
@@ -2716,13 +2716,19 @@
     }
   });
 
+  // 좌우 꾹 누르기: 한 칸 → 잠깐 뒤 빠르게 미끄러짐 (새 블록이 나와도 계속)
+  let dasDir = null, dasT1 = null, dasT2 = null;
+  function dasStop(d) { if (d && dasDir !== d) return; clearTimeout(dasT1); clearInterval(dasT2); dasT1 = dasT2 = null; dasDir = null; }
+  function dasStart(d) { dasStop(); dasDir = d; act[d](); dasT1 = setTimeout(() => { dasT2 = setInterval(() => { if (state === 'over' || state === 'ready') { dasStop(); return; } act[d](); }, 33); }, 140); }
+  document.addEventListener('keyup', (e) => { const n = keyMap[e.key]; if (n === 'left' || n === 'right') dasStop(n); });
+  window.addEventListener('blur', () => dasStop());
   function bindHold(btn, fn) {
     let t1 = null, t2 = null;
     const stop = () => { clearTimeout(t1); clearInterval(t2); t1 = t2 = null; };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       fn();
-      t1 = setTimeout(() => { t2 = setInterval(fn, 70); }, 220);
+      t1 = setTimeout(() => { t2 = setInterval(fn, 45); }, 170); // 화면 버튼도 조금 더 빠르게
     });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, stop));
     btn.addEventListener('contextmenu', e => e.preventDefault());
@@ -2880,7 +2886,11 @@
       vsOpen('VS', '<p class="vs-msg">대결 기능을 불러오지 못했어요.<br>인터넷 연결을 확인해 주세요.</p>');
       return;
     }
+    let vsGt = 'basic', vsLv = 'normal'; try { vsGt = localStorage.getItem('petris-vs-gt') || 'basic'; vsLv = localStorage.getItem('petris-vs-lv') || 'normal'; } catch (e) {}
     vsOpen('ONLINE PLAY', `
+      <div class="mode-tabs vs-opt" id="vs-gt">${[['basic', 'BASIC'], ['item', 'ITEM']].map(([k, n]) => `<button class="mt-btn${vsGt === k ? ' on' : ''}" data-v="${k}">${n}</button>`).join('')}</div>
+      <div class="mode-tabs vs-opt" id="vs-lv">${[['easy', 'EASY'], ['normal', 'NORMAL'], ['hard', 'HARD'], ['master', 'MASTER']].map(([k, n]) => `<button class="mt-btn${vsLv === k ? ' on' : ''}" data-v="${k}">${n}</button>`).join('')}</div>
+      <div class="vs-or">방을 만든 사람 설정으로 대전</div>
       <label class="vs-lbl">NAME</label>
       <input id="vs-name" class="vs-in" maxlength="8" placeholder="닉네임" value="${esc(getName())}">
       <button class="vs-btn" id="vs-host">CREATE ROOM</button>
@@ -2895,6 +2905,10 @@
       return v;
     };
     document.getElementById('vs-code').oninput = e => { const v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); if (v !== e.target.value) e.target.value = v; }; // 코드: 대소문자 상관없이
+    ['vs-gt', 'vs-lv'].forEach(id => document.getElementById(id).querySelectorAll('.mt-btn').forEach(b => b.addEventListener('click', () => {
+      document.getElementById(id).querySelectorAll('.mt-btn').forEach(o => o.classList.toggle('on', o === b));
+      try { localStorage.setItem(id === 'vs-gt' ? 'petris-vs-gt' : 'petris-vs-lv', b.dataset.v); } catch (e) {}
+    })));
     document.getElementById('vs-host').onclick = () => {
       if (!saveName()) return nameNeeded();
       hostRoom();
@@ -2972,7 +2986,8 @@
   function hostGo() {
     myReady = false; oppReady = false;
     const seed = Math.floor(Math.random() * 2 ** 31);
-    const d = { t: 'go', seed, cols: COLS, rows: ROWS };
+    let gt = 'basic', lv = 'normal'; try { gt = localStorage.getItem('petris-vs-gt') || 'basic'; lv = localStorage.getItem('petris-vs-lv') || 'normal'; } catch (e) {}
+    const d = { t: 'go', seed, cols: COLS, rows: ROWS, gt, lv }; // 방장 설정 (레벨 · 아이템전)
     vsSend(d);
     beginBattle(d);
   }
@@ -2989,6 +3004,7 @@
   function beginBattle(d) {
     try { document.activeElement && document.activeElement.blur(); window.scrollTo(0, 0); } catch (e) {} // 키보드 닫힌 뒤 화면 밀림 방지
     mode = 'battle';
+    gameMode = ['easy', 'normal', 'hard', 'master'].includes(d.lv) ? d.lv : 'normal'; gType = d.gt === 'item' ? 'item' : 'basic'; // 방장 설정
     lockDims = true;
     document.body.classList.add('battle');
     setDims(d.cols, d.rows);
