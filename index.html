@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792823000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1792831000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -3184,7 +3184,7 @@
       const MODE = { 'basic-master': 'MASTER', 'time-master': 'TIME MASTER', 'item-master': 'ITEM MASTER', 'time-easy': 'TIME EASY', 'time-normal': 'TIME', 'time-hard': 'TIME HARD', 'item-easy': 'ITEM EASY', 'item-normal': 'ITEM', 'item-hard': 'ITEM HARD', time: 'TIME', easy: 'EASY', solo: 'NORMAL', hard: 'HARD', master: 'ITEM', god: 'MASTER', vs: 'VS' };
       const top = localRanks().sort((a, b) => b.s - a.s);
       const me = getName();
-      const rows = top.map((r, i) => `<li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${r.s.toLocaleString()}</em></li>`).join('');
+      const rows = top.map((r, i) => `<li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}${window.phLv ? phLv(MODE[r.m] || '') : ''}</span><em>${r.s.toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>게임이 끝나면 이름을 남겨 보세요!</p>');
       return;
     }
@@ -3194,10 +3194,13 @@
     try {
       const res = await fetch(RANK_URL + '?a=top&season=' + se);
       const data = await res.json();
+      const S1M = r => [["듀공킹왕짱", 23580760], ["돌아온참치", 1003110]].some(([n, s]) => r.n === n && Number(r.s) === s); // 시즌 2의 1·2위 기록 → 시즌 1로
+      if (se === '2') data.top = (data.top || []).filter(r => !S1M(r));
+      if (se === '1') { try { const d2 = await fetch(RANK_URL + '?a=top&season=2').then(x => x.json()); data.top = (data.top || []).concat((d2.top || []).filter(S1M)).sort((a, b) => b.s - a.s); } catch (e) {} }
       const me = getName();
       const MODE = { '타임어택 마스터': 'TIME MASTER', '아이템 마스터': 'ITEM MASTER', '타임어택 이지': 'TIME EASY', '타임어택 노멀': 'TIME', '타임어택 하드': 'TIME HARD', '아이템 이지': 'ITEM EASY', '아이템 노멀': 'ITEM', '아이템 하드': 'ITEM HARD', '타임어택': 'TIME', '이지': 'EASY', '노멀': 'NORMAL', '하드': 'HARD', '아이템': 'ITEM', '마스터': 'MASTER', '갓': 'MASTER', '대결': 'VS' };
       const rows = (data.top || []).map((r, i) => `
-        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}<i class="rk-m">${MODE[r.m] || ''}</i></span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
+        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}${window.phLv ? phLv(MODE[r.m] || '') : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`).join('');
       vsOpen('RANKING', tabs + (rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>')); bindTabs();
     } catch (e) {
       vsOpen('순위표', '<p class="vs-msg">순위표를 불러오지 못했어요.</p>');
@@ -3488,5 +3491,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=12"></script></body>
+<script src="../games/ph.js?v=13"></script></body>
 </html>
