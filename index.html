@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793003820";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793111473";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2559,10 +2559,10 @@
   const TIME_LIMIT = 180000;
   let lastSec = -1, timeUp = false;
   function isTime() { return gType === 'time' && mode !== 'battle'; }
-  // 점수 배율: 기본·타임어택 EASY ×0.5 · NORMAL ×1 · HARD ×2 / 아이템 EASY ×1 · NORMAL ×2 · HARD ×5
-  function modeMul() { return isMaster() ? (isGod() ? 5 : isHard() ? 3 : isEasy() ? 1 : 2) : isEasy() ? 0.5 : isMasterLv() ? 3 : isHard() ? 2 : 1; } // 마스터 ×3 (아이템 하드 ×3, 아이템 마스터 ×5)
+  // 점수 배율 (모든 방식 같음): EASY ×0.5 · NORMAL ×1 · HARD ×2 · MASTER ×3
+  function modeMul() { return isEasy() ? 0.5 : isMasterLv() ? 3 : isHard() ? 2 : 1; } // 아이템전도 BASIC과 같은 배율 (2026-10-27부터)
   function modeCode() { return isTime() ? 'time-' + gameMode : isMaster() ? 'item-' + gameMode : isEasy() ? 'easy' : isMasterLv() ? 'basic-master' : isHard() ? 'hard' : 'solo'; }
-  const MODE_DESC = {"basic": ["SCORE ×0.5 · 가이드", "SCORE ×1", "SCORE ×2 · 바닥 블록", "SCORE ×3 · 더 빠르게 · 바닥 8줄"], "item": ["SCORE ×1 · 긴 블록 · 아이템 · 함정", "SCORE ×2 · 긴 블록 · 아이템 · 함정", "SCORE ×3 · 하드 속도 · 아이템 · 함정", "SCORE ×5 · 괴상한 블록 · 함정만"], "time": ["3분 · SCORE ×0.5 · 가이드", "3분 · SCORE ×1", "3분 · SCORE ×2 · 바닥 블록", "3분 · SCORE ×3 · 더 빠르게 · 바닥 8줄"]};
+  const MODE_DESC = {"basic": ["SCORE ×0.5 · 가이드", "SCORE ×1", "SCORE ×2 · 바닥 블록", "SCORE ×3 · 더 빠르게 · 바닥 8줄"], "item": ["SCORE ×0.5 · 긴 블록 · 아이템 · 함정", "SCORE ×1 · 긴 블록 · 아이템 · 함정", "SCORE ×2 · 하드 속도 · 아이템 · 함정", "SCORE ×3 · 괴상한 블록 · 함정만"], "time": ["3분 · SCORE ×0.5 · 가이드", "3분 · SCORE ×1", "3분 · SCORE ×2 · 바닥 블록", "3분 · SCORE ×3 · 더 빠르게 · 바닥 8줄"]};
   function chooseMode() {
     unlockAudio();
     const render = () => {
@@ -3196,7 +3196,7 @@
     } catch (e) { return false; }
   }
 
-  // 랭킹: 모드(BASIC·ITEM·TIME·VS) × 시즌(시즌 2 = 현재 · 시즌 1). 난이도는 나누지 않고 이름 옆 뱃지로만
+  // 랭킹: 모드(BASIC·ITEM·TIME·VS)별 통합 랭킹 (시즌 1·2 합침 — 시즌 1 기록은 지금 점수 체계로 환산해 시트에 반영, '환산' 표시). 난이도는 이름 옆 뱃지로만
   function rkParse(m) { // 시트(한글)·이 기기(영문) 모드 이름 → [모드, 난이도]
     m = String(m || '').trim();
     const K = { '이지': 'easy', '노멀': 'normal', '하드': 'hard', '마스터': 'master', easy: 'easy', normal: 'normal', hard: 'hard', master: 'master' };
@@ -3216,25 +3216,24 @@
     if (!RK_ALL) { list.innerHTML = '<p class="vs-msg">불러오는 중…</p>'; return; }
     if (RK_ALL === 'err') { list.innerHTML = '<p class="vs-msg">순위표를 불러오지 못했어요.</p>'; return; }
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
-    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (!window.phRk || phRk.ver('petris', r) === S.ver); })
+    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode; })
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
-        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}${window.phLv ? phLv(mo === 'vs' ? 'VS' : MB[mo] + LB[df]) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
+        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}${window.phLv ? phLv((mo === 'vs' ? 'VS' : MB[mo] + LB[df]) + (r._s1 ? ' 환산' : '')) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
   }
   function rkBarInit(sel) {
-    const el = document.getElementById('rk-bar'); if (!el || !window.phRk) { RK_SEL = Object.assign({ mode: 'basic', ver: 'v2' }, sel || {}); return; }
+    const el = document.getElementById('rk-bar'); if (!el || !window.phRk) { RK_SEL = Object.assign({ mode: 'basic' }, sel || {}); return; }
     RK_SEL = phRk.bar(el, { game: 'petris', modes: RK_MODES, sel: sel, onChange: x => { RK_SEL = x; rkDraw(); } });
   }
   async function showRank(sel) {
-    sel = { mode: 'basic', ver: 'v2' }; // 열 때마다 기본: BASIC · 시즌 2
+    sel = { mode: 'basic' }; // 열 때마다 기본: BASIC
     vsOpen('RANKING', '<div id="rk-bar"></div><div id="rk-list"></div>');
     rkBarInit(sel); RK_ALL = null; rkDraw();
     if (!RANK_URL) { RK_ALL = localRanks().map(r => Object.assign({ ts: r.d }, r)); rkDraw(); return; }
     try {
       const get = se => fetch(RANK_URL + '?a=top&season=' + se).then(x => x.json()).then(d => d.top || []);
       const [s2, sT, s1] = await Promise.all([get('2'), get('T').catch(() => []), get('1').catch(() => [])]);
-      const S1M = r => [["듀공킹왕짱", 23580760], ["박현아대마왕", 469710]].some(([n, s]) => r.n === n && Number(r.s) === s); // 시즌 2의 1·2위 기록 → 시즌 1로
-      RK_ALL = s2.filter(r => !S1M(r)).concat(sT, s1.map(r => Object.assign({}, r, { _v: 's1' })), s2.filter(S1M).map(r => Object.assign({}, r, { _v: 's1' })));
+      RK_ALL = s2.concat(sT, s1.map(r => Object.assign({}, r, { _s1: 1 }))); // 시즌 1·2 통합
     } catch (e) { RK_ALL = 'err'; }
     rkDraw();
   }
@@ -3523,5 +3522,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=16"></script></body>
+<script src="../games/ph.js?v=17"></script></body>
 </html>
