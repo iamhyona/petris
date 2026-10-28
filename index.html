@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793112840";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793212057";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2566,12 +2566,11 @@
   function chooseMode() {
     unlockAudio();
     const render = () => {
-      const d = MODE_DESC[gType];
-      vsOpen('', `<div class="mode-tabs">${[['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME ATTACK']].map(([k, n]) => `<button class="mt-btn${gType === k ? ' on' : ''}" data-t="${k}">${n}</button>`).join('')}</div><div class="mode-pick">
-      <button class="vs-btn mode-btn easy" data-m="easy">EASY<small class="mul">${d[0]}</small></button>
-      <button class="vs-btn mode-btn" data-m="normal">NORMAL<small class="mul">${d[1]}</small></button>
-      <button class="vs-btn mode-btn hard" data-m="hard">HARD<small class="mul">${d[2]}</small></button>
-      <button class="vs-btn mode-btn god" data-m="master">MASTER<small class="mul">${d[3]}</small></button>
+      vsOpen('', `<div class="mode-tabs phSeg">${[['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME ATTACK']].map(([k, n]) => `<button class="mt-btn${gType === k ? ' on' : ''}" data-t="${k}">${n}</button>`).join('')}</div><div class="mode-pick">
+      <button class="vs-btn mode-btn phDiff lv-e" data-m="easy">EASY</button>
+      <button class="vs-btn mode-btn phDiff lv-n" data-m="normal">NORMAL</button>
+      <button class="vs-btn mode-btn phDiff lv-h" data-m="hard">HARD</button>
+      <button class="vs-btn mode-btn phDiff lv-m" data-m="master">MASTER</button>
     </div>`);
       $vsBody.querySelectorAll('.mt-btn').forEach(b => b.addEventListener('click', () => { gType = b.dataset.t; try { localStorage.setItem('petris-gtype', gType); } catch (e) {} render(); }));
       $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
@@ -2594,6 +2593,7 @@
 
   function startGame() {
     unlockAudio();
+    if (window.phLvTheme) phLvTheme(gameMode, document.getElementById('board')); // 게임 중 난이도 색
     if (typeof fitBoard === 'function' && !lockDims) fitBoard(); // 시작 직전 실제 화면 높이에 맞춤
     danger = false; document.body.classList.remove('danger', 'warn');
     grid = newGrid();
@@ -3220,7 +3220,7 @@
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
     const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode; })
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
-        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span>${esc(r.n)}${window.phLv ? phLv((mo === 'vs' ? 'VS' : MB[mo] + LB[df]) + (r._s1 ? ' 환산' : '')) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
+        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em>${window.phLv ? phLv((mo === 'vs' ? 'VS' : MB[mo] + LB[df]) + (r._s1 ? ' 환산' : '')) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
   }
   function rkBarInit(sel) {
@@ -3524,5 +3524,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=17"></script></body>
+<script src="../games/ph.js?v=18"></script></body>
 </html>
