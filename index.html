@@ -1032,7 +1032,7 @@
 <script src="../games/relay.js?v=1"></script><!-- 온라인 대전: 중계 서버 방식 (휴대폰 데이터에서도 연결) -->
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html,body{height:var(--app-h,100dvh)!important}.gb{height:var(--app-h,100dvh)!important}</style>
-<link rel="stylesheet" href="../games/ph.css?v=12"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
+<link rel="stylesheet" href="../games/ph.css?v=14"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
 /* HUD 정보 칸: 라벨 위 · 숫자 아래 (공통 .phBx) */
 html body .info .panel{gap:8px!important}
 html body .info .panel .box.phBx,html body .info .panel .box.phBx:first-child,html body .info .panel .box.phBx+.box.phBx{padding:9px 4px!important;justify-content:space-between!important;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;box-shadow:none!important;min-height:58px;gap:6px!important}
@@ -2000,8 +2000,8 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     };
     if (typeof isMaster === 'function' && isMaster()) {
       const msg = kind.startsWith('#R_') ? ['STONE', '#b8bec6'] : kind.startsWith('#Q_') ? ['REVERSE!', '#ff5fa2'] : kind.startsWith('#F_') ? ['FAST!', '#ffd84d'] : null;
-      if (msg) popText = { text: msg[0], t: performance.now(), big: false, color: msg[1], kind: 'warn' };
-      if (!fogOn && rng() < (isGod() ? 0.06 : 0.035)) { fogOn = true; fogUntil = performance.now() + 7000; popText = { text: 'FOG!', t: performance.now(), big: false, color: '#b8c4c0', kind: 'warn' }; }
+      if (msg) popText = { text: msg[0], t: performance.now(), big: false, color: msg[1] };
+      if (!fogOn && rng() < (isGod() ? 0.06 : 0.035)) { fogOn = true; fogUntil = performance.now() + 7000; popText = { text: 'FOG!', t: performance.now(), big: false, color: '#b8c4c0' }; }
     }
     drawNext();
     if (collides(piece.cells, piece.x, piece.y)) gameOver();
@@ -2089,7 +2089,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     lastTetris = n === 4;
     const word = perfect ? 'PERFECT' : b2b ? 'AMAZING' : ['', 'VERY GOOD', 'NICE', 'GREAT', 'EXCELLENT'][Math.min(n, 4)];
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
-    popText = { text: word + '!', t: performance.now(), big: perfect || b2b, color: WCOL[word], kind: 'gold' };
+    popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
     if (perfect) {
       score += Math.round(5000 * scoreLv() * modeMul()); // 판 전체 클리어 보너스
       sfxApplause(3.5);
@@ -2100,7 +2100,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     say(word);
     if (combo >= 2) {
       setTimeout(() => {
-        popText = { text: 'COMBO X' + comboMul, t: performance.now(), big: false, color: '#ff5fa2', kind: 'gold' };
+        popText = { text: 'COMBO x' + comboMul, t: performance.now(), big: combo >= 3, color: combo >= 4 ? 'rainbow' : '#ff5fa2' };
         if (audioCtx) [660, 880, 1100].slice(0, Math.min(3, combo)).forEach((f, i) => tone('square', f, 0, audioCtx.currentTime + i * 0.06, 0.12, 0.07));
       }, 650);
     }
@@ -2128,7 +2128,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
   function riseEvery() { return isGod() ? Math.max(3000, 6500 - (stage - 1) * 800) : isMaster() ? Math.max(4000, 8000 - (stage - 1) * 1000) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
   function stageUp() {
     stage++;
-    popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow', kind: 'stage' };
+    popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
     boardFlash = performance.now();
     shake(5, 300);
     if (audioCtx) {
@@ -2213,7 +2213,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     if (piece.kind === 'B') { colorBomb(); return; }
     if (piece.kind === 'SL') { // 느림 시계: 10초 동안 천천히
       slowUntil = performance.now() + 10000;
-      popText = { text: 'SLOW', sub: '10 SEC', t: performance.now(), big: false, color: '#8fd8ff', kind: 'item' };
+      popText = { text: 'SLOW 10s', t: performance.now(), big: true, color: '#8fd8ff' };
       if (audioCtx) [880, 660, 440].forEach((f, i) => tone('triangle', f, 0, audioCtx.currentTime + i * 0.09, 0.18, 0.08));
       piece = null; dropCounter = 0; updateHud(); spawn(); return;
     }
@@ -2221,7 +2221,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       const by = piece.y + piece.cells[0][1];
       for (let x = 0; x < COLS; x++) if (!grid[by][x]) grid[by][x] = 'LB';
       grid[by][piece.x + piece.cells[0][0]] = 'LB';
-      popText = { text: 'LINE BOMB!', t: performance.now(), big: false, color: '#8fd8ff', kind: 'item' };
+      popText = { text: 'LINE BOMB!', t: performance.now(), big: true, color: '#8fd8ff' };
       piece = null; dropCounter = 0; updateHud();
       clearing = { rows: fullRows(), t: performance.now() }; state = 'clearing'; sfxClearStart(); return;
     }
@@ -2276,7 +2276,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     }
     for (let k = 0; k < 24; k++) particles.push({ x: (bx + 0.5) * CELL, y: (by + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 10, vy: -Math.random() * 12 - 2, life: 1, color: hsl2hex(k * 15, 90, 62), size: 5 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.4 });
     score += 10 + Math.round(n * 10 * modeMul()); // 컬러 폭탄: 블록당 10점 (레벨 배율 없음)
-    popText = { text: 'COLOR BOMB!', t: performance.now(), big: false, color: 'rainbow', kind: 'item' };
+    popText = { text: 'COLOR BOMB!', t: performance.now(), big: true, color: 'rainbow' };
     boardFlash = performance.now();
     shake(8, 320);
     sfxClear(Math.min(4, 1 + Math.floor(n / 8)));
@@ -2501,28 +2501,33 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       ctx.restore();
     }
 
-    // SINGLE / DOUBLE / TRIPLE / PETRIS! — 공통 팝업 모양 (Silkscreen 대문자 · 어두운 외곽선 · 의미별 색 · d1 28 / d2 20px)
+    // SINGLE / DOUBLE / TRIPLE / PETRIS!
     if (popText) {
-      const e = (now - popText.t) / 1250;
+      const e = (now - popText.t) / 950;
       if (e >= 1) popText = null;
-      else if (window.phPopDraw) {
-        const t = String(popText.text).toUpperCase();
-        const kind = popText.kind || (/^(STAGE|WIN)/.test(t) ? 'stage' : /^LOSE/.test(t) ? 'warn' : 'gold');
-        const tier = popText.tier || (popText.big ? 'd1' : 'd2');
-        const k = boardCanvas.width / (boardCanvas.clientWidth || boardCanvas.width); // CSS px → 캔버스 px
-        let px = (tier === 'd1' ? 28 : tier === 'd3' ? 14 : 20) * k;
-        ctx.save(); ctx.font = `700 ${px}px Silkscreen, monospace`;
-        const tw = ctx.measureText(t).width + t.length * Math.round(px * 0.1);
-        ctx.restore();
-        if (tw > COLS * CELL * 0.9) px *= (COLS * CELL * 0.9) / tw;
-        const sc = e < 0.1 ? 0.6 + (e / 0.1) * 0.48 : e < 0.18 ? 1.08 - ((e - 0.1) / 0.08) * 0.08 : 1;
-        const al = e < 0.1 ? e / 0.1 : e > 0.72 ? (1 - e) / 0.28 : 1;
-        const y = ROWS * CELL * 0.38 - (e > 0.72 ? ((e - 0.72) / 0.28) * 16 * k : 0);
+      else {
+        const sc = e < 0.15 ? 0.4 + (e / 0.15) * 0.9 : 1.3 - (e - 0.15) * 0.3;
         ctx.save();
-        ctx.translate(COLS * CELL / 2, y);
+        ctx.globalAlpha = e > 0.7 ? (1 - e) / 0.3 : 1;
+        ctx.translate(COLS * CELL / 2, ROWS * CELL * 0.38 - e * 30);
         ctx.scale(sc, sc);
-        phPopDraw(ctx, t, 0, 0, Math.round(px), kind, al);
-        if (popText.sub) phPopDraw(ctx, popText.sub, 0, px * 1.1, Math.round(11 * k), kind, al);
+        ctx.font = `700 ${popText.big ? 38 : 30}px "Silkscreen", Galmuri11, monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = '#000';
+        ctx.strokeText(popText.text, 0, 0);
+        const tw = ctx.measureText(popText.text).width;
+        const fit = Math.min(1, (COLS * CELL * 0.92) / tw);
+        ctx.scale(fit, fit);
+        if (popText.color === 'rainbow' || (!popText.color && popText.big)) {
+          const g = ctx.createLinearGradient(-tw / 2, 0, tw / 2, 0);
+          ['#e8284f', '#f26a0d', '#f2b000', '#10b870', '#00a8e0', '#8a3cf0'].forEach((c, i) => g.addColorStop(i / 5, c));
+          ctx.fillStyle = g;
+        } else {
+          ctx.fillStyle = popText.color || '#ffffff';
+        }
+        ctx.fillText(popText.text, 0, 0);
         ctx.restore();
       }
     }
@@ -2642,7 +2647,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
         gameMode = b.dataset.m; pset('lv', gameMode);
         vsHide();
-        phTut('petris-tut', {"goal": "가로줄을 꽉 채우면 줄이 사라지고 점수가 올라요.<br>블록이 위까지 쌓이면 게임 끝!", "touch": [["← 밀기 →", "블록 옮기기"], ["탭", "블록 돌리기"], ["↓ 천천히 밀기", "천천히 내리기"], ["↓ 튕기기", "바로 내리기"]], "pc": [["← →", "블록 옮기기"], ["↑", "블록 돌리기"], ["↓", "천천히 내리기"], ["SPACE", "바로 내리기"]]}, startGame); // 처음 한 번 튜토리얼
+        phTut('petris-tut', {"goal": "가로줄을 꽉 채우면 줄이 사라져요.<br>블록이 위까지 쌓이면 게임 끝!", "touch": [["← 밀기 →", "블록 옮기기"], ["탭", "블록 돌리기"], ["↓ 천천히 밀기", "천천히 내리기"], ["↓ 튕기기", "바로 내리기"]], "pc": [["← →", "블록 옮기기"], ["↑", "블록 돌리기"], ["↓", "천천히 내리기"], ["SPACE", "바로 내리기"]]}, startGame); // 처음 한 번 튜토리얼
       }));
     };
     render();
@@ -2722,7 +2727,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       state = 'paused';
       stopMusic();
       if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
-      showOverlay(dots('PAUSE', '#f4fff0', 'mid'), 'RESUME');
+      showOverlay('<div class="phPauseH">PAUSE</div>', 'RESUME');
       $overlay.classList.add('paused');
     } else if (state === 'paused') {
       state = 'playing';
@@ -3138,7 +3143,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     const sub = note ? `<small>${note}</small>` : `<small>SCORE ${score}</small>`;
     showOverlay(`${dots(win ? 'WIN!' : 'LOSE', win ? BRAND : '#f4fff0', 'big')}${sub}`, conn ? 'REMATCH' : 'OK');
     $overlay.classList.add('battle');
-    popText = { text: win ? 'WIN!' : 'LOSE', t: performance.now(), big: true, kind: win ? 'stage' : 'warn' };
+    popText = { text: win ? 'WIN!' : 'LOSE', t: performance.now(), big: win };
   }
 
   function requestRematch() {
@@ -3598,5 +3603,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=22"></script></body>
+<script src="../games/ph.js?v=24"></script></body>
 </html>
