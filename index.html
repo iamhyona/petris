@@ -1032,7 +1032,7 @@
 <script src="../games/relay.js?v=1"></script><!-- 온라인 대전: 중계 서버 방식 (휴대폰 데이터에서도 연결) -->
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html,body{height:var(--app-h,100dvh)!important}.gb{height:var(--app-h,100dvh)!important}</style>
-<link rel="stylesheet" href="../games/ph.css?v=8"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
+<link rel="stylesheet" href="../games/ph.css?v=9"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
 /* HUD 정보 칸: 라벨 위 · 숫자 아래 (공통 .phBx) */
 html body .info .panel{gap:8px!important}
 html body .info .panel .box.phBx,html body .info .panel .box.phBx:first-child,html body .info .panel .box.phBx+.box.phBx{padding:9px 4px!important;justify-content:space-between!important;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;box-shadow:none!important;min-height:58px;gap:6px!important}
@@ -1055,6 +1055,7 @@ html body.battle .info .sock:has(#start-btn){margin-top:auto!important}
 @media (max-height:700px){html body .info .sock:has(#start-btn){margin-top:auto!important}}
 @media (max-height:820px){html body .info .sock .sysb.phIb{height:46px!important}html body .info .panel .box.phBx:not(:first-child){min-height:52px}}
 /* 게임판 아래 난이도 이름 */
+.screen>.info-l{padding-bottom:18px!important;box-sizing:border-box} /* 왼쪽 버튼 아래 끝 = 게임판 아래 끝 (밑의 난이도 글자 높이만큼 띄움) */
 .screen>.phLvName{position:absolute;z-index:1;box-sizing:border-box;height:18px;line-height:12px;padding:5px 0 0 .3em}
 /* 일시정지·게임오버·대전 결과 버튼: 공통 .phBtn (보이고 숨기는 규칙은 그대로) */
 html body #overlay button.phBtn{--b:#10b870;--t:#9ff0c6;width:300px!important;max-width:100%!important;min-width:0!important;height:52px!important;min-height:0!important;box-sizing:border-box!important;border:2px solid var(--b)!important;border-radius:12px!important;background:#12142a!important;box-shadow:none!important;color:var(--t)!important;font:400 13px "Silkscreen",monospace!important;letter-spacing:.2em!important;padding:0 0 0 .2em!important;text-shadow:none!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;transform:none!important;margin:0!important;position:relative}
@@ -3597,5 +3598,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=19"></script></body>
+<script src="../games/ph.js?v=20"></script></body>
 </html>
