@@ -2612,8 +2612,8 @@ html body .rank li em{font-family:"Jersey 15",sans-serif!important;font-size:16p
   }
 
   // 게임 방식(gType): basic · item · time  ×  레벨(gameMode): easy · normal · hard
-  let gameMode = (() => { const m = pget('lv', 'normal'); return ['easy', 'normal', 'hard', 'master'].includes(m) ? m : 'normal'; })(); // 마지막에 고른 난이도
-  let gType = (() => { let t = pget('mode', null); if (t == null) { try { t = localStorage.getItem('petris-gtype'); } catch (e) {} } return ['basic', 'item', 'time'].includes(t) ? t : 'basic'; })(); // 마지막에 고른 방식
+  let gameMode = 'normal'; // 들어올 때마다 기본 NORMAL
+  let gType = 'basic'; // 들어올 때마다 기본 BASIC (아이템전 아님)
   function isHard() { return gameMode === 'hard' || gameMode === 'master'; } // 하드·마스터: 빠른 속도 · 바닥 블록
   function isMasterLv() { return gameMode === 'master'; } // 마스터 레벨
   function lvOff() { return isGod() ? 6 : isMasterLv() ? 10 : isHard() ? 6 : 0; } // 시작 속도 단계
