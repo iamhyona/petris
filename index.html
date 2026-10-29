@@ -3347,7 +3347,7 @@ html body .rank li em{font-family:"Jersey 15",sans-serif!important;font-size:16p
   function phSetup() {
     if (!window.phSettings) return;
     phSettings.config({
-      guide: { label: '고스트 블록', get: () => ghostPref, set: v => { ghostPref = !!v; pset('guide', ghostPref); shadowOn = isEasy() && ghostPref; shadowLabel(); draw(); } },
+      guide: { label: '고스트 블록 · EASY', get: () => ghostPref, set: v => { ghostPref = !!v; pset('guide', ghostPref); shadowOn = isEasy() && ghostPref; shadowLabel(); draw(); } },
       speed: { get: () => spdPref, set: v => { spdPref = v === 0 || v === 2 ? v : 1; pset('speed', spdPref); } },
       fx: { get: () => !!SET.fx, set: v => { SET.fx = v ? 1 : 0; saveSet(); } },
       hap: { get: () => !!SET.hap, set: v => { SET.hap = v ? 1 : 0; saveSet(); } },
