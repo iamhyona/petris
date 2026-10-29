@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793212057";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793232263";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1032,7 +1032,56 @@
 <script src="../games/relay.js?v=1"></script><!-- 온라인 대전: 중계 서버 방식 (휴대폰 데이터에서도 연결) -->
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html,body{height:var(--app-h,100dvh)!important}.gb{height:var(--app-h,100dvh)!important}</style>
-<link rel="stylesheet" href="../games/ph.css?v=7"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style></head>
+<link rel="stylesheet" href="../games/ph.css?v=8"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
+/* HUD 정보 칸: 라벨 위 · 숫자 아래 (공통 .phBx) */
+html body .info .panel{gap:8px!important}
+html body .info .panel .box.phBx,html body .info .panel .box.phBx:first-child,html body .info .panel .box.phBx+.box.phBx{padding:9px 4px!important;justify-content:space-between!important;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;box-shadow:none!important;min-height:58px;gap:6px!important}
+html body .info .panel .box.phBx .phL{margin:0!important;font-size:8px!important;letter-spacing:.08em!important;text-shadow:none!important}
+html body .info .panel .box.phBx .phN{font-size:22px!important;letter-spacing:.02em!important;text-shadow:none!important;color:#fff!important;width:auto!important}
+html body .info .panel .box.phBx .phN.hurry{color:#ff8aa0!important}
+html body .info .panel .box.phBx canvas#next{margin:0 auto!important}
+/* HUD 아이콘 버튼: 멈춤 · 설정 (재시작·속도·그림자는 설정 창으로) */
+html body .info .sock:has(#speed-btn),html body .info .sock:has(#shadow-btn),html body .info .sock:has(#restart-btn){display:none!important}
+html body .info .sock .sysb.phIb{height:52px!important;width:100%!important;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;box-shadow:none!important;color:#dfe2ea!important;text-shadow:none!important;padding:0!important}
+html body .info .sock .sysb.phIb::after{content:none!important}
+html body .info .sock #sel-btn.phIb,html body .info .sock #start-btn.phIb{border-color:var(--phBd,#2c2f4a)!important;color:#dfe2ea!important;text-shadow:none!important}
+html body .info .sock .sysb.phIb svg{display:block!important;width:22px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:square;stroke-linejoin:miter}
+html body .info .sock #start-btn.phIb .i-play{display:none!important}
+html body .info .sock #start-btn.phIb.is-play .i-play{display:block!important;fill:currentColor;stroke:none}
+html body .info .sock #start-btn.phIb.is-play .i-pause{display:none!important}
+html body .info .sock .sysb.phIb.pressed,html body .info .sock .sysb.phIb:active{background:#1b1e3a!important;color:#fff!important}
+html body .info .sock:has(#start-btn){margin-top:0!important}
+html body.battle .info .sock:has(#start-btn){margin-top:auto!important}
+@media (max-height:700px){html body .info .sock:has(#start-btn){margin-top:auto!important}}
+@media (max-height:820px){html body .info .sock .sysb.phIb{height:46px!important}html body .info .panel .box.phBx:not(:first-child){min-height:52px}}
+/* 게임판 아래 난이도 이름 */
+.screen>.phLvName{position:absolute;z-index:1;box-sizing:border-box;height:18px;line-height:12px;padding:5px 0 0 .3em}
+/* 일시정지·게임오버·대전 결과 버튼: 공통 .phBtn (보이고 숨기는 규칙은 그대로) */
+html body #overlay button.phBtn{--b:#10b870;--t:#9ff0c6;width:300px!important;max-width:100%!important;min-width:0!important;height:52px!important;min-height:0!important;box-sizing:border-box!important;border:2px solid var(--b)!important;border-radius:12px!important;background:#12142a!important;box-shadow:none!important;color:var(--t)!important;font:400 13px "Silkscreen",monospace!important;letter-spacing:.2em!important;padding:0 0 0 .2em!important;text-shadow:none!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;transform:none!important;margin:0!important;position:relative}
+html body #overlay button.phBtn.sub{--b:#3a3e66;--t:#dfe2ea}
+html body #overlay button.phBtn.rank-link{--b:#8a6a10;--t:#ffd84d}
+@media (hover:hover){html body #overlay button.phBtn:hover{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important;color:var(--t)!important}}
+html body #overlay button.phBtn:focus-visible{outline:none;background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important;color:var(--t)!important}
+html body #overlay button.phBtn:active{background:color-mix(in srgb,var(--b) 26%,#12142a)!important;color:var(--t)!important;transform:translateY(1px)!important}
+html body .overlay .phBtn{margin:0!important;position:relative}
+html body .overlay .phBtn::before{content:none!important}
+html body .overlay .phBtn svg{width:12px;height:12px;fill:currentColor;margin-right:8px;shape-rendering:crispEdges}
+html body .overlay .ov-only.phBtn,html body .overlay .exit.phBtn{display:none!important}
+html body .overlay.paused .ov-only.phBtn,html body .overlay.over .ov-only.phBtn,html body .overlay.battle .exit.phBtn{display:flex!important}
+html body .overlay.battle .ov-only.phBtn,html.embed body .overlay .ov-only.phBtn{display:none!important}
+html body .overlay.over #btn-restart2.phBtn{display:none!important}
+html body .overlay.over #btn-rank.phBtn{margin-top:0!important}
+html body .overlay.paused #overlay-btn,html body .overlay.over #overlay-btn{order:0}
+/* 난이도 고르기: 마지막에 고른 난이도 표시 */
+html body .phDiff.phDiff.phDiff.on{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important}
+/* 숫자는 Jersey 15 · 글자는 Silkscreen */
+html body .go-score span{font:400 11px "Silkscreen",monospace!important;letter-spacing:.2em!important;color:#8b8fa8!important}
+html body .go-score b{font:400 40px "Jersey 15",sans-serif!important;letter-spacing:.02em!important;color:#ffd84d!important}
+html body .opp-score{font:400 16px "Jersey 15",sans-serif!important}
+html body .opp-warn{font:400 16px "Jersey 15",sans-serif!important;color:#ff8aa0!important}
+html body .vs-count{font-family:"Jersey 15",sans-serif!important;font-weight:400!important}
+html body .rank li em{font-family:"Jersey 15",sans-serif!important;font-size:16px}
+</style></head>
 <body>
 <div class="gb">
   <div class="brand">
@@ -1045,40 +1094,41 @@
     <div class="screen">
       <div class="info info-l"></div>
       <canvas id="board" width="300" height="600"></canvas>
+      <div class="phLvName" id="lv-name"></div>
       <div class="info info-r"></div>
       <div class="side">
-        <div class="box">
-          <div class="lbl">NEXT</div>
+        <div class="box phBx">
+          <i class="phL">NEXT</i>
           <canvas id="next" width="120" height="120"></canvas>
         </div>
-        <div class="box">
-          <div class="lbl">SCORE</div>
-          <div class="num" id="score">0</div>
+        <div class="box phBx">
+          <i class="phL">SCORE</i>
+          <b class="phN" id="score">0</b>
         </div>
-        <div class="box">
-          <div class="lbl">LINES</div>
-          <div class="num" id="lines">0</div>
+        <div class="box phBx">
+          <i class="phL">LINES</i>
+          <b class="phN" id="lines">0</b>
         </div>
-        <div class="box">
-          <div class="lbl" id="lvl-lbl">STAGE</div>
-          <div class="num" id="level">001</div>
+        <div class="box phBx">
+          <i class="phL" id="lvl-lbl">STAGE</i>
+          <b class="phN" id="level">001</b>
         </div>
       </div>
       <div id="overlay" class="overlay">
         <div class="phS"><i class="phS-sp a"></i><div class="phS-logo" data-word="PETRIS"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="6" r="4.5600000000000005" fill="#e8284f"/><circle cx="30" cy="6" r="4.5600000000000005" fill="#e8284f"/><circle cx="42" cy="6" r="4.5600000000000005" fill="#e8284f"/><circle cx="54" cy="6" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="6" cy="18" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="42" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="54" cy="18" r="4.5600000000000005" fill="#e8284f"/><circle cx="6" cy="30" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="42" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="54" cy="30" r="4.5600000000000005" fill="#e8284f"/><circle cx="6" cy="42" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="42" r="4.5600000000000005" fill="#e8284f"/><circle cx="30" cy="42" r="4.5600000000000005" fill="#e8284f"/><circle cx="42" cy="42" r="4.5600000000000005" fill="#e8284f"/><circle cx="54" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="6" cy="54" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="42" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="54" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="6" cy="66" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="42" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="54" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="6" cy="78" r="4.5600000000000005" fill="#e8284f"/><circle cx="18" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="42" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="54" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="6" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="6" r="4.5600000000000005" fill="#f26a0d"/><circle cx="102" cy="6" r="4.5600000000000005" fill="#f26a0d"/><circle cx="114" cy="6" r="4.5600000000000005" fill="#f26a0d"/><circle cx="126" cy="6" r="4.5600000000000005" fill="#f26a0d"/><circle cx="78" cy="18" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="102" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="114" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="126" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="30" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="102" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="114" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="126" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="42" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="42" r="4.5600000000000005" fill="#f26a0d"/><circle cx="102" cy="42" r="4.5600000000000005" fill="#f26a0d"/><circle cx="114" cy="42" r="4.5600000000000005" fill="#f26a0d"/><circle cx="126" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="54" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="102" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="114" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="126" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="66" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="102" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="114" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="126" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="78" cy="78" r="4.5600000000000005" fill="#f26a0d"/><circle cx="90" cy="78" r="4.5600000000000005" fill="#f26a0d"/><circle cx="102" cy="78" r="4.5600000000000005" fill="#f26a0d"/><circle cx="114" cy="78" r="4.5600000000000005" fill="#f26a0d"/><circle cx="126" cy="78" r="4.5600000000000005" fill="#f26a0d"/><circle cx="150" cy="6" r="4.5600000000000005" fill="#f2b000"/><circle cx="162" cy="6" r="4.5600000000000005" fill="#f2b000"/><circle cx="174" cy="6" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="6" r="4.5600000000000005" fill="#f2b000"/><circle cx="198" cy="6" r="4.5600000000000005" fill="#f2b000"/><circle cx="150" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="18" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="150" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="30" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="150" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="42" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="150" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="54" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="150" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="66" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="150" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="162" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="174" cy="78" r="4.5600000000000005" fill="#f2b000"/><circle cx="186" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="198" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="222" cy="6" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="6" r="4.5600000000000005" fill="#10b870"/><circle cx="246" cy="6" r="4.5600000000000005" fill="#10b870"/><circle cx="258" cy="6" r="4.5600000000000005" fill="#10b870"/><circle cx="270" cy="6" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="222" cy="18" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="246" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="258" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="270" cy="18" r="4.5600000000000005" fill="#10b870"/><circle cx="222" cy="30" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="246" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="258" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="270" cy="30" r="4.5600000000000005" fill="#10b870"/><circle cx="222" cy="42" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="42" r="4.5600000000000005" fill="#10b870"/><circle cx="246" cy="42" r="4.5600000000000005" fill="#10b870"/><circle cx="258" cy="42" r="4.5600000000000005" fill="#10b870"/><circle cx="270" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="222" cy="54" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="246" cy="54" r="4.5600000000000005" fill="#10b870"/><circle cx="258" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="270" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="222" cy="66" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="246" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="258" cy="66" r="4.5600000000000005" fill="#10b870"/><circle cx="270" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="222" cy="78" r="4.5600000000000005" fill="#10b870"/><circle cx="234" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="246" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="258" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="270" cy="78" r="4.5600000000000005" fill="#10b870"/><circle cx="294" cy="6" r="4.5600000000000005" fill="#00a8e0"/><circle cx="306" cy="6" r="4.5600000000000005" fill="#00a8e0"/><circle cx="318" cy="6" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="6" r="4.5600000000000005" fill="#00a8e0"/><circle cx="342" cy="6" r="4.5600000000000005" fill="#00a8e0"/><circle cx="294" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="306" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="318" cy="18" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="342" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="294" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="306" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="318" cy="30" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="342" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="294" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="306" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="318" cy="42" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="342" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="294" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="306" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="318" cy="54" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="342" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="294" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="306" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="318" cy="66" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="342" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="294" cy="78" r="4.5600000000000005" fill="#00a8e0"/><circle cx="306" cy="78" r="4.5600000000000005" fill="#00a8e0"/><circle cx="318" cy="78" r="4.5600000000000005" fill="#00a8e0"/><circle cx="330" cy="78" r="4.5600000000000005" fill="#00a8e0"/><circle cx="342" cy="78" r="4.5600000000000005" fill="#00a8e0"/><circle cx="366" cy="6" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="378" cy="6" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="390" cy="6" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="402" cy="6" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="414" cy="6" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="366" cy="18" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="378" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="390" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="402" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="414" cy="18" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="366" cy="30" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="378" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="390" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="402" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="414" cy="30" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="366" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="378" cy="42" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="390" cy="42" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="402" cy="42" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="414" cy="42" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="366" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="378" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="390" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="402" cy="54" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="414" cy="54" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="366" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="378" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="390" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="402" cy="66" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/><circle cx="414" cy="66" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="366" cy="78" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="378" cy="78" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="390" cy="78" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="402" cy="78" r="4.5600000000000005" fill="#2a5ef0"/><circle cx="414" cy="78" r="4.5600000000000005" fill="rgba(255,255,255,.06)"/></svg></div><div class="phS-show"><svg viewBox="0 0 34 34"><rect x="6.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#e8284f"/></svg><svg viewBox="0 0 34 34"><rect x="21.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f26a0d"/></svg><svg viewBox="0 0 34 34"><rect x="10.0" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="17.5" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="10.0" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/><rect x="17.5" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#f2b000"/></svg><svg viewBox="0 0 34 34"><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="21.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#10b870"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#10b870"/></svg><svg viewBox="0 0 34 34"><rect x="2.5" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="10.0" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="17.5" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/><rect x="25.0" y="13.8" width="6.5" height="6.5" rx="1.2" fill="#00a8e0"/></svg><svg viewBox="0 0 34 34"><rect x="6.3" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#2a5ef0"/></svg><svg viewBox="0 0 34 34"><rect x="13.8" y="10.0" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="6.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="13.8" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/><rect x="21.3" y="17.5" width="6.5" height="6.5" rx="1.2" fill="#8a3cf0"/></svg></div><i class="phS-sp b"></i><div class="phS-btns"><button class="phS-b" data-click="overlay-btn">SINGLE PLAY</button><button class="phS-b" data-click="btn-vs">ONLINE PLAY</button><div class="phS-row2"><button class="phS-b gold" data-click="btn-rank">RANKING</button><button class="phS-b gold" id="btn-set">SETTINGS</button></div></div><i class="phS-sp c"></i><div class="phS-credit">이 게임은 서울 마포구에 사는 박현아가 만든<br>비상업용 게임이에요. 지치고 힘들 때<br>잠시 머리 식히며 마음껏 즐겨 주세요.</div><div class="phS-mu">MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA · FLUTETUNES.COM</div></div>
         <div id="overlay-msg">PETRIS</div>
-        <button id="overlay-btn">START</button>
+        <button id="overlay-btn" class="phBtn">START</button>
         <div class="menu">
           <button id="btn-vs" class="sec">ONLINE PLAY</button>
         </div>
-        <button id="btn-exit" class="sec exit">EXIT</button>
-        <button id="btn-restart2" class="sec ov-only">RESTART</button>
-        <button id="btn-set2" class="sec ov-only">SETTINGS</button>
-        <button id="btn-home" class="sec ov-only">MAIN MENU</button>
+        <button id="btn-exit" class="sec exit phBtn sub">EXIT</button>
+        <button id="btn-restart2" class="sec ov-only phBtn sub">RESTART</button>
+        <button id="btn-set2" class="sec ov-only phBtn sub">SETTINGS</button>
+        <button id="btn-home" class="sec ov-only phBtn sub">MAIN MENU</button>
         <button id="btn-bgm" class="bgm-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M3 0h5v6h-1v1h-2v-1h-1v-1h3v-3h-3v4h-1v1h-2v-1h-1v-1h3z"/></svg><span id="bgm-name">BGM</span></button>
         <div class="credit">MUSIC DATA: PIANO-MIDI.DE (B. KRUEGER) CC BY-SA · FLUTETUNES.COM</div>
         <div class="credit-note"><span>이 게임은 서울 마포구에 사는 박현아가 만든</span><br><span>비상업용 게임이에요. 지치고 힘들 때</span><br><span>잠시 머리 식히며 마음껏 즐겨 주세요.</span></div>
-        <button id="btn-rank" class="rank-link"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1 0h6v1h1v2h-1v1h-1v1h-1v1h1v1h1v1h-6v-1h1v-1h1v-1h-1v-1h-1v-1h-1v-2h1z"/></svg>RANKING</button>
+        <button id="btn-rank" class="rank-link phBtn sub"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1 0h6v1h1v2h-1v1h-1v1h-1v1h1v1h1v1h-6v-1h1v-1h1v-1h-1v-1h-1v-1h-1v-2h1z"/></svg>RANKING</button>
         <div class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 &nbsp; <kbd>↑</kbd> 회전<br><kbd>↓</kbd> 천천히 &nbsp; <kbd>SPACE</kbd> 빨리 내리기</div>
         <div class="keys-touch"><kbd>← 밀기 →</kbd> 이동 &nbsp; <kbd>탭</kbd> 회전<br><kbd>↓ 천천히 밀기</kbd> 천천히 &nbsp; <kbd>↓ 튕기기</kbd> 빨리 내리기</div>
         <button id="overlay-music" class="ov-music" aria-label="음악 켜기/끄기"><svg class="i-on" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M4.27 3 3 4.27l9 9v.28A4 4 0 1 0 14 17v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg></button>
@@ -1133,8 +1183,8 @@
     <span class="sock"><button class="pb sysb" id="speed-btn" aria-label="속도 올리기"></button></span>
     <span class="sock"><button class="pb sysb" id="shadow-btn" aria-label="그림자 켜기/끄기"></button></span>
     <span class="sock"><button class="pb sysb" id="restart-btn" aria-label="처음부터 다시"></button></span>
-    <span class="sock"><button class="pb sysb" id="start-btn" aria-label="잠시 멈춤"><svg class="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></button></span>
-    <span class="sock"><button class="pb sysb" id="sel-btn" aria-label="설정"><svg class="i-on" viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg><svg class="i-off" viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg></button></span>
+    <span class="sock"><button class="pb sysb phIb" id="start-btn" aria-label="잠시 멈춤"><svg class="i-pause" viewBox="0 0 22 20"><path d="M7 3 V17 M15 3 V17"/></svg><svg class="i-play" viewBox="0 0 22 20"><path d="M7 3 L17 10 L7 17 Z"/></svg></button></span>
+    <span class="sock"><button class="pb sysb phIb" id="sel-btn" aria-label="설정"><svg viewBox="0 0 22 20"><path d="M11 4 A6 6 0 1 1 10.99 4 M11 7.5 A2.5 2.5 0 1 1 10.99 7.5 M11 1.5 V4 M11 16 V18.5 M2.5 10 H5 M17 10 H19.5 M5 4 L6.8 5.8 M15.2 14.2 L17 16 M5 16 L6.8 14.2 M15.2 5.8 L17 4"/></svg></button></span>
   </div>
 
   <div class="help">
@@ -1360,9 +1410,19 @@
 
   let audioCtx = null;
   // 설정 (localStorage에 저장): 배경음악·효과음·음성 안내·화면 효과·진동·회전 방향
-  const SET = (() => { const d = { bgm: 1, sfx: 1, vox: 1, fx: 1, hap: 1, rot: 'cw' }; try { return Object.assign(d, JSON.parse(localStorage.getItem('petris-set') || '{}')); } catch (e) { return d; } })();
-  function saveSet() { try { localStorage.setItem('petris-set', JSON.stringify(SET)); } catch (e) {} }
-  let musicOn = !!SET.bgm;
+  // 설정 저장: 공통 phPref (ph.js가 나중에 로드되므로 같은 키로 직접 읽고 씀) — 예전 'petris-set' 값은 처음 한 번 이어받음
+  const PPFX = 'phPref:' + (location.pathname.split('/')[1] || 'hub') + ':';
+  function pget(k, d) { try { if (window.phPref) return phPref.get(k, d); const v = localStorage.getItem(PPFX + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function pset(k, v) { try { if (window.phPref) phPref.set(k, v); else localStorage.setItem(PPFX + k, JSON.stringify(v)); } catch (e) {} }
+  const SET = (() => { const d = { vox: 1, fx: 1, hap: 1, rot: 'cw' }; try { Object.assign(d, JSON.parse(localStorage.getItem('petris-set') || '{}')); } catch (e) {} ['vox', 'fx', 'hap', 'rot'].forEach(k => { d[k] = pget(k, d[k]); }); return d; })();
+  function saveSet() { ['vox', 'fx', 'hap', 'rot'].forEach(k => pset(k, SET[k])); }
+  let ghostPref = !!pget('guide', true); // 고스트 블록 (EASY 전용)
+  let spdPref = (() => { const v = +pget('speed', 1); return v === 0 || v === 2 ? v : 1; })(); // 낙하 속도: 0 느리게 · 1 보통 · 2 빠르게
+  function spd() { return mode === 'battle' ? 1 : spdPref; } // 온라인 대전은 항상 보통
+  function bgmV() { try { return window.phAudio ? phAudio.bgm() : 0.7; } catch (e) { return 0.7; } }
+  function sfxV() { try { return window.phAudio ? phAudio.sfx() : 0.8; } catch (e) { return 0.8; } }
+  function bgmAllowed() { try { return window.phAudio ? phAudio.bgmOn() : true; } catch (e) { return true; } }
+  let musicOn = true;
   let musicRunning = false;
   let musicTimer = null;
   let nextNoteTime = 0;
@@ -1587,12 +1647,12 @@
   // 배경음악 전용 볼륨 (효과음은 그대로): 음악 스케줄 중에 만든 소리만 이 버스로 보냄
   const BGM_VOL = 0.3; // 배경음악 볼륨 (효과음은 그대로)
   let sfxBus = null, voxBus = null;
-  function SD() { if (!sfxBus || sfxBus.context !== audioCtx) { sfxBus = audioCtx.createGain(); sfxBus.connect(audioCtx.destination); } sfxBus.gain.value = SET.sfx ? 1 : 0; return sfxBus; }
+  function SD() { if (!sfxBus || sfxBus.context !== audioCtx) { sfxBus = audioCtx.createGain(); sfxBus.connect(audioCtx.destination); } sfxBus.gain.value = sfxV(); return sfxBus; }
   function VD() { if (!voxBus || voxBus.context !== audioCtx) { voxBus = audioCtx.createGain(); voxBus.connect(audioCtx.destination); } voxBus.gain.value = SET.vox ? 1 : 0; return voxBus; }
   let inMusic = false, mBus = null;
   function OUT() {
     if (!inMusic) return SD(); // 효과음 버스 (설정에서 끌 수 있음)
-    if (!mBus || mBus.context !== audioCtx) { mBus = audioCtx.createGain(); mBus.gain.value = BGM_VOL; mBus.connect(audioCtx.destination); }
+    if (!mBus || mBus.context !== audioCtx) { mBus = audioCtx.createGain(); mBus.gain.value = BGM_VOL * bgmV(); mBus.connect(audioCtx.destination); }
     return mBus;
   }
   function tone(type, f1, f2, start, dur, vol) {
@@ -1869,11 +1929,19 @@
     clearTimeout(musicTimer);
   }
 
-  function toggleMusic() {
-    musicOn = !musicOn; SET.bgm = musicOn ? 1 : 0; saveSet();
-    document.getElementById('overlay-music').classList.toggle('off', !musicOn);
+  function toggleMusic() { // M 키 · 음표 버튼: 공통 배경음 켜기/끄기 (phAudio가 바뀌면 syncSound가 반영)
+    if (window.phAudio) { phAudio.toggleBgm(); return; }
+    musicOn = !musicOn; syncSound();
+  }
+  function syncSound() { // 배경음·효과음 볼륨을 바로 반영
+    if (window.phAudio) musicOn = bgmAllowed() && !(EMBED && PNUM === '2');
+    const om = document.getElementById('overlay-music'); if (om) om.classList.toggle('off', !musicOn);
+    if (audioCtx) {
+      if (mBus && mBus.context === audioCtx) mBus.gain.value = BGM_VOL * bgmV();
+      if (sfxBus && sfxBus.context === audioCtx) sfxBus.gain.value = sfxV();
+    }
     if (musicOn && state === 'playing') startMusic();
-    else stopMusic();
+    else if (!musicOn) stopMusic();
   }
 
   // ================= 게임 로직 =================
@@ -1931,8 +1999,8 @@
     };
     if (typeof isMaster === 'function' && isMaster()) {
       const msg = kind.startsWith('#R_') ? ['STONE', '#b8bec6'] : kind.startsWith('#Q_') ? ['REVERSE!', '#ff5fa2'] : kind.startsWith('#F_') ? ['FAST!', '#ffd84d'] : null;
-      if (msg) popText = { text: msg[0], t: performance.now(), big: false, color: msg[1] };
-      if (!fogOn && rng() < (isGod() ? 0.06 : 0.035)) { fogOn = true; fogUntil = performance.now() + 7000; popText = { text: 'FOG!', t: performance.now(), big: false, color: '#b8c4c0' }; }
+      if (msg) popText = { text: msg[0], t: performance.now(), big: false, color: msg[1], kind: 'warn' };
+      if (!fogOn && rng() < (isGod() ? 0.06 : 0.035)) { fogOn = true; fogUntil = performance.now() + 7000; popText = { text: 'FOG!', t: performance.now(), big: false, color: '#b8c4c0', kind: 'warn' }; }
     }
     drawNext();
     if (collides(piece.cells, piece.x, piece.y)) gameOver();
@@ -2020,7 +2088,7 @@
     lastTetris = n === 4;
     const word = perfect ? 'PERFECT' : b2b ? 'AMAZING' : ['', 'VERY GOOD', 'NICE', 'GREAT', 'EXCELLENT'][Math.min(n, 4)];
     const WCOL = { 'VERY GOOD': '#8fe39a', NICE: '#3fc8ff', GREAT: '#ffc93c', EXCELLENT: '#ff8a3c', PERFECT: 'rainbow', AMAZING: 'rainbow' };
-    popText = { text: word + '!', t: performance.now(), big: n >= 3 || perfect, color: WCOL[word] };
+    popText = { text: word + '!', t: performance.now(), big: perfect || b2b, color: WCOL[word], kind: 'gold' };
     if (perfect) {
       score += Math.round(5000 * scoreLv() * modeMul()); // 판 전체 클리어 보너스
       sfxApplause(3.5);
@@ -2031,7 +2099,7 @@
     say(word);
     if (combo >= 2) {
       setTimeout(() => {
-        popText = { text: 'COMBO x' + comboMul, t: performance.now(), big: combo >= 3, color: combo >= 4 ? 'rainbow' : '#ff5fa2' };
+        popText = { text: 'COMBO X' + comboMul, t: performance.now(), big: false, color: '#ff5fa2', kind: 'gold' };
         if (audioCtx) [660, 880, 1100].slice(0, Math.min(3, combo)).forEach((f, i) => tone('square', f, 0, audioCtx.currentTime + i * 0.06, 0.12, 0.07));
       }, 650);
     }
@@ -2059,7 +2127,7 @@
   function riseEvery() { return isGod() ? Math.max(3000, 6500 - (stage - 1) * 800) : isMaster() ? Math.max(4000, 8000 - (stage - 1) * 1000) : Math.max(7000, 18000 - (stage - 2) * 1500); } // 마스터: 1단계부터 11초마다 한 줄씩 올라옴
   function stageUp() {
     stage++;
-    popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow' };
+    popText = { text: 'STAGE ' + stage, t: performance.now(), big: true, color: 'rainbow', kind: 'stage' };
     boardFlash = performance.now();
     shake(5, 300);
     if (audioCtx) {
@@ -2144,7 +2212,7 @@
     if (piece.kind === 'B') { colorBomb(); return; }
     if (piece.kind === 'SL') { // 느림 시계: 10초 동안 천천히
       slowUntil = performance.now() + 10000;
-      popText = { text: 'SLOW 10s', t: performance.now(), big: true, color: '#8fd8ff' };
+      popText = { text: 'SLOW', sub: '10 SEC', t: performance.now(), big: false, color: '#8fd8ff', kind: 'item' };
       if (audioCtx) [880, 660, 440].forEach((f, i) => tone('triangle', f, 0, audioCtx.currentTime + i * 0.09, 0.18, 0.08));
       piece = null; dropCounter = 0; updateHud(); spawn(); return;
     }
@@ -2152,7 +2220,7 @@
       const by = piece.y + piece.cells[0][1];
       for (let x = 0; x < COLS; x++) if (!grid[by][x]) grid[by][x] = 'LB';
       grid[by][piece.x + piece.cells[0][0]] = 'LB';
-      popText = { text: 'LINE BOMB!', t: performance.now(), big: true, color: '#8fd8ff' };
+      popText = { text: 'LINE BOMB!', t: performance.now(), big: false, color: '#8fd8ff', kind: 'item' };
       piece = null; dropCounter = 0; updateHud();
       clearing = { rows: fullRows(), t: performance.now() }; state = 'clearing'; sfxClearStart(); return;
     }
@@ -2207,7 +2275,7 @@
     }
     for (let k = 0; k < 24; k++) particles.push({ x: (bx + 0.5) * CELL, y: (by + 0.5) * CELL, vx: (Math.random() * 2 - 1) * 10, vy: -Math.random() * 12 - 2, life: 1, color: hsl2hex(k * 15, 90, 62), size: 5 + Math.random() * 8, rot: Math.random() * 6, vr: (Math.random() * 2 - 1) * 0.4 });
     score += 10 + Math.round(n * 10 * modeMul()); // 컬러 폭탄: 블록당 10점 (레벨 배율 없음)
-    popText = { text: 'COLOR BOMB!', t: performance.now(), big: true, color: 'rainbow' };
+    popText = { text: 'COLOR BOMB!', t: performance.now(), big: false, color: 'rainbow', kind: 'item' };
     boardFlash = performance.now();
     shake(8, 320);
     sfxClear(Math.min(4, 1 + Math.floor(n / 8)));
@@ -2223,6 +2291,7 @@
     // EASY는 같은 단계에서도 약 30% 느리게
     let v = mode === 'battle' ? Math.round(Math.max(450, 650 - playTime / 1800) * (({ easy: 1.3, hard: 0.85, master: 0.7 })[gameMode] || 1)) // 대전(노말): 시작 0.65초 → 3분 0.55초 → 6분부터 0.45초
       : Math.max(70, Math.round(650 * Math.pow(0.87, level) * (isEasy() ? 1.3 : 1)));
+    v /= [0.8, 1, 1.25][spd()]; // 설정: 낙하 속도 (느리게 ×0.8 · 보통 · 빠르게 ×1.25)
     if (performance.now() < slowUntil) v *= 2.2; // 느림 시계
     if (piece && piece.kind.startsWith('#F_')) v /= 3; // 번개 블록
     return v;
@@ -2431,33 +2500,28 @@
       ctx.restore();
     }
 
-    // SINGLE / DOUBLE / TRIPLE / PETRIS!
+    // SINGLE / DOUBLE / TRIPLE / PETRIS! — 공통 팝업 모양 (Silkscreen 대문자 · 어두운 외곽선 · 의미별 색 · d1 28 / d2 20px)
     if (popText) {
-      const e = (now - popText.t) / 950;
+      const e = (now - popText.t) / 1250;
       if (e >= 1) popText = null;
-      else {
-        const sc = e < 0.15 ? 0.4 + (e / 0.15) * 0.9 : 1.3 - (e - 0.15) * 0.3;
+      else if (window.phPopDraw) {
+        const t = String(popText.text).toUpperCase();
+        const kind = popText.kind || (/^(STAGE|WIN)/.test(t) ? 'stage' : /^LOSE/.test(t) ? 'warn' : 'gold');
+        const tier = popText.tier || (popText.big ? 'd1' : 'd2');
+        const k = boardCanvas.width / (boardCanvas.clientWidth || boardCanvas.width); // CSS px → 캔버스 px
+        let px = (tier === 'd1' ? 28 : tier === 'd3' ? 14 : 20) * k;
+        ctx.save(); ctx.font = `700 ${px}px Silkscreen, monospace`;
+        const tw = ctx.measureText(t).width + t.length * Math.round(px * 0.1);
+        ctx.restore();
+        if (tw > COLS * CELL * 0.9) px *= (COLS * CELL * 0.9) / tw;
+        const sc = e < 0.1 ? 0.6 + (e / 0.1) * 0.48 : e < 0.18 ? 1.08 - ((e - 0.1) / 0.08) * 0.08 : 1;
+        const al = e < 0.1 ? e / 0.1 : e > 0.72 ? (1 - e) / 0.28 : 1;
+        const y = ROWS * CELL * 0.38 - (e > 0.72 ? ((e - 0.72) / 0.28) * 16 * k : 0);
         ctx.save();
-        ctx.globalAlpha = e > 0.7 ? (1 - e) / 0.3 : 1;
-        ctx.translate(COLS * CELL / 2, ROWS * CELL * 0.38 - e * 30);
+        ctx.translate(COLS * CELL / 2, y);
         ctx.scale(sc, sc);
-        ctx.font = `700 ${popText.big ? 38 : 30}px "Silkscreen", Galmuri11, monospace`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.lineWidth = 7;
-        ctx.strokeStyle = '#000';
-        ctx.strokeText(popText.text, 0, 0);
-        const tw = ctx.measureText(popText.text).width;
-        const fit = Math.min(1, (COLS * CELL * 0.92) / tw);
-        ctx.scale(fit, fit);
-        if (popText.color === 'rainbow' || (!popText.color && popText.big)) {
-          const g = ctx.createLinearGradient(-tw / 2, 0, tw / 2, 0);
-          ['#e8284f', '#f26a0d', '#f2b000', '#10b870', '#00a8e0', '#8a3cf0'].forEach((c, i) => g.addColorStop(i / 5, c));
-          ctx.fillStyle = g;
-        } else {
-          ctx.fillStyle = popText.color || '#ffffff';
-        }
-        ctx.fillText(popText.text, 0, 0);
+        phPopDraw(ctx, t, 0, 0, Math.round(px), kind, al);
+        if (popText.sub) phPopDraw(ctx, popText.sub, 0, px * 1.1, Math.round(11 * k), kind, al);
         ctx.restore();
       }
     }
@@ -2547,8 +2611,8 @@
   }
 
   // 게임 방식(gType): basic · item · time  ×  레벨(gameMode): easy · normal · hard
-  let gameMode = 'normal';
-  let gType = (() => { try { const t = localStorage.getItem('petris-gtype'); return ['basic', 'item', 'time'].includes(t) ? t : 'basic'; } catch (e) { return 'basic'; } })();
+  let gameMode = (() => { const m = pget('lv', 'normal'); return ['easy', 'normal', 'hard', 'master'].includes(m) ? m : 'normal'; })(); // 마지막에 고른 난이도
+  let gType = (() => { let t = pget('mode', null); if (t == null) { try { t = localStorage.getItem('petris-gtype'); } catch (e) {} } return ['basic', 'item', 'time'].includes(t) ? t : 'basic'; })(); // 마지막에 고른 방식
   function isHard() { return gameMode === 'hard' || gameMode === 'master'; } // 하드·마스터: 빠른 속도 · 바닥 블록
   function isMasterLv() { return gameMode === 'master'; } // 마스터 레벨
   function lvOff() { return isGod() ? 6 : isMasterLv() ? 10 : isHard() ? 6 : 0; } // 시작 속도 단계
@@ -2560,7 +2624,7 @@
   let lastSec = -1, timeUp = false;
   function isTime() { return gType === 'time' && mode !== 'battle'; }
   // 점수 배율 (모든 방식 같음): EASY ×0.5 · NORMAL ×1 · HARD ×2 · MASTER ×3
-  function modeMul() { return isEasy() ? 0.5 : isMasterLv() ? 3 : isHard() ? 2 : 1; } // 아이템전도 BASIC과 같은 배율 (2026-10-27부터)
+  function modeMul() { return (isEasy() ? 0.5 : isMasterLv() ? 3 : isHard() ? 2 : 1) * [0.8, 1, 1.2][spd()]; } // 낙하 속도 배율도 함께 (느리게 ×0.8 · 빠르게 ×1.2) // 아이템전도 BASIC과 같은 배율 (2026-10-27부터)
   function modeCode() { return isTime() ? 'time-' + gameMode : isMaster() ? 'item-' + gameMode : isEasy() ? 'easy' : isMasterLv() ? 'basic-master' : isHard() ? 'hard' : 'solo'; }
   const MODE_DESC = {"basic": ["SCORE ×0.5 · 가이드", "SCORE ×1", "SCORE ×2 · 바닥 블록", "SCORE ×3 · 더 빠르게 · 바닥 8줄"], "item": ["SCORE ×0.5 · 긴 블록 · 아이템 · 함정", "SCORE ×1 · 긴 블록 · 아이템 · 함정", "SCORE ×2 · 하드 속도 · 아이템 · 함정", "SCORE ×3 · 괴상한 블록 · 함정만"], "time": ["3분 · SCORE ×0.5 · 가이드", "3분 · SCORE ×1", "3분 · SCORE ×2 · 바닥 블록", "3분 · SCORE ×3 · 더 빠르게 · 바닥 8줄"]};
   function chooseMode() {
@@ -2572,9 +2636,10 @@
       <button class="vs-btn mode-btn phDiff lv-h" data-m="hard">HARD</button>
       <button class="vs-btn mode-btn phDiff lv-m" data-m="master">MASTER</button>
     </div>`);
-      $vsBody.querySelectorAll('.mt-btn').forEach(b => b.addEventListener('click', () => { gType = b.dataset.t; try { localStorage.setItem('petris-gtype', gType); } catch (e) {} render(); }));
+      $vsBody.querySelectorAll('.mt-btn').forEach(b => b.addEventListener('click', () => { gType = b.dataset.t; try { localStorage.setItem('petris-gtype', gType); } catch (e) {} pset('mode', gType); render(); }));
+      const cur = $vsBody.querySelector(`.mode-btn[data-m="${gameMode}"]`); if (cur) { cur.classList.add('on'); try { cur.focus({ preventScroll: true }); } catch (e) {} }
       $vsBody.querySelectorAll('.mode-btn').forEach(b => b.addEventListener('click', () => {
-        gameMode = b.dataset.m;
+        gameMode = b.dataset.m; pset('lv', gameMode);
         vsHide();
         phTut('petris-tut', {"goal": "가로줄을 꽉 채우면 줄이 사라지고 점수가 올라요.<br>블록이 위까지 쌓이면 게임 끝!", "touch": [["← 밀기 →", "블록 옮기기"], ["탭", "블록 돌리기"], ["↓ 천천히 밀기", "천천히 내리기"], ["↓ 튕기기", "바로 내리기"]], "pc": [["← →", "블록 옮기기"], ["↑", "블록 돌리기"], ["↓", "천천히 내리기"], ["SPACE", "바로 내리기"]]}, startGame); // 처음 한 번 튜토리얼
       }));
@@ -2600,7 +2665,7 @@
     if (isHard()) fillHardStart();
     score = 0; lines = 0; level = 0; stage = 1; lastRise = 0; combo = 0;
     speedBoost = 0; speedLabel();
-    shadowOn = isEasy(); shadowLabel();
+    shadowOn = isEasy() && ghostPref; shadowLabel();
     stageSong();
     playTime = 0; timeUp = false; lastSec = -1; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
     bag = []; nextKind = null; bombCount = 0; itemCount = 0; trapCount = 0; fogOn = false; fogUntil = 0; slowUntil = 0;
@@ -2821,19 +2886,9 @@
   $startBtn.addEventListener('click', startOrPause);
   $selBtn.addEventListener('click', openSettingsGame); // 게임 중에도 설정 열기
   $speedBtn.addEventListener('click', () => {
-    if (mode === 'battle' || state !== 'playing') return;
-    if (speedBoost >= 10) return;
-    speedBoost++;
-    speedLabel();
-    popText = { text: 'SPEED UP', t: performance.now(), big: false, color: '#f2b000' };
-    if (audioCtx) tone('square', 660 + speedBoost * 40, 0, audioCtx.currentTime, 0.1, 0.06);
-    updateLevel();
+    return; // 예전 SPEED 버튼: 낙하 속도는 이제 설정 창에서 고름
   });
-  $restartBtn.addEventListener('click', () => {
-    if (mode === 'battle' || state === 'ready') return;
-    stopMusic();
-    startGame();
-  });
+  $restartBtn.addEventListener('click', () => { if (state !== 'ready') goRestart(); });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && state === 'playing') togglePause();
@@ -3082,7 +3137,7 @@
     const sub = note ? `<small>${note}</small>` : `<small>SCORE ${score}</small>`;
     showOverlay(`${dots(win ? 'WIN!' : 'LOSE', win ? BRAND : '#f4fff0', 'big')}${sub}`, conn ? 'REMATCH' : 'OK');
     $overlay.classList.add('battle');
-    popText = { text: win ? 'WIN!' : 'LOSE', t: performance.now(), big: win };
+    popText = { text: win ? 'WIN!' : 'LOSE', t: performance.now(), big: true, kind: win ? 'stage' : 'warn' };
   }
 
   function requestRematch() {
@@ -3269,12 +3324,7 @@
     previewT = setTimeout(() => { if (state !== 'playing') stopMusic(); }, 6000);
   });
   document.getElementById('btn-exit').addEventListener('click', exitBattle);
-  document.getElementById('btn-restart2').addEventListener('click', () => {
-    if (mode === 'battle') return;
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    stopMusic();
-    startGame();
-  });
+  document.getElementById('btn-restart2').addEventListener('click', () => goRestart());
   document.getElementById('btn-home').addEventListener('click', () => {
     if (mode === 'battle') return;
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -3286,27 +3336,46 @@
     $overlay.classList.remove('paused', 'over');
     showOverlay(dots('PETRIS', BRAND, 'title'), 'SINGLE PLAY');
   });
-  // ===== 설정 창 =====
-  function openSettings() {
-    const tg = (k, label) => `<div class="set-row"><span>${label}</span><button class="set-tg${SET[k] ? '' : ' off'}" data-k="${k}">${SET[k] ? 'ON' : 'OFF'}</button></div>`;
-    vsOpen('SETTINGS', `<div class="set-list">
-      ${tg('bgm', '배경음악')}${tg('sfx', '효과음')}${tg('vox', '음성 안내')}${tg('fx', '화면 효과 (흔들림·파편)')}${tg('hap', '진동')}
-      <div class="set-row"><span>회전 방향</span><div class="set-opts"><button class="set-tg${SET.rot === 'cw' ? '' : ' off'}" data-rot="cw">↻ 시계</button><button class="set-tg${SET.rot === 'ccw' ? '' : ' off'}" data-rot="ccw">↺ 반시계</button></div></div>
-    </div>`);
-    $vsBody.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
-      const k = b.dataset.k;
-      if (k === 'bgm') { toggleMusic(); } else { SET[k] = SET[k] ? 0 : 1; saveSet(); }
-      if (k === 'hap' && SET.hap) buzz(20);
-      openSettings();
+  // ===== 설정 창: 공통 phSettings (배경음·효과음·음성 안내 + 고스트 블록·낙하 속도·화면 효과·진동·회전 방향) =====
+  function goRestart() {
+    if (mode === 'battle') return;
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    stopMusic();
+    startGame();
+  }
+  function goHome() { document.getElementById('btn-home').click(); }
+  function phSetup() {
+    if (!window.phSettings) return;
+    phSettings.config({
+      guide: { label: '고스트 블록', get: () => ghostPref, set: v => { ghostPref = !!v; pset('guide', ghostPref); shadowOn = isEasy() && ghostPref; shadowLabel(); draw(); } },
+      speed: { get: () => spdPref, set: v => { spdPref = v === 0 || v === 2 ? v : 1; pset('speed', spdPref); } },
+      fx: { get: () => !!SET.fx, set: v => { SET.fx = v ? 1 : 0; saveSet(); } },
+      hap: { get: () => !!SET.hap, set: v => { SET.hap = v ? 1 : 0; saveSet(); } },
+      vox: { get: () => !!SET.vox, set: v => { SET.vox = v ? 1 : 0; saveSet(); if (voxBus && audioCtx && voxBus.context === audioCtx) voxBus.gain.value = SET.vox ? 1 : 0; } },
+      rot: { get: () => SET.rot, set: v => { SET.rot = v === 'ccw' ? 'ccw' : 'cw'; saveSet(); } },
+      onSound: () => { unlockAudio(); syncSound(); },
     });
-    $vsBody.querySelectorAll('[data-rot]').forEach(b => b.onclick = () => { SET.rot = b.dataset.rot; saveSet(); openSettings(); });
+    if (window.phAudio) phAudio.on(syncSound);
+    syncSound();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', phSetup); else setTimeout(phSetup, 0);
+  function openSettings() { // 시작 화면·일시정지 화면
+    if (window.phSettings) phSettings.open({ inGame: false });
   }
   let setPaused = false;
-  function openSettingsGame() { // 게임 중: 잠깐 멈추고 설정 열기 (닫으면 이어서)
-    if (state === 'playing' && mode !== 'battle') { togglePause(); setPaused = true; }
-    openSettings();
+  function openSettingsGame() { // 게임 중: 잠깐 멈추고 설정 열기 (닫으면 이어서) · 온라인 대전은 멈추지 않음
+    if (!window.phSettings) return;
+    if (mode === 'battle') { phSettings.open({ inGame: true }); return; }
+    if (state === 'playing') { togglePause(); setPaused = true; }
+    const live = state === 'playing' || state === 'paused' || state === 'clearing';
+    phSettings.open({
+      inGame: true,
+      restart: live ? () => { setPaused = false; goRestart(); } : null,
+      home: live ? () => { setPaused = false; goHome(); } : null,
+      onClose: () => { if (setPaused) { setPaused = false; if (state === 'paused') togglePause(); } },
+    });
   }
-  document.getElementById('btn-set').addEventListener('click', openSettings);
+  document.getElementById('btn-set').addEventListener('click', (e) => { e.stopPropagation(); openSettings(); });
   document.getElementById('btn-set2').addEventListener('click', openSettings);
   if (!musicOn) document.getElementById('overlay-music').classList.add('off');
 
@@ -3317,6 +3386,7 @@
   });
 
   function drawSpectrum() {
+    return; // 상단 무지개 픽셀 줄 없앰 (공통 헤더는 ph.css)
     const PAL = ['#e8284f', '#f26a0d', '#f2b000', '#10b870', '#00a8e0', '#2a5ef0', '#8a3cf0'];
     document.querySelectorAll('.lcd-label .ln').forEach(el => {
       let cv = el.querySelector('canvas');
@@ -3380,7 +3450,8 @@
     const gap = parseFloat(cs.rowGap) || 6;
     const cg = parseFloat(cs.columnGap) || 6;
     const availW = sr.width - padX - $infoL.offsetWidth - $infoR.offsetWidth - cg * 2;
-    const availH = sr.height - padY;
+    const LVH = 18; // 게임판 아래 난이도 이름 자리
+    const availH = sr.height - padY - LVH;
     const cols = Math.max(10, Math.min(13, Math.floor(availW / 25)));
     const cellW = availW / cols;
     const rows = Math.max(20, Math.min(50, Math.floor(availH / cellW)));
@@ -3396,6 +3467,8 @@
     // 한 칸이 안 되는 자투리가 바닥에 남지 않게 세로를 살짝 늘려 꽉 채움
     const fillH = (availH - ROWS * cell) < cell ? availH : ROWS * cell;
     boardCanvas.style.height = fillH + 'px';
+    const $ln = document.getElementById('lv-name');
+    if ($ln) { $ln.style.left = boardCanvas.offsetLeft + 'px'; $ln.style.width = (COLS * cell) + 'px'; $ln.style.top = (boardCanvas.offsetTop + fillH) + 'px'; }
   }
   window.addEventListener('resize', fitBoard);
   // 카톡 등 인앱 브라우저는 하단 바가 생겨도 resize가 안 올 때가 있어 화면 크기 변화를 직접 감시
@@ -3524,5 +3597,5 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=18"></script></body>
+<script src="../games/ph.js?v=19"></script></body>
 </html>
