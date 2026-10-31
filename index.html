@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793560000";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793417029";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -684,7 +684,7 @@
   .rank li:nth-child(1) b { color: #f2b000; } .rank li:nth-child(2) b { color: #cfd8dc; } .rank li:nth-child(3) b { color: #f26a0d; }
   .rank li span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .rank li em { font-style: normal; font-family: "Silkscreen", Galmuri11, monospace; color: #fff; }
-  .rank li.me { background: rgba(184,224,160,0.1); border-radius: 6px; }
+  .rank li span.rbg { flex: 0 0 auto; display: inline-flex; gap: 4px; align-items: center; } /* 2026-10-31: 배지는 점수 앞 · 내 기록 색 칠하기 없앰 · 환산 표시 없앰 */
   .rk-tabs { display: flex; gap: 8px; margin: 0 0 12px; }
   .rk-tabs button { flex: 1; padding: 8px 4px !important; font-family: "Silkscreen", Galmuri11, monospace; font-size: 11px !important; letter-spacing: 1px; background: transparent; color: #6f9a72; border: 2px solid rgba(184,224,160,0.25); border-radius: 6px; cursor: pointer; }
   .rk-tabs button.on { color: #0b150e; background: #b8e0a0; border-color: #b8e0a0; }
@@ -1032,7 +1032,7 @@
 <script src="../games/relay.js?v=1"></script><!-- 온라인 대전: 중계 서버 방식 (휴대폰 데이터에서도 연결) -->
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html,body{height:var(--app-h,100dvh)!important}.gb{height:var(--app-h,100dvh)!important}</style>
-<link rel="stylesheet" href="../games/ph.css?v=19"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
+<link rel="stylesheet" href="../games/ph.css?v=21"><style>/* 시작 화면 통일 */#overlay{--phB:#5b8a60;--phT:#d8f5c4;--phBg:#0b150e;--phR:rgba(184,224,160,.14);--phC:rgba(200,240,176,.45)}.vs .mode-tabs .mt-btn{font-size:8px!important;letter-spacing:0!important;padding-left:4px!important;padding-right:4px!important;white-space:nowrap!important}.rk-tabs button{flex:1 1 auto!important;min-width:0!important;font-size:8px!important;letter-spacing:0!important;padding-left:6px!important;padding-right:6px!important;white-space:nowrap!important}.phS-mu{position:absolute;left:0;right:0;bottom:5px;font:6px "Silkscreen",monospace;letter-spacing:.04em;color:var(--phC);opacity:.7;white-space:nowrap;text-align:center;pointer-events:none}#overlay.start>*:not(.phS):not(.ov-music){display:none!important}#overlay:not(.start)>.phS{display:none!important}#overlay.start{padding:0!important}</style><style>/* ===== v2 디자인 통일 (2026-10-29) ===== */
 /* HUD 정보 칸: 라벨 위 · 숫자 아래 (공통 .phBx) */
 html body .info .panel{gap:8px!important}
 html body .info .panel .box.phBx,html body .info .panel .box.phBx:first-child,html body .info .panel .box.phBx+.box.phBx{padding:9px 4px!important;justify-content:space-between!important;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;box-shadow:none!important;min-height:58px;gap:6px!important}
@@ -2398,7 +2398,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
   }
 
   function drawGridLines() {
-    ctx.strokeStyle = 'rgba(140,220,120,0.04)';
+    ctx.strokeStyle = 'rgba(150,170,255,0.05)';
     ctx.lineWidth = 1;
     for (let x = 1; x < COLS; x++) {
       ctx.beginPath();
@@ -2412,7 +2412,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       ctx.lineTo(COLS * CELL, y * CELL + 0.5);
       ctx.stroke();
     }
-    ctx.fillStyle = 'rgba(170,245,150,0.18)';
+    ctx.fillStyle = 'rgba(180,195,255,0.16)';
     for (let y = 1; y < ROWS; y++)
       for (let x = 1; x < COLS; x++) ctx.fillRect(x * CELL - 1, y * CELL - 1, 2, 2);
   }
@@ -2704,10 +2704,10 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       return;
     }
     say(timeUp ? 'Time up' : 'Game over');
-    const canRank = score > 0 && !EMBED;
+    const canRank = !EMBED; /* 2026-10-31: 다른 게임처럼 점수와 상관없이 이름 칸 항상 */
     showOverlay(`${timeUp ? dots('TIME', '#7ff0b8', 'big') + dots('OVER', '#7ff0b8', 'big') : dots('GAME', '#f4fff0', 'big') + dots('OVER', '#f4fff0', 'big')}<div class="go-score"><span>SCORE</span><b>${score.toLocaleString()}</b></div>` +
       (canRank ? `<form class="rank-form" id="rank-form" autocomplete="off">
-        <input id="rank-name" class="vs-in" maxlength="8" placeholder="이름 (최대 8자)" value="${esc(getName())}">
+        <input id="rank-name" class="vs-in" maxlength="8" placeholder="이름" value="${esc(getName())}">
         <button type="submit" class="rank-save">OK</button>
       </form><div class="rank-note" id="rank-note"></div>` : ''), 'RETRY');
     $overlay.classList.add('over');
@@ -3288,7 +3288,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
     const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode; })
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
-        <li class="${r.n === me ? 'me' : ''}"><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em>${window.phLv ? phLv((mo === 'vs' ? 'VS' : MB[mo] + LB[df]) + (r._s1 ? ' 환산' : '')) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
+        <li><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em></span><span class="rbg">${window.phLv ? phLv(mo === 'vs' ? 'VS' : MB[mo] + LB[df]) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
   }
   function rkBarInit(sel) {
@@ -3610,5 +3610,23 @@ function initLocal2P() {
   });
 }
 </script>
-<script src="../games/ph.js?v=34"></script></body>
+<script src="../games/ph.js?v=36"></script><style id="frameUnify">/* 2026-10-31 게임 틀 통일: 다른 게임과 같은 남색 판 (초록 빛 빼기) */
+html,html body,.gb{background:#17171f!important}
+body{color:#dfe4ff}
+.bezel{background:#101016!important;border-radius:10px!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)!important}
+.screen{background:#0a0c1d!important;border-radius:8px!important;box-shadow:inset 0 0 0 1px rgba(150,170,255,.25)!important}
+html body #board,html body .board{background:#0a0c1d!important;border-radius:6px!important;box-shadow:0 0 0 2px #3a3f80,0 0 14px rgba(150,170,255,.18)!important}
+html body #vs{background:#090a10!important}
+#overlay{background:rgba(4,5,18,.9)!important}
+/* 게임오버: 다른 게임과 같은 순서 · 같은 이름 칸 (이름+OK → RANKING → RETRY → MAIN MENU | ALL GAMES) */
+html body #overlay.phGoOv.over .phGoMenu,html body #overlay.phGoOv.over .phGoAll{order:6!important;grid-column:auto!important;width:auto!important;font-size:11px!important;letter-spacing:.2em!important}
+html body #overlay.phGoOv.over .phGoF{display:flex!important;gap:10px!important}
+html body #overlay.phGoOv.over .phGoF input{flex:1 1 0!important;min-width:0!important;height:52px!important;box-sizing:border-box!important;border:2px solid #3a3e66!important;border-radius:12px!important;background:#0a0b16!important;color:#fff!important;font:400 14px Galmuri11,sans-serif!important;padding:0 14px!important;margin:0!important;box-shadow:none!important}
+html body #overlay.phGoOv.over .phGoF button{flex:0 0 96px!important;height:52px!important;box-sizing:border-box!important;border:2px solid #3a3e66!important;border-radius:12px!important;background:#12142a!important;color:#dfe2ea!important;font:400 11px "Silkscreen",monospace!important;letter-spacing:.14em!important;padding:0!important;margin:0!important;box-shadow:none!important}
+html body #overlay.phGoOv.over #rank-note:empty{display:none!important}
+html body #overlay.phGoOv.over #overlay-msg{display:contents!important}
+html body #overlay.phGoOv.over #overlay-msg>:not(.phGoF):not(#rank-note){display:none!important}
+html body #overlay.phGoOv.over #rank-note{order:3!important;grid-column:1/-1!important}
+</style>
+</body>
 </html>
