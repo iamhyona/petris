@@ -2,7 +2,7 @@
 <html lang="ko">
 <head><style>html.phL body{visibility:hidden}</style><script>/* 글꼴·최신 버전 확인될 때까지 잠깐 가리기 (옛 글꼴·옛 화면 깜빡임 방지) */(function(){var d=document.documentElement,n=1;d.classList.add("phL");function o(){d.classList.remove("phL")}window.__phDone=function(){if(--n<=0)o()};setTimeout(o,1200);function f(){try{var F=document.fonts;Promise.all([F.load('700 14px "Silkscreen"'),F.load('12px "Galmuri11"'),F.load('8px "Press Start 2P"')]).then(function(){return F.ready}).then(window.__phDone,window.__phDone)}catch(e){o()}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",f);else f()})();</script>
 <meta charset="UTF-8">
-<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793536794";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>/* 새 버전 자동 갱신: 열어둔 채로도 1분마다 확인, 시작 화면일 때만 새로고침 (게임·일시정지·게임오버 중엔 기다림) */(function(){var V="1793554601";if(location.search&&!/^\?v=\d+$/.test(location.search))return;var nv=null;function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V)nv=m[1]}).catch(function(){})}catch(e){}}function idle(){var o=document.getElementById("overlay");if(!o)return false;return getComputedStyle(o).display!=="none"&&!o.classList.contains("paused")&&!o.classList.contains("over")&&!document.querySelector(".vs.show")}function go(){if(nv&&location.search!=="?v="+nv&&idle())location.replace(location.pathname+"?v="+nv)}chk();setInterval(chk,60000);setInterval(go,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -3281,26 +3281,27 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     else if (/^(아이템|item)/.test(m)) { mo = 'item'; rest = m.replace(/^(아이템|item)[ -]?/, ''); }
     return [mo, K[rest] || 'normal'];
   }
-  const RK_MODES = [['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME'], ['vs', 'VS']], RK_DIFFS = [];
+  const RK_MODES = [['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME'], ['vs', 'VS']], RK_DIFFS = [['easy', 'EASY'], ['normal', 'NORMAL'], ['hard', 'HARD'], ['master', 'MASTER']]; // 2026-11-02: 난도별 랭킹
   let RK_ALL = null, RK_SEL = {};
   function rkDraw() {
     const list = document.getElementById('rk-list'); if (!list) return;
     if (!RK_ALL) { list.innerHTML = '<p class="vs-msg"><span class="phLoad">LOADING</span></p>'; return; }
     if (RK_ALL === 'err') { list.innerHTML = '<p class="vs-msg">순위표를 불러오지 못했어요.</p>'; return; }
+    { const t = document.getElementById('rkLv'); if (t) t.style.display = RK_SEL.mode === 'vs' ? 'none' : ''; }
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
-    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode; })
+    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (mo === 'vs' || df === (S.diff || 'normal')); })
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
         <li><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em></span><span class="rbg">${window.phLv ? phLv(mo === 'vs' ? 'VS' : MB[mo] + LB[df]) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
   }
   function rkBarInit(sel) {
-    const el = document.getElementById('rk-bar'); if (!el || !window.phRk) { RK_SEL = Object.assign({ mode: 'basic' }, sel || {}); return; }
-    RK_SEL = phRk.bar(el, { game: 'petris', modes: RK_MODES, sel: sel, onChange: x => { RK_SEL = x; rkDraw(); } });
+    const el = document.getElementById('rk-bar'); if (!el || !window.phRk) { RK_SEL = Object.assign({ mode: 'basic', diff: 'normal' }, sel || {}); return; }
+    RK_SEL = phRk.bar(el, { game: 'petris', modes: RK_MODES, sel: sel, onChange: x => { RK_SEL = Object.assign({}, x, { diff: RK_SEL.diff }); rkDraw(); } });
   }
   async function showRank(sel) {
-    sel = { mode: 'basic' }; // 열 때마다 기본: BASIC
-    vsOpen('RANKING', '<div id="rk-bar"></div><div id="rk-list"></div>');
-    rkBarInit(sel); RK_ALL = null; rkDraw();
+    sel = { mode: 'basic', diff: gameMode }; // 열 때마다 기본: BASIC · 지금 난이도
+    vsOpen('RANKING', '<div id="rk-bar"></div><div class="phLvTabs" id="rkLv"><button class="lv-e" data-l="easy">E</button><button class="lv-n" data-l="normal">N</button><button class="lv-h" data-l="hard">H</button><button class="lv-m" data-l="master">M</button></div><div id="rk-list"></div>');
+    rkBarInit(sel); RK_SEL.diff = sel.diff || 'normal'; document.querySelectorAll('#rkLv button').forEach(b => { b.classList.toggle('on', b.dataset.l === RK_SEL.diff); b.onclick = () => { RK_SEL.diff = b.dataset.l; document.querySelectorAll('#rkLv button').forEach(x => x.classList.toggle('on', x === b)); rkDraw(); }; }); RK_ALL = null; rkDraw();
     if (!RANK_URL) { RK_ALL = localRanks().map(r => Object.assign({ ts: r.d }, r)); rkDraw(); return; }
     try {
       const get = se => fetch(RANK_URL + '?a=top&season=' + se).then(x => x.json()).then(d => d.top || []);
