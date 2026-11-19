@@ -3293,7 +3293,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     if (RK_ALL === 'err') { list.innerHTML = '<p class="vs-msg">순위표를 불러오지 못했어요.</p>'; return; }
     { const t = document.getElementById('rkLv'); if (t) t.style.setProperty('display', RK_SEL.mode === 'time' ? 'flex' : 'none', 'important'); } // 2026-11-19: 난이도 탭은 TIME ATTACK에만
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
-    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (mo !== 'time' || df === (S.diff || 'normal')); }) // BASIC·ITEM은 난이도 통합 (난이도 배율로 비교)
+    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (mo !== 'time' || df === (S.diff || 'normal')) && !(mo === 'item' && String(r.d || '') < '2026-10-23 16:13'); }) // 2026-11-19: 10/23 오후 이전 옛 아이템전(옛 MASTER 규칙) 기록은 랭킹에서 빼고 시트에 따로 보관 // BASIC·ITEM은 난이도 통합 (난이도 배율로 비교)
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
         <li><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em></span><span class="rbg">${window.phLv ? phLv(mo === 'vs' ? 'VS' : MB[mo] + LB[df]) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
