@@ -1307,7 +1307,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
   SHAPES.LB = [[0,0]]; COLORS.LB = '#f2f6ff';
   SHAPES.SL = [[0,0]]; COLORS.SL = '#8fd8ff';
   COLORS['#RC'] = '#6f757e';
-  let itemCount = 0, trapCount = 0, fogUntil = 0, fogOn = false, slowUntil = 0;
+  let itemCount = 0, trapCount = 0, fogUntil = 0, fogOn = false, slowUntil = 0, lbClear = false;
   function variant(p, base) { const k = p + '_' + base; if (!SHAPES[k]) { SHAPES[k] = SHAPES[base]; COLORS[k] = p === '#R' ? '#9aa0a8' : COLORS[base]; } return k; }
   function isStone(k) { return !!k && (k.startsWith('#R_') || k === '#RC'); }
   function baseOf(k) { return (k && (k.startsWith('#Q_') || k.startsWith('#F_'))) ? k.slice(3) : k; }
@@ -2078,10 +2078,13 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     for (const y of gone) grid.splice(y, 1);
     for (let i = 0; i < gone.length; i++) grid.unshift(Array(COLS).fill(null));
 
-    combo++;
+    const byLB = lbClear; lbClear = false;
+    if (!byLB) combo++;
     const comboMul = Math.min(5, combo);
     // 줄 수별 기본 점수: 1줄 100 · 2줄 300 · 3줄 700 · 4줄 1500 (속도 단계·콤보 배수 적용)
-    score += Math.round((n <= 4 ? [0, 100, 300, 700, 1500][n] : 1500 + (n - 4) * 800) * scoreLv() * comboMul * modeMul());
+    // 2026-11-19 아이템전 조정: 줄 폭탄으로 지운 줄은 1줄당 100점만 (콤보·여러 줄 보너스 없음, 콤보도 이어지지 않음)
+    if (byLB) score += Math.round(100 * n * scoreLv() * modeMul());
+    else score += Math.round((n <= 4 ? [0, 100, 300, 700, 1500][n] : 1500 + (n - 4) * 800) * scoreLv() * comboMul * modeMul());
     lines += n;
     if (mode === 'battle') {
       let sendN = [0, 1, 2, 3, 4][Math.min(n, 4)] + (n > 4 ? n - 4 : 0); // 지운 줄 수만큼 상대 바닥에 줄 올리기
@@ -2105,7 +2108,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       sfxApplause(b2b ? 4 : 3);
     }
     say(word);
-    if (combo >= 2) {
+    if (combo >= 2 && !byLB) {
       setTimeout(() => {
         popText = { text: 'COMBO x' + comboMul, t: performance.now(), big: combo >= 3, color: combo >= 4 ? 'rainbow' : '#ff5fa2' };
         if (audioCtx) [660, 880, 1100].slice(0, Math.min(3, combo)).forEach((f, i) => tone('square', f, 0, audioCtx.currentTime + i * 0.06, 0.12, 0.07));
@@ -2229,6 +2232,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
       for (let x = 0; x < COLS; x++) if (!grid[by][x]) grid[by][x] = 'LB';
       grid[by][piece.x + piece.cells[0][0]] = 'LB';
       popText = { text: 'LINE BOMB!', t: performance.now(), big: true, color: '#8fd8ff' };
+      lbClear = true;
       piece = null; dropCounter = 0; updateHud();
       clearing = { rows: fullRows(), t: performance.now() }; state = 'clearing'; sfxClearStart(); return;
     }
@@ -2681,7 +2685,7 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     shadowOn = isEasy() && ghostPref; shadowLabel();
     stageSong();
     playTime = 0; timeUp = false; lastSec = -1; particles = []; flashes = []; clearing = null; popText = null; boardFlash = 0; lastTetris = false;
-    bag = []; nextKind = null; bombCount = 0; itemCount = 0; trapCount = 0; fogOn = false; fogUntil = 0; slowUntil = 0;
+    bag = []; nextKind = null; bombCount = 0; itemCount = 0; trapCount = 0; fogOn = false; fogUntil = 0; slowUntil = 0; lbClear = false;
     updateHud();
     spawn();
     dropCounter = 0;
@@ -3281,15 +3285,15 @@ html body .rank li em{font-family:Galmuri11,sans-serif!important;font-size:14px!
     else if (/^(아이템|item)/.test(m)) { mo = 'item'; rest = m.replace(/^(아이템|item)[ -]?/, ''); }
     return [mo, K[rest] || 'normal'];
   }
-  const RK_MODES = [['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME'], ['vs', 'VS']], RK_DIFFS = [['easy', 'EASY'], ['normal', 'NORMAL'], ['hard', 'HARD'], ['master', 'MASTER']]; // 2026-11-02: 난도별 랭킹
+  const RK_MODES = [['basic', 'BASIC'], ['item', 'ITEM'], ['time', 'TIME'], ['vs', 'VS']], RK_DIFFS = [['easy', 'EASY'], ['normal', 'NORMAL'], ['hard', 'HARD'], ['master', 'MASTER']]; // 2026-11-19: 모드별 통합 랭킹 · 난이도 탭은 TIME만
   let RK_ALL = null, RK_SEL = {};
   function rkDraw() {
     const list = document.getElementById('rk-list'); if (!list) return;
     if (!RK_ALL) { list.innerHTML = '<p class="vs-msg"><span class="phLoad">LOADING</span></p>'; return; }
     if (RK_ALL === 'err') { list.innerHTML = '<p class="vs-msg">순위표를 불러오지 못했어요.</p>'; return; }
-    { const t = document.getElementById('rkLv'); if (t) t.style.display = RK_SEL.mode === 'vs' ? 'none' : ''; }
+    { const t = document.getElementById('rkLv'); if (t) t.style.setProperty('display', RK_SEL.mode === 'time' ? 'flex' : 'none', 'important'); } // 2026-11-19: 난이도 탭은 TIME ATTACK에만
     const me = getName(), S = RK_SEL, LB = { easy: 'EASY', normal: 'NORMAL', hard: 'HARD', master: 'MASTER' }, MB = { item: 'ITEM ', time: 'TIME ', basic: '', vs: '' };
-    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (mo === 'vs' || df === (S.diff || 'normal')); })
+    const rows = RK_ALL.filter(r => { const [mo, df] = rkParse(r.m); return mo === S.mode && (mo !== 'time' || df === (S.diff || 'normal')); }) // BASIC·ITEM은 난이도 통합 (난이도 배율로 비교)
       .sort((a, b) => b.s - a.s).map((r, i) => { const [mo, df] = rkParse(r.m); return `
         <li><b>${i + 1}</b><span><em class="nm">${esc(r.n)}</em></span><span class="rbg">${window.phLv ? phLv(mo === 'vs' ? 'VS' : MB[mo] + LB[df]) : ''}</span><em>${Number(r.s).toLocaleString()}</em></li>`; }).join('');
     list.innerHTML = rows ? `<ol class="rank">${rows}</ol>` : '<p class="vs-msg">아직 기록이 없어요.<br>첫 기록의 주인공이 되어 보세요!</p>';
